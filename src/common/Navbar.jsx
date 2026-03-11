@@ -1,15 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-const Link = ({ to, children, className, onClick, style }) => (
-  <Link to
-    ={to}
-    className={className}
-    style={style}
-    onClick={(e) => { onClick && onClick(); }}
-  >
-    {children}
-  </Link>
-);
 
 const NAV = [
   { label: "Home", to: "/" },
@@ -99,7 +89,11 @@ function DropdownMenu({ groups, visible }) {
             margin: "0 0 10px 0",
           }}>{group.group}</p>
           {group.items.map((item) => (
-            <Link key={item.to} to={item.to}>
+            <Link
+              key={item.to}
+              to={item.to}
+              style={{ textDecoration: "none" }}
+            >
               <div style={{
                 display: "flex",
                 alignItems: "center",
@@ -152,7 +146,7 @@ function MobileAccordion({ item, active, setActive }) {
                 <div key={group.group} style={{ marginBottom: "10px" }}>
                   <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.62rem", fontWeight: 700, color: "#9ca3af", letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 10px 4px", margin: 0 }}>{group.group}</p>
                   {group.items.map((sub) => (
-                    <Link key={sub.to} to={sub.to}>
+                    <Link key={sub.to} to={sub.to} style={{ textDecoration: "none" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 10px", borderRadius: "7px", fontFamily: "'DM Sans', sans-serif", fontSize: "0.875rem", fontWeight: 500, color: "#374151", cursor: "pointer", transition: "background 0.15s, color 0.15s" }}
                         onMouseEnter={e => { e.currentTarget.style.background = "#f0f5ff"; e.currentTarget.style.color = "#133f77"; }}
                         onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#374151"; }}
@@ -167,7 +161,7 @@ function MobileAccordion({ item, active, setActive }) {
           )}
         </>
       ) : (
-        <Link to={item.to}>
+        <Link to={item.to} style={{ textDecoration: "none" }}>
           <div style={{ padding: "12px 14px", borderRadius: "9px", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: "#374151", cursor: "pointer", transition: "background 0.18s, color 0.18s" }}
             onMouseEnter={e => { e.currentTarget.style.background = "#e8f0fb"; e.currentTarget.style.color = "#133f77"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#374151"; }}
@@ -187,7 +181,7 @@ export default function TaxNavbar() {
   const [itrOpen, setItrOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name:"", pan:"", mobile:"", email:"", ay:"", itrType:"", income:"" });
+  const [form, setForm] = useState({ name: "", pan: "", mobile: "", email: "", ay: "", itrType: "", income: "" });
   const hoverTimeout = useRef(null);
   const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
 
@@ -205,7 +199,7 @@ export default function TaxNavbar() {
   const handleSubmit = () => setSubmitted(true);
   const closeModal = () => {
     setItrOpen(false);
-    setTimeout(() => { setStep(1); setSubmitted(false); setForm({ name:"",pan:"",mobile:"",email:"",ay:"",itrType:"",income:"" }); }, 300);
+    setTimeout(() => { setStep(1); setSubmitted(false); setForm({ name: "", pan: "", mobile: "", email: "", ay: "", itrType: "", income: "" }); }, 300);
   };
 
   useEffect(() => {
@@ -351,9 +345,10 @@ export default function TaxNavbar() {
 
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px", height: "66px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
 
-          <Link to="/">
+          {/* ✅ FIX 1: Link directly wrapping logo - no nested custom component */}
+          <Link to="/" style={{ textDecoration: "none" }}>
             <div style={{ display: "flex", flexDirection: "column", lineHeight: 1, flexShrink: 0, cursor: "pointer", gap: "3px" }}>
-             <img src="/logo.jpeg" alt="company-logo" className="h-15"/>
+              <img src="/logo.jpeg" alt="company-logo" className="h-15" />
             </div>
           </Link>
 
@@ -365,15 +360,24 @@ export default function TaxNavbar() {
                     {i > 0 && (
                       <div style={{ width: "1px", height: "16px", background: "#e5e7eb", flexShrink: 0 }} />
                     )}
-                    <div style={{ position: "relative" }}
+                    <div
+                      style={{ position: "relative" }}
                       onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
-                      onMouseLeave={() => item.dropdown && handleMouseLeave()}>
-                      <Link to={item.to}>
+                      onMouseLeave={() => item.dropdown && handleMouseLeave()}
+                    >
+                      {/* ✅ FIX 2: For items with dropdown, use button only (no Link wrapping button) */}
+                      {item.dropdown ? (
                         <button className={`ts-nav-btn ${hoveredNav === item.label ? "active" : ""}`}>
                           {item.label}
-                          {item.dropdown && <span className="ts-chevron">▾</span>}
+                          <span className="ts-chevron">▾</span>
                         </button>
-                      </Link>
+                      ) : (
+                        <Link to={item.to} style={{ textDecoration: "none" }}>
+                          <button className="ts-nav-btn">
+                            {item.label}
+                          </button>
+                        </Link>
+                      )}
                       {item.dropdown && <DropdownMenu groups={item.dropdown} visible={hoveredNav === item.label} />}
                     </div>
                   </div>
@@ -386,7 +390,11 @@ export default function TaxNavbar() {
           {isMobile && (
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <button className="cta-btn" style={{ padding: "8px 14px", fontSize: "0.8rem" }} onClick={() => setItrOpen(true)}>File ITR</button>
-              <button onClick={() => setMenuOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: "6px", display: "flex", flexDirection: "column", gap: "5px", alignItems: "center" }} aria-label="Open menu">
+              <button
+                onClick={() => setMenuOpen(true)}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: "6px", display: "flex", flexDirection: "column", gap: "5px", alignItems: "center" }}
+                aria-label="Open menu"
+              >
                 <span style={{ display: "block", width: 22, height: 2, background: "#133f77", borderRadius: 2 }} />
                 <span style={{ display: "block", width: 22, height: 2, background: "#133f77", borderRadius: 2 }} />
                 <span style={{ display: "block", width: 22, height: 2, background: "#133f77", borderRadius: 2 }} />
@@ -396,6 +404,7 @@ export default function TaxNavbar() {
         </div>
       </nav>
 
+      {/* Mobile Drawer */}
       {menuOpen && (
         <div style={{ position: "fixed", inset: 0, zIndex: 800, display: "flex" }}>
           <div className="drawer-overlay" onClick={() => setMenuOpen(false)} />
@@ -424,6 +433,7 @@ export default function TaxNavbar() {
         </div>
       )}
 
+      {/* ITR Modal */}
       {itrOpen && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && closeModal()}>
           <div className="modal-box">
@@ -445,67 +455,91 @@ export default function TaxNavbar() {
               )}
             </div>
             <div className="modal-body">
-              {!submitted ? (<>
-                {step === 1 && (<>
-                  <div className="info-pill">⚠️ Keep your PAN card handy</div>
-                  <div className="form-group">
-                    <label className="form-label">Full Name (as per PAN)</label>
-                    <input className="form-input" name="name" value={form.name} onChange={handleChange} placeholder="e.g. Rajesh Kumar Sharma" />
-                  </div>
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label className="form-label">PAN Number</label>
-                      <input className="form-input" name="pan" value={form.pan} onChange={handleChange} placeholder="ABCDE1234F" maxLength={10} style={{ textTransform: "uppercase" }} />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Mobile</label>
-                      <input className="form-input" name="mobile" value={form.mobile} onChange={handleChange} placeholder="9XXXXXXXXX" maxLength={10} />
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Email Address</label>
-                    <input className="form-input" name="email" value={form.email} onChange={handleChange} placeholder="you@example.com" type="email" />
-                  </div>
-                  <button className="form-btn" onClick={() => setStep(2)} disabled={!form.name || !form.pan || !form.mobile || !form.email}>Continue →</button>
-                </>)}
-                {step === 2 && (<>
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label className="form-label">Assessment Year</label>
-                      <select className="form-input" name="ay" value={form.ay} onChange={handleChange}>
-                        <option value="">Select AY</option>
-                        <option>AY 2025–26</option><option>AY 2024–25</option><option>AY 2023–24</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">ITR Form Type</label>
-                      <select className="form-input" name="itrType" value={form.itrType} onChange={handleChange}>
-                        <option value="">Select Type</option>
-                        <option>ITR-1 (Sahaj)</option><option>ITR-2</option><option>ITR-3</option><option>ITR-4 (Sugam)</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Gross Annual Income (₹)</label>
-                    <input className="form-input" name="income" value={form.income} onChange={handleChange} placeholder="e.g. 750000" type="number" />
-                  </div>
-                  <div className="btn-row">
-                    <button className="form-btn form-btn-outline" onClick={() => setStep(1)}>← Back</button>
-                    <button className="form-btn" onClick={() => setStep(3)} disabled={!form.ay || !form.itrType || !form.income}>Review →</button>
-                  </div>
-                </>)}
-                {step === 3 && (<>
-                  <div style={{ background: "#f8faff", border: "1.5px solid #e8f0fb", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
-                    {[["Name", form.name], ["PAN", form.pan.toUpperCase()], ["Mobile", form.mobile], ["Email", form.email], ["Assessment Year", form.ay], ["ITR Form", form.itrType], ["Gross Income", `₹ ${Number(form.income).toLocaleString("en-IN")}`]].map(([k, v]) => (
-                      <div key={k} className="review-row"><span className="review-key">{k}</span><span className="review-val">{v}</span></div>
-                    ))}
-                  </div>
-                  <div className="btn-row">
-                    <button className="form-btn form-btn-outline" onClick={() => setStep(2)}>← Edit</button>
-                    <button className="form-btn" onClick={handleSubmit}>Submit ITR ✓</button>
-                  </div>
-                </>)}
-              </>) : (
+              {!submitted ? (
+                <>
+                  {step === 1 && (
+                    <>
+                      <div className="info-pill">⚠️ Keep your PAN card handy</div>
+                      <div className="form-group">
+                        <label className="form-label">Full Name (as per PAN)</label>
+                        <input className="form-input" name="name" value={form.name} onChange={handleChange} placeholder="e.g. Rajesh Kumar Sharma" />
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label className="form-label">PAN Number</label>
+                          <input className="form-input" name="pan" value={form.pan} onChange={handleChange} placeholder="ABCDE1234F" maxLength={10} style={{ textTransform: "uppercase" }} />
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label">Mobile</label>
+                          <input className="form-input" name="mobile" value={form.mobile} onChange={handleChange} placeholder="9XXXXXXXXX" maxLength={10} />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Email Address</label>
+                        <input className="form-input" name="email" value={form.email} onChange={handleChange} placeholder="you@example.com" type="email" />
+                      </div>
+                      <button className="form-btn" onClick={() => setStep(2)} disabled={!form.name || !form.pan || !form.mobile || !form.email}>Continue →</button>
+                    </>
+                  )}
+                  {step === 2 && (
+                    <>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label className="form-label">Assessment Year</label>
+                          <select className="form-input" name="ay" value={form.ay} onChange={handleChange}>
+                            <option value="">Select AY</option>
+                            <option>AY 2025–26</option>
+                            <option>AY 2024–25</option>
+                            <option>AY 2023–24</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label">ITR Form Type</label>
+                          <select className="form-input" name="itrType" value={form.itrType} onChange={handleChange}>
+                            <option value="">Select Type</option>
+                            <option>ITR-1 (Sahaj)</option>
+                            <option>ITR-2</option>
+                            <option>ITR-3</option>
+                            <option>ITR-4 (Sugam)</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Gross Annual Income (₹)</label>
+                        <input className="form-input" name="income" value={form.income} onChange={handleChange} placeholder="e.g. 750000" type="number" />
+                      </div>
+                      <div className="btn-row">
+                        <button className="form-btn form-btn-outline" onClick={() => setStep(1)}>← Back</button>
+                        <button className="form-btn" onClick={() => setStep(3)} disabled={!form.ay || !form.itrType || !form.income}>Review →</button>
+                      </div>
+                    </>
+                  )}
+                  {step === 3 && (
+                    <>
+                      <div style={{ background: "#f8faff", border: "1.5px solid #e8f0fb", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
+                        {[
+                          ["Name", form.name],
+                          ["PAN", form.pan.toUpperCase()],
+                          ["Mobile", form.mobile],
+                          ["Email", form.email],
+                          ["Assessment Year", form.ay],
+                          ["ITR Form", form.itrType],
+                          ["Gross Income", `₹ ${Number(form.income).toLocaleString("en-IN")}`],
+                        ].map(([k, v]) => (
+                          <div key={k} className="review-row">
+                            <span className="review-key">{k}</span>
+                            <span className="review-val">{v}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="btn-row">
+                        <button className="form-btn form-btn-outline" onClick={() => setStep(2)}>← Edit</button>
+                        <button className="form-btn" onClick={handleSubmit}>Submit ITR ✓</button>
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : (
                 <div className="success-box">
                   <div className="success-icon">✅</div>
                   <p className="success-title">ITR Filed Successfully!</p>
