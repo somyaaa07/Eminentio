@@ -353,8 +353,7 @@ export default function TaxNavbar() {
 
           <Link to="/">
             <div style={{ display: "flex", flexDirection: "column", lineHeight: 1, flexShrink: 0, cursor: "pointer", gap: "3px" }}>
-              <span style={{ fontFamily: "'Playfair Display', serif", color: "#133f77", fontSize: "1.35rem", lineHeight: 1 }}>TaxSure</span>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.58rem", color: "#9ca3af", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 500 }}>India's Tax Authority</span>
+             <img src="/logo.jpeg" alt="company-logo" className="h-15"/>
             </div>
           </Link>
 
