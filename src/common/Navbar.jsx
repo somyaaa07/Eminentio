@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 const Link = ({ to, children, className, onClick, style }) => (
-  <a
-    href={to}
+  <Link to
+    ={to}
     className={className}
     style={style}
     onClick={(e) => { onClick && onClick(); }}
   >
     {children}
-  </a>
+  </Link>
 );
 
 const NAV = [
