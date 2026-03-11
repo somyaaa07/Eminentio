@@ -150,10 +150,6 @@ export default function SpecializedServices() {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap');
-<<<<<<< HEAD
-    
-=======
->>>>>>> cdb87fdd43b1a59a5d9c79cf0c4f89e660b02666
 
         .svc-root {
           background: #f2f5fb;
@@ -188,7 +184,6 @@ export default function SpecializedServices() {
         }
 
         @media(max-width:768px){ .svc-header{ grid-template-columns:1fr; gap:28px; } }
-
 
         .svc-eyebrow {
           display: inline-flex; align-items: center; gap: 7px;
@@ -241,25 +236,19 @@ export default function SpecializedServices() {
         /* ─── CARDS GRID ─── */
         .svc-cards {
           display: grid;
-<<<<<<< HEAD
-          grid-template-columns: repeat(3,1fr);
-          gap: 22px;
-          align-items: stretch;
-        }
-        @media(max-width:1280px){ .svc-cards{ grid-template-columns:1fr; } }
-        @media(min-width:1280px) and (max-width:880px){ .svc-cards{ grid-template-columns:repeat(2,1fr); } }
-=======
           grid-template-columns: repeat(3, 1fr);
           gap: 22px;
           align-items: stretch;
         }
-        @media(max-width:900px){
-          .svc-cards{ grid-template-columns: 1fr; }
+        @media(max-width: 900px) {
+          .svc-cards { grid-template-columns: 1fr; }
         }
-        @media(min-width:900px) and (max-width:1100px){
-          .svc-cards{ grid-template-columns: repeat(2, 1fr); }
+        @media(min-width: 900px) and (max-width: 1100px) {
+          .svc-cards { grid-template-columns: repeat(2, 1fr); }
         }
->>>>>>> cdb87fdd43b1a59a5d9c79cf0c4f89e660b02666
+        @media(min-width: 1100px) {
+          .svc-cards { grid-template-columns: repeat(3, 1fr); }
+        }
 
         .card-scene { perspective: 900px; }
 
