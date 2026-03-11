@@ -405,17 +405,7 @@ const WelcomeSection = () => {
           </div>
         </div>
 
-        {/* Bottom CTA banner */}
-        <div className="ws2-bottom">
-          <div className={`ws2-bottom-inner ${visible ? 'show' : ''}`}>
-            <div className="ws2-bottom-text">
-              <div className="ws2-bottom-heading">Ready to simplify your compliance?</div>
-              <div className="ws2-bottom-sub">Trusted by 5,000+ individuals and businesses across India</div>
-            </div>
-            <div className="ws2-bottom-divider" />
-            <button className="ws2-btn">Get Started Today</button>
-          </div>
-        </div>
+     
       </section>
     </>
   );

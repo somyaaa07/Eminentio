@@ -155,7 +155,7 @@ export default function ContactPage() {
       <style>{style}</style>
 
       {/* HERO BANNER */}
-      <section className="hero-bg" style={{ paddingTop: "64px" }}>
+      <section className="hero-bg" >
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem", textAlign: "center", color: "white", width: "100%" }}>
           <p className="font-sub" style={{ fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", opacity: 0.75, marginBottom: "1.2rem" }}>
             Trusted Tax & Compliance Advisors
@@ -177,14 +177,7 @@ export default function ContactPage() {
               📞 Call Us Now
             </button>
           </div>
-          <div style={{ display: "flex", gap: "3rem", justifyContent: "center", marginTop: "4rem", flexWrap: "wrap" }}>
-            {[["10,000+", "Returns Filed"], ["4.9★", "Client Rating"], ["Same Day", "ITR Filing"]].map(([num, label]) => (
-              <div key={label} style={{ textAlign: "center" }}>
-                <p className="font-title" style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)", fontWeight: 700, marginBottom: "0.25rem" }}>{num}</p>
-                <p className="font-sub" style={{ fontSize: "0.72rem", opacity: 0.7, letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</p>
-              </div>
-            ))}
-          </div>
+       
         </div>
       </section>
 
