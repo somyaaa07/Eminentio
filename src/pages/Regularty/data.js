@@ -13,7 +13,7 @@ export const regulatoryData = {
       title: "MCA & ROC Compliance Services",
       subtitle:
         "End-to-end compliance under Companies Act and Ministry of Corporate Affairs.",
-      image: "/banner-img/mca-c.png",
+      image: "https://i.pinimg.com/736x/77/43/84/774384e18fd48fe5f2d825cd6ed7e7c6.jpg",
       cta: "Get MCA Support"
     },
 
@@ -466,7 +466,7 @@ export const regulatoryData = {
       title: "FEMA & RBI Compliance Services",
       subtitle:
         "Expert assistance for foreign investments, cross-border transactions, RBI reporting, and NBFC regulatory requirements.",
-      image: "/banner-img/about.png",
+      image: "https://i.pinimg.com/736x/c4/60/20/c460204a42727e6ab3845ff286a258e8.jpg",
       cta: "Get FEMA / RBI Consultation"
     },
 
@@ -951,7 +951,7 @@ export const regulatoryData = {
       title: "Labour Law Compliance Services",
       subtitle:
         "Comprehensive support for PF, ESI, payroll, and all statutory labour law requirements under Indian law.",
-      image: "/banner-img/labour.png",
+      image: "https://images.pexels.com/photos/6077381/pexels-photo-6077381.jpeg",
       cta: "Get Labour Law Support"
     },
 
@@ -1364,7 +1364,7 @@ export const regulatoryData = {
       title: "Company Registration Services",
       subtitle:
         "Fast, hassle-free company incorporation with complete post-registration compliance support.",
-      image: "/banner-img/sebi.png",
+      image: "https://images.pexels.com/photos/7648057/pexels-photo-7648057.jpeg",
       cta: "Register Your Company"
     },
 
@@ -1756,7 +1756,7 @@ export const regulatoryData = {
       title: "LLP Formation Services",
       subtitle:
         "Register your Limited Liability Partnership with expert guidance on LLP agreement, filings, and ongoing compliance.",
-      image: "/banner-img/llp.png",
+      image: "https://i.pinimg.com/736x/aa/3d/09/aa3d09186934c8b85f0abd84eade40a7.jpg",
       cta: "Form Your LLP"
     },
 
@@ -2133,7 +2133,7 @@ export const regulatoryData = {
       title: "MSME / Udyam Registration Services",
       subtitle:
         "Register your business as an MSME and unlock government schemes, subsidies, and priority sector benefits.",
-      image: "/banner-img/msme.png",
+      image: "https://i.pinimg.com/736x/7d/b4/1e/7db41ec2acbf401815a0b310858fab05.jpg",
       cta: "Register as MSME"
     },
 

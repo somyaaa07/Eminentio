@@ -5,8 +5,8 @@ const reasons = [
   {
     icon: Award,
     num: "01",
-    title: "Skilled Professionals on Demand",
-    desc: "Access a pool of highly-skilled auditors, accountants, tax specialists, and business support staff ready to meet any need — on demand.",
+    title: "Skilled Professionals ",
+    desc: "Access a pool of highly-skilled auditors, accountants, tax specialists, and business support staff",
   },
   {
     icon: Clock,
@@ -18,13 +18,13 @@ const reasons = [
     icon: Shield,
     num: "03",
     title: "Global Standards",
-    desc: "Our professionals are trained to adhere to international CPA and compliance reporting standards for seamless collaboration.",
+    desc: "Our professionals are trained to adhere to international CPA and compliance reporting standards.",
   },
   {
     icon: Users,
     num: "04",
     title: "Seamless Integration",
-    desc: "Our offshore staff becomes part of your extended team — tailored to your processes, tools, and company culture from day one.",
+    desc: "Our offshore staff becomes part of your extended team — tailored to your processes, tools",
   },
 ];
 
@@ -66,10 +66,7 @@ const Card = ({ item, idx, visible }) => {
           <div className="wcu-divider" style={{ height: 1, background: "#dde4ef" }} />
           <h3 className="wcu-card-title" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(1.1rem, 2vw, 1.25rem)", fontWeight: 700, color: "#0f2545", letterSpacing: "-0.02em", lineHeight: 1.2, margin: 0 }}>{item.title}</h3>
           <p className="wcu-card-desc" style={{ fontSize: "clamp(0.77rem, 1.2vw, 0.82rem)", fontWeight: 300, color: "#64748b", lineHeight: 1.8, margin: 0 }}>{item.desc}</p>
-          <div style={{ display: "flex", alignItems: "center", paddingTop: "0.2rem" }}>
-            <div className="wcu-arrow-line" style={{ height: 1, width: 14, background: "#133f77" }} />
-            <div className="wcu-arrow-head" style={{ width: 5, height: 5, borderTop: "1.5px solid #133f77", borderRight: "1.5px solid #133f77", transform: "rotate(45deg)", marginLeft: -2, flexShrink: 0 }} />
-          </div>
+         
         </div>
       </div>
     </div>

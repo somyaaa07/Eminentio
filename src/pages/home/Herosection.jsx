@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-
+import { Link } from "react-router-dom";
 const SLIDES = [
   {
-    img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=85",
+    img: "https://images.pexels.com/photos/6863181/pexels-photo-6863181.jpeg",
     tag: "Offshore Staffing Experts",
     headline: ["Expert Offshore Staffing", "for CPA Firms & Businesses"],
     sub: "Over 5 years of expertise helping CPA firms and private businesses expand their teams with experienced audit, accounting, and taxation professionals.",
   },
   {
-    img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1600&q=85",
+    img: "https://images.pexels.com/photos/4475525/pexels-photo-4475525.jpeg",
     tag: "400+ Clients Served",
     headline: ["Dedicated Offshore Staff", "at a Fraction of the Cost"],
     sub: "Save up to 60% compared to in-house hiring. Our professionals seamlessly integrate with your team — delivering precision, consistency, and dedication.",
   },
   {
-    img: "https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=1600&q=85",
+    img: "https://images.pexels.com/photos/6779716/pexels-photo-6779716.jpeg",
     tag: "Scalable Staffing Solutions",
     headline: ["Right Talent,", "Right Time — Always"],
     sub: "From one professional for a short-term project to full dedicated teams for long-term operations. Eminentia scales with your business needs.",
@@ -166,21 +166,18 @@ export default function HeroSection() {
           </div>
           <p className="hs-sub">{SLIDES[active].sub}</p>
           <div className="hs-ctas">
+            <Link to="/contact">
             <button className="btn-primary">
               Hire Offshore Staff
               <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
-            <button className="btn-ghost">Our Services</button>
+            </Link>
+            <Link to="/about">
+            <button className="btn-ghost">Know us</button></Link>
           </div>
         </div>
 
-        <div className="hs-thumbs">
-          {SLIDES.map((slide, i) => (
-            <div key={i} className={`hs-thumb ${i === active ? 'hs-thumb-active' : ''}`} onClick={() => resetTimer(() => goTo(i, i > active ? "next" : "prev"))}>
-              <img src={slide.img} alt={`thumb-${i}`} />
-            </div>
-          ))}
-        </div>
+     
 
         <div className="hs-controls">
           <div className="hs-progress-wrap">

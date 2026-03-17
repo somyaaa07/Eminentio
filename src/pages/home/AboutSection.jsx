@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Award, Users, Shield, Clock, CheckCircle, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const features = [
   { icon: Award, title: 'Skilled on Demand', desc: 'Access auditors, accountants, tax specialists, and business support staff whenever you need them.' },
@@ -78,7 +79,6 @@ export default function AboutSection() {
                 Your trusted offshore staffing partner for CPA firms and private businesses — for over 5 years.
               </p>
             </div>
-            <div className={`divider-line ${visible ? 'visible' : ''}`} style={{ marginTop: 28 }} />
           </div>
 
           {/* Main Grid */}
@@ -107,16 +107,18 @@ export default function AboutSection() {
                 ))}
               </div>
 
+<Link to ="/services/taxationStaffing">
               <button className="cta-btn" style={{ background: '#133f77', color: '#fff', border: 'none', cursor: 'pointer', borderRadius: 50, padding: '13px 28px', fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.78rem', letterSpacing: '0.04em', display: 'inline-flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap' }}>
                 Explore Our Services
                 <ArrowUpRight size={15} strokeWidth={2.5} />
               </button>
+              </Link>
             </div>
 
             {/* Right - Image */}
             <div className={`fade-right ${visible ? 'visible' : ''}`} style={{ transitionDelay: '250ms', position: 'relative' }}>
               <div className="img-wrap" style={{ borderRadius: 24, overflow: 'hidden', boxShadow: '0 30px 80px rgba(19,63,119,0.15), 0 8px 24px rgba(0,0,0,0.08)', position: 'relative' }}>
-                <img src="https://images.pexels.com/photos/7247407/pexels-photo-7247407.jpeg" alt="Eminentia Consulting offshore team" style={{ width: '100%', height: 'clamp(240px, 40vw, 480px)', objectFit: 'cover', display: 'block' }} />
+                <img src="https://images.pexels.com/photos/8927456/pexels-photo-8927456.jpeg" alt="Eminentia Consulting offshore team" style={{ width: '100%', height: 'clamp(240px, 40vw, 480px)', objectFit: 'cover', display: 'block' }} />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '55%', background: 'linear-gradient(to top, rgba(13,27,46,0.72) 0%, transparent 100%)' }} />
                 <div style={{ position: 'absolute', bottom: 24, left: 24, right: 24 }}>
                   <div style={{ fontFamily: 'Poppins', fontWeight: 300, fontSize: '0.72rem', color: 'rgba(255,255,255,0.7)', marginBottom: 4 }}>Dedicated Offshore Professionals</div>

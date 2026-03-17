@@ -12,7 +12,7 @@ export const servicesData = {
     hero: {
       title: "Audit & Assurance Staffing",
       subtitle: "Reliable offshore audit experts to strengthen your audit practice — on-demand, cost-efficient, and fully integrated",
-      image: "/banner-img/audit-assurance.png",
+      image: "https://i.pinimg.com/736x/c3/0f/39/c30f3980543e028bcf3ee77ef22dc356.jpg",
       cta: "Hire Audit Professionals"
     },
     about: {
@@ -110,7 +110,7 @@ export const servicesData = {
     hero: {
       title: "Accounting Staffing",
       subtitle: "Accurate, reliable offshore accountants who work exclusively for you — without the overhead of full-time hires",
-      image: "/banner-img/accounting-staffing.png",
+      image: "https://i.pinimg.com/736x/a1/47/2f/a1472f4af3bf39bfd9e220ccc6ca8e84.jpg",
       cta: "Hire Accounting Professionals"
     },
     about: {
@@ -213,7 +213,7 @@ export const servicesData = {
     hero: {
       title: "Taxation Staffing",
       subtitle: "Expert offshore tax professionals to handle compliance, filings, and advisory — so your firm stays ahead of every deadline",
-      image: "/banner-img/taxation-staffing.png",
+      image: "https://i.pinimg.com/736x/c7/5d/80/c75d80c9ca76c7caca43af06bc3e644b.jpg",
       cta: "Hire Tax Professionals"
     },
     about: {

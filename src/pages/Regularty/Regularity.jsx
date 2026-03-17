@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { regulatoryData } from "./data";
 
+
 import {
   CheckCircle, Rocket, Phone, Star,
   TrendingUp, HelpCircle, Home, FileText, Briefcase, BarChart3,
@@ -818,10 +819,12 @@ export default function RegulatoryV2() {
             </div>
             <div style={{ background: T.navy, borderRadius: 14, padding: isMobile ? "28px 18px" : "36px 48px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", position: "relative", overflow: "hidden" }}>
               <div style={{ position: "absolute", top: -30, right: -30, width: 120, height: 120, borderRadius: "50%", background: "rgba(255,255,255,0.1)" }} />
-              <p style={{ fontFamily: fontSans, fontSize: 14, color: "rgba(255,255,255,0.65)", marginBottom: 16 }}>Ready to experience our proven compliance process?</p>
+             <p style={{ fontFamily: fontSans, fontSize: 14, color: "rgba(255,255,255,0.65)", marginBottom: 16 }}>Ready to experience our proven compliance process?</p>
+              <Link to="/contact">
               <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 10, background: T.white, color: T.navy, border: "none", cursor: "pointer", fontFamily: fontSans, fontSize: 14, fontWeight: 700 }}>
                 Start Your Journey <Rocket size={14} />
               </button>
+              </Link>
             </div>
           </section>
 
@@ -880,12 +883,16 @@ export default function RegulatoryV2() {
                   {regulatory.cta.description}
                 </p>
                 <div className="rv2-cta-btns">
+                  <Link to="/contact">
                   <button className="rv2-cta-btn" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 28px", borderRadius: 10, background: T.white, color: T.navy, border: "none", cursor: "pointer", fontFamily: fontSans, fontSize: 14, fontWeight: 700 }}>
                     {regulatory.cta.primaryButton} <ArrowRight size={14} />
                   </button>
+                  </Link>
+                  <Link to="/about">
                   <button className="rv2-cta-btn" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 28px", borderRadius: 10, background: "rgba(255,255,255,0.10)", color: T.white, border: "1px solid rgba(255,255,255,0.22)", cursor: "pointer", fontFamily: fontSans, fontSize: 14, fontWeight: 600 }}>
                     <Phone size={14} /> {regulatory.cta.secondaryButton}
                   </button>
+                  </Link>
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? "8px 14px" : "12px 24px" }}>
                   {["Free Consultation", "Expert Team", "Proven Track Record", "24/7 Support"].map(t => (

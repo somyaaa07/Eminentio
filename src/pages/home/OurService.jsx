@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FileText, Calculator, TrendingUp, Shield, Users, Award, ArrowRight } from 'lucide-react';
-
+import { Link } from 'react-router-dom';
 const services = [
   { icon: FileText, title: 'Audit & Assurance Staffing', desc: 'Experienced audit associates for financial audits, compliance reviews, risk analyses, and assurance reporting — accurate results while relieving your internal teams.', num: '01' },
   { icon: Calculator, title: 'Accounting Staffing', desc: 'From bookkeeping to advanced financial reports, our accounting specialists manage it all with 100% accuracy, integrating seamlessly with your existing processes and systems.', num: '02' },
@@ -41,10 +41,7 @@ const ServiceCard = ({ service, idx, visible }) => {
       <h3 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 700, fontSize: 'clamp(1.2rem, 2.5vw, 1.45rem)', color: hovered ? '#ffffff' : '#133f77', marginBottom: '0.75rem', transition: 'color 0.3s', lineHeight: 1.2, letterSpacing: '0.01em' }}>{service.title}</h3>
       <div style={{ width: hovered ? '48px' : '24px', height: '1.5px', background: hovered ? 'rgba(255,255,255,0.5)' : 'rgba(19,63,119,0.2)', borderRadius: '2px', marginBottom: '1rem', transition: 'all 0.4s ease' }} />
       <p style={{ fontFamily: '"Poppins", sans-serif', fontWeight: 300, fontSize: 'clamp(0.75rem, 1.5vw, 0.78rem)', color: hovered ? 'rgba(255,255,255,0.75)' : '#6b7e96', lineHeight: 1.85, marginBottom: '1.5rem', transition: 'color 0.3s' }}>{service.desc}</p>
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: hovered ? '10px' : '6px', color: hovered ? 'rgba(255,255,255,0.9)' : '#133f77', fontFamily: '"Poppins", sans-serif', fontWeight: 600, fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', transition: 'all 0.3s ease' }}>
-        Learn more
-        <ArrowRight size={13} style={{ transform: hovered ? 'translateX(3px)' : 'none', transition: 'transform 0.3s' }} />
-      </div>
+ 
     </div>
   );
 };
@@ -106,10 +103,12 @@ const OurServices = () => {
           </div>
 
           <div className="services-cta-wrap" style={{ opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(16px)', transition: 'all 0.6s ease 700ms' }}>
+            <Link to="/contact">
             <button className="services-cta-btn">
               Hire Offshore Staff Today
               <ArrowRight size={14} />
             </button>
+            </Link>
           </div>
         </div>
       </section>

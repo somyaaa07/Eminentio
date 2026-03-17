@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FileText, Calculator, TrendingUp, ArrowRight, Check, Shield, Clock, Users, Award } from 'lucide-react';
-
+import { Link } from 'react-router-dom';
 const services = [
   {
     icon: FileText,
@@ -13,6 +13,7 @@ const services = [
     color: '#1e4fa3',
     light: '#eef3fc',
     shadow: 'rgba(30,79,163,0.25)',
+    link:"/services/auditAssurance"
   },
   {
     icon: Calculator,
@@ -25,6 +26,7 @@ const services = [
     color: '#133f77',
     light: '#eaf0f8',
     shadow: 'rgba(19,63,119,0.25)',
+    link:"/services/accountingStaffing"
   },
   {
     icon: TrendingUp,
@@ -37,6 +39,7 @@ const services = [
     color: '#0d3561',
     light: '#e6edf5',
     shadow: 'rgba(13,53,97,0.25)',
+    link:"/services/taxationStaffing"
   },
 ];
 
@@ -93,9 +96,11 @@ function Card3D({ s, idx, visible }) {
               ))}
             </ul>
           </div>
+          <Link to={s.link}>
           <button className="card-cta" style={{ background: hovered ? s.color : '#fff', color: hovered ? '#fff' : s.color, borderColor: `${s.color}55`, boxShadow: hovered ? `0 6px 20px ${s.shadow}` : 'none' }}>
             {s.btn} <ArrowRight size={14} />
           </button>
+          </Link>
         </div>
       </div>
     </div>

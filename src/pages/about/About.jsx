@@ -27,7 +27,6 @@ const mvvData = [
     body: "Integrity. Commitment. Excellence. Collaboration. Innovation. These are not just words — they are the principles our offshore teams live by every single day.",
     extras: [{ n: "400+", l: "Satisfied Clients" }, { n: "100%", l: "Quality Focus" }],
     pillars: [
-      { icon: "⚖️", t: "Integrity & Transparency", d: "We believe in complete honesty, transparency, and ethical practices — always." },
       { icon: "🤝", t: "Commitment to Client Success", d: "Your goals are our goals. We measure our success by the growth we deliver for you." },
       { icon: "🚀", t: "Innovation & Collaboration", d: "We adapt new technologies and work alongside you as a true partner, not just a vendor." },
     ],
@@ -472,7 +471,7 @@ export default function AboutPage() {
           <FadeIn dir="left">
             <div className="about-img-container">
               <div className="about-img-wrap">
-                <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80" alt="Eminentia Consulting Team" />
+                <img src="https://i.pinimg.com/736x/a8/4a/ce/a84aceeb533fd1ee1ea21b02b9505b72.jpg" alt="Eminentia Consulting Team" />
               </div>
               <div
                 className="about-deco-border"
@@ -624,7 +623,7 @@ export default function AboutPage() {
       {/* ─── CTA ─── */}
       <section className="s-cta">
         <div style={{ position:"absolute", inset:0 }}>
-          <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1600&q=80" alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+          <img src="https://i.pinimg.com/736x/a8/4a/ce/a84aceeb533fd1ee1ea21b02b9505b72.jpg" alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
           <div style={{ position:"absolute", inset:0, background:`linear-gradient(to right,${PD}f5 40%,${PD}bb 100%)` }} />
         </div>
         <div className="s-cta-inner">

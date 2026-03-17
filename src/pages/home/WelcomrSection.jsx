@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-
+import { Link } from 'react-router-dom';
 const checkpoints = [
   'ITR & GST filing with 98% success rate',
   'Company registration & legal documentation',
@@ -628,8 +628,10 @@ const WelcomeSection = () => {
                 </div>
 
                 <div className={`ws-btns ${visible ? 'show' : ''}`}>
-                  <button className="ws-btn-primary">Start Filing Now</button>
-                  <button className="ws-btn-outline">View Services</button>
+                  <Link to="/contact">
+                  <button className="ws-btn-primary">Start Filing Now</button></Link>
+                  <Link to="/documents">
+                  <button className="ws-btn-outline">Documents</button></Link>
                 </div>
               </div>
 

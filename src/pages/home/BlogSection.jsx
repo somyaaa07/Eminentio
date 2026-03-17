@@ -123,10 +123,7 @@ const BlogSection = () => {
                       <Dot size={14} />
                       <span>{post.readTime}</span>
                     </div>
-                    <Link to="/blog" className="card-read-link" style={{ color: post.accent }}>
-                      Read Article
-                      <ArrowUpRight size={14} className="card-arrow" style={{ color: post.accent }} />
-                    </Link>
+                
                   </div>
                 </div>
               </div>

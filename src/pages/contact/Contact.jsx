@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 const PRIMARY = "#133f77";
 const SNOW = "#FFFAFA";
 
@@ -14,8 +14,8 @@ const style = `
   /* ── HERO ── */
   .hero-bg {
     background:
-      linear-gradient( transparent, #000 100%),
-      url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&q=80') center/cover no-repeat;
+         linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.75)),
+      url('https://images.pexels.com/photos/8382047/pexels-photo-8382047.jpeg') center/cover no-repeat;
     min-height: 88vh;
     display: flex;
     align-items: center;
@@ -375,7 +375,8 @@ export default function ContactPage() {
                 Send Us a Message →
               </button>
             </a>
-            <button className="hero-btn-outline">📞 Talk to Our Team</button>
+            <Link to="/about">
+            <button className="hero-btn-outline">📞 Talk to Our Team</button></Link>
           </div>
         </div>
       </section>
