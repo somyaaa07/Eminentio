@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Search, Bookmark, Share2, Calendar,
-  FileText, ChevronDown, ChevronRight,TrendingUp,
+  FileText, ChevronDown, ChevronRight, TrendingUp,
   X, Building2, Filter, ArrowUpRight,
   LayoutGrid, List, ChevronLeft
 } from 'lucide-react';
@@ -10,7 +10,6 @@ const B  = '#133f77';
 const BD = '#0d2d57';
 const BL = '#e8eef6';
 
-// ── Unsplash bg — a professional finance/documents scene ──────────────────
 const HERO_BG = 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80';
 
 export default function TaxationDocuments() {
@@ -26,7 +25,21 @@ export default function TaxationDocuments() {
   const [filtersOpen,     setFiltersOpen]     = useState(false);
   const shareRef  = useRef(null);
   const filterRef = useRef(null);
-  const itemsPerPage = viewMode === 'grid' ? 6 : 8;
+
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const itemsPerPage = windowWidth < 480
+    ? (viewMode === 'grid' ? 4 : 6)
+    : windowWidth < 768
+    ? (viewMode === 'grid' ? 4 : 6)
+    : (viewMode === 'grid' ? 6 : 8);
 
   useEffect(() => {
     const h = (e) => {
@@ -104,6 +117,11 @@ export default function TaxationDocuments() {
 
   useEffect(() => setCurrentPage(1), [searchQuery, activeTab, selectedYear, selectedTaxType, sortOrder, viewMode]);
 
+  // ✅ Scroll to top smoothly on every page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   const toggleBookmark = id => {
     const s = new Set(bookmarkedDocs);
     s.has(id) ? s.delete(id) : s.add(id);
@@ -137,12 +155,11 @@ export default function TaxationDocuments() {
     'Forms & Templates':  { bg:'#fdf4ff', color:'#7e22ce' },
   }[c] || { bg:'#f9fafb', color:'#374151' });
 
-  /* ── Reusable share dropdown ─────────────────────────────── */
   const ShareMenu = ({ doc }) => (
     <div style={{
       position:'absolute', bottom:'calc(100% + 6px)', right:0,
       background:'#fff', border:'1px solid #e8edf4', borderRadius:10,
-      boxShadow:'0 16px 40px rgba(0,0,0,.12)', zIndex:100,
+      boxShadow:'0 16px 40px rgba(0,0,0,.12)', zIndex:200,
       minWidth:140, overflow:'hidden', animation:'smIn .15s ease',
     }}>
       {[
@@ -168,108 +185,100 @@ export default function TaxationDocuments() {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700&display=swap');
-   
+
+        *, *::before, *::after { box-sizing: border-box; }
+
         .td { font-family:'Poppins',sans-serif; background:#f8fafc; min-height:100vh; color:#1e293b; }
 
-        /* ══════════════════════════════════════════
-           HERO  — full bg image, dark overlay, fixed min-height
-        ══════════════════════════════════════════ */
         .td-hero {
           position: relative;
-          min-height: 420px;
+          min-height: 480px;
           background:
             linear-gradient(to bottom, rgba(10,28,58,0.72) 0%, rgba(10,28,58,0.55) 60%, rgba(10,28,58,0.78) 100%),
             url('${HERO_BG}') center center / cover no-repeat;
           display: flex;
           flex-direction: column;
-          justify-content: flex-end;   /* push content to bottom so stats sit at base */
-          overflow: visible;           /* allow search bar to visually overflow */
+          justify-content: space-between;
+          overflow: hidden;
         }
 
-        /* decorative rings */
         .td-deco { position:absolute; border-radius:50%; border:1px solid rgba(255,255,255,.1); pointer-events:none; }
         .td-deco1 { width:500px;height:500px; top:-200px; right:-120px; }
         .td-deco2 { width:260px;height:260px; bottom:40px; right:180px; opacity:.4; }
         .td-deco3 { width:120px;height:120px; top:60px;   right:340px; opacity:.25; }
 
-        /* inner constrained to max-width */
         .td-hero-inner {
           max-width: 1240px;
           margin: 0 auto;
-          padding: clamp(3rem,8vw,5rem) 1.5rem 0;
+          padding: clamp(3rem,7vw,5.5rem) clamp(1rem,4vw,1.5rem) clamp(2rem,4vw,3rem);
           width: 100%;
           display: grid;
           grid-template-columns: 1fr auto;
           gap: 2rem;
-          align-items: flex-end;
+          align-items: flex-start;
           position: relative;
           z-index: 2;
         }
-        @media(max-width:768px){ .td-hero-inner{ grid-template-columns:1fr; } }
 
         .td-hero-tag {
           display: inline-flex; align-items: center; gap: .4rem;
           font-size: .65rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
           color: rgba(255,255,255,.65);
           background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
-          border-radius: 999px; padding: .3rem .875rem; margin-bottom: 1rem;
+          border-radius: 999px; padding: .3rem .875rem; margin-bottom: .875rem;
         }
-        .td-hero-tag-dot { width:5px; height:5px; border-radius:50%; background:#60a5fa; }
+        .td-hero-tag-dot { width:5px; height:5px; border-radius:50%; background:#60a5fa; flex-shrink:0; }
 
         .td-hero h1 {
           font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(2rem, 5vw, 3.6rem);
+          font-size: clamp(1.7rem, 5vw, 3.6rem);
           font-weight: 700; color: #fff; line-height: 1.12;
-          letter-spacing: -.02em; margin-bottom: .875rem;
+          letter-spacing: -.02em; margin-bottom: .75rem;
+          word-break: break-word;
         }
         .td-hero h1 em { font-style: italic; color: #93c5fd; }
         .td-hero-sub {
-          font-size: clamp(.82rem, 1.8vw, .95rem);
+          font-size: clamp(.78rem, 1.8vw, .95rem);
           color: rgba(255,255,255,.68); max-width: 500px;
           line-height: 1.78; font-weight: 300;
         }
 
-        /* trending card — right side */
         .td-hero-card {
           background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
           border-radius: 14px; padding: 1.1rem 1.25rem;
           backdrop-filter: blur(14px); min-width: 210px;
-          align-self: center;
+          align-self: flex-start;
         }
-        @media(max-width:768px){ .td-hero-card { display:none; } }
         .td-hero-card-ttl { font-size:.63rem; text-transform:uppercase; letter-spacing:.14em; color:rgba(255,255,255,.5); margin-bottom:.875rem; }
         .td-hero-card-row { display:flex; align-items:center; gap:.625rem; padding:.45rem 0; border-bottom:1px solid rgba(255,255,255,.08); }
         .td-hero-card-row:last-child { border-bottom:none; padding-bottom:0; }
         .td-hero-card-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
         .td-hero-card-txt { font-size:.7rem; color:rgba(255,255,255,.78); line-height:1.35; }
 
-        /* stats strip — sits at very bottom of hero */
         .td-stats-strip {
           background: rgba(0,0,0,.35);
           backdrop-filter: blur(10px);
           border-top: 1px solid rgba(255,255,255,.1);
-          margin-top: 2.5rem;
           position: relative; z-index: 2;
         }
         .td-stats-inner {
-          max-width: 1240px; margin: 0 auto; padding: 0 1.5rem;
+          max-width: 1240px; margin: 0 auto;
+          padding: 0 clamp(1rem,4vw,1.5rem);
           display: flex;
         }
         .td-stat {
-          flex: 1; padding: .9rem 1.25rem;
+          flex: 1; padding: clamp(.6rem,.8vw,.9rem) clamp(.75rem,2vw,1.25rem);
           border-right: 1px solid rgba(255,255,255,.08);
+          min-width: 0;
         }
         .td-stat:last-child { border-right: none; }
         .td-stat-num {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 1.7rem; font-weight: 700; color: #fff;
-          line-height: 1; margin-bottom: .2rem;
+          font-size: clamp(1.2rem,3vw,1.7rem); font-weight: 700; color: #fff;
+          line-height: 1; margin-bottom: .2rem; white-space: nowrap;
         }
-        .td-stat-lbl { font-size: .6rem; text-transform: uppercase; letter-spacing: .12em; color: rgba(255,255,255,.42); }
+        .td-stat-lbl { font-size: clamp(.5rem,.8vw,.6rem); text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.42); white-space: nowrap; }
 
-        /* ══════════════════════════════════════════
-           SEARCH BAR  — sits BELOW hero, no overlap trick
-        ══════════════════════════════════════════ */
         .td-search-section {
           background: #fff;
           border-bottom: 1px solid #e8edf4;
@@ -279,49 +288,47 @@ export default function TaxationDocuments() {
           z-index: 30;
         }
         .td-search-inner {
-          max-width: 1240px; margin: 0 auto; padding: .875rem 1.5rem;
-          display: flex; align-items: center; gap: .875rem; flex-wrap: wrap;
+          max-width: 1240px; margin: 0 auto;
+          padding: .75rem clamp(1rem,4vw,1.5rem);
+          display: flex; align-items: center; gap: .625rem; flex-wrap: wrap;
         }
         .td-si-wrap {
-          flex: 1; min-width: 180px;
-          display: flex; align-items: center; gap: .625rem;
+          flex: 1; min-width: 140px;
+          display: flex; align-items: center; gap: .5rem;
         }
-        .td-si-wrap > svg { color: #94a3b8; flex-shrink: 0; width:1rem; height:1rem; }
+        .td-si-wrap > svg { color: #94a3b8; flex-shrink: 0; width:.9rem; height:.9rem; }
         .td-si {
           flex: 1; border: none; outline: none;
-          font-family: 'Poppins', sans-serif; font-size: .875rem;
-          color: #1e293b; background: transparent;
+          font-family: 'Poppins', sans-serif; font-size: .8rem;
+          color: #1e293b; background: transparent; min-width: 0;
         }
         .td-si::placeholder { color: #b8c4d0; }
-        .td-divider { width:1px; height:26px; background:#e8edf4; flex-shrink:0; }
+        .td-divider { width:1px; height:22px; background:#e8edf4; flex-shrink:0; }
 
-        /* filter button */
         .td-filter-btn {
-          display: flex; align-items: center; gap: .4rem;
-          font-family: 'Poppins', sans-serif; font-size: .78rem; font-weight: 500;
+          display: flex; align-items: center; gap: .35rem;
+          font-family: 'Poppins', sans-serif; font-size: .75rem; font-weight: 500;
           color: #475569; border: none; background: transparent;
-          cursor: pointer; padding: .4rem .7rem; border-radius: 8px; transition: all .15s;
-          white-space: nowrap;
+          cursor: pointer; padding: .375rem .625rem; border-radius: 8px; transition: all .15s;
+          white-space: nowrap; flex-shrink: 0;
         }
         .td-filter-btn:hover { background: #f1f5f9; }
         .td-filter-btn.active { background: ${BL}; color: ${B}; }
         .td-filter-badge {
           background: ${B}; color: #fff;
-          font-size: .6rem; font-weight: 700;
-          width: 1rem; height: 1rem; border-radius: 50%;
+          font-size: .58rem; font-weight: 700;
+          width: .9rem; height: .9rem; border-radius: 50%;
           display: inline-flex; align-items: center; justify-content: center;
         }
 
-        /* view toggle */
-        .td-vb { display:flex; gap:.2rem; padding:.2rem; background:#f1f5f9; border-radius:8px; }
+        .td-vb { display:flex; gap:.2rem; padding:.2rem; background:#f1f5f9; border-radius:8px; flex-shrink:0; }
         .td-vbtn {
-          padding:.35rem .5rem; border-radius:6px; border:none;
+          padding:.3rem .45rem; border-radius:6px; border:none;
           background:transparent; color:#94a3b8; cursor:pointer;
           display:flex; align-items:center; transition:all .15s;
         }
         .td-vbtn.on { background:#fff; color:${B}; box-shadow:0 1px 4px rgba(0,0,0,.1); }
 
-        /* filter panel */
         .td-filter-panel {
           background: #fff;
           border-top: 1px solid #f1f5f9;
@@ -329,43 +336,43 @@ export default function TaxationDocuments() {
           box-shadow: 0 8px 30px rgba(19,63,119,.08);
         }
         .td-filter-panel-inner {
-          max-width: 1240px; margin: 0 auto; padding: 1rem 1.5rem;
-          display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 1rem;
+          max-width: 1240px; margin: 0 auto;
+          padding: .875rem clamp(1rem,4vw,1.5rem);
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+          gap: .875rem;
         }
         .td-fg label {
-          display: block; font-size: .63rem; font-weight: 600;
-          letter-spacing: .1em; text-transform: uppercase; color: #94a3b8; margin-bottom: .4rem;
+          display: block; font-size: .6rem; font-weight: 600;
+          letter-spacing: .1em; text-transform: uppercase; color: #94a3b8; margin-bottom: .35rem;
         }
         .td-sel {
-          width: 100%; padding: .5rem 2rem .5rem .75rem;
+          width: 100%; padding: .45rem 2rem .45rem .7rem;
           border: 1.5px solid #e2e8f0; border-radius: 8px;
-          font-family: 'Poppins', sans-serif; font-size: .8rem; color: #1e293b;
+          font-family: 'Poppins', sans-serif; font-size: .78rem; color: #1e293b;
           background: #fafbfc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right .7rem center;
           appearance: none; outline: none; cursor: pointer;
           transition: border-color .15s, box-shadow .15s;
         }
         .td-sel:focus { border-color:${B}; box-shadow:0 0 0 3px rgba(19,63,119,.1); }
         .td-clear-btn {
-          width: 100%; padding: .5rem; border: 1.5px solid ${B};
+          width: 100%; padding: .45rem; border: 1.5px solid ${B};
           border-radius: 8px; color: ${B}; background: transparent;
-          cursor: pointer; font: 600 .75rem/1 'Poppins',sans-serif;
+          cursor: pointer; font: 600 .72rem/1 'Poppins',sans-serif;
           transition: all .15s;
         }
         .td-clear-btn:hover { background: ${BL}; }
 
-        /* ══════════════════════════════════════════
-           MAIN CONTENT
-        ══════════════════════════════════════════ */
-        .td-main { max-width:1240px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+        .td-main { max-width:1240px; margin:0 auto; padding:1.5rem clamp(1rem,4vw,1.5rem) 4rem; }
 
-        /* tabs */
         .td-tabs {
           display: flex; border-bottom: 2px solid #e8edf4;
-          overflow-x: auto; scrollbar-width: none; margin-bottom: 1.5rem;
+          overflow-x: auto; scrollbar-width: none; margin-bottom: 1.25rem;
+          -webkit-overflow-scrolling: touch;
         }
         .td-tabs::-webkit-scrollbar { display:none; }
         .td-tab {
-          padding: .75rem 1.1rem; font-size: .78rem; font-weight: 500;
+          padding: .65rem .9rem; font-size: .75rem; font-weight: 500;
           white-space: nowrap; flex-shrink: 0; border: none; background: transparent;
           color: #94a3b8; cursor: pointer; border-bottom: 2.5px solid transparent;
           margin-bottom: -2px; transition: all .15s; font-family: 'Poppins', sans-serif;
@@ -373,120 +380,199 @@ export default function TaxationDocuments() {
         .td-tab:hover { color: #475569; }
         .td-tab.on { color:${B}; border-bottom-color:${B}; font-weight:600; }
 
-        .td-count-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; flex-wrap:wrap; gap:.75rem; }
-        .td-count { font-size:.78rem; color:#94a3b8; }
+        .td-count-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.1rem; flex-wrap:wrap; gap:.5rem; }
+        .td-count { font-size:.75rem; color:#94a3b8; }
         .td-count strong { color:#475569; font-weight:600; }
 
-        /* ── GRID ── */
-        .td-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.25rem; margin-bottom:2rem; }
-        @media(max-width:700px){ .td-grid{ grid-template-columns:1fr; } }
+        .td-grid {
+          display:grid;
+          grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+          gap:1rem;
+          margin-bottom:1.75rem;
+        }
 
         .td-card {
           background: #fff; border: 1.5px solid #edf1f8; border-radius: 16px;
           overflow: hidden; display: flex; flex-direction: column;
           transition: all .25s cubic-bezier(.4,0,.2,1);
         }
-        .td-card:hover { border-color:${B}; transform:translateY(-4px); box-shadow:0 16px 48px rgba(19,63,119,.12); }
+        .td-card:hover { border-color:${B}; transform:translateY(-3px); box-shadow:0 12px 40px rgba(19,63,119,.12); }
 
         .td-card-top {
-          padding: 1.25rem; background: linear-gradient(135deg,#f8fafd,#fff);
-          border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: .875rem;
+          padding: 1.1rem; background: linear-gradient(135deg,#f8fafd,#fff);
+          border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: .75rem;
         }
         .td-card-icon {
-          width: 2.75rem; height: 2.75rem; border-radius: 12px; background: ${B};
+          width: 2.5rem; height: 2.5rem; border-radius: 11px; background: ${B};
           display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-          box-shadow: 0 4px 12px rgba(19,63,119,.22);
+          box-shadow: 0 3px 10px rgba(19,63,119,.22);
         }
-        .td-card-icon svg  { color:#fff; width:1.1rem; height:1.1rem; }
+        .td-card-icon svg  { color:#fff; width:1rem; height:1rem; }
         .td-card-icon.mca  { background: linear-gradient(135deg,#f43f5e,#e11d48); }
         .td-card-meta      { flex:1; min-width:0; }
-        .td-card-dn        { font-size:.63rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#94a3b8; margin-bottom:.35rem; }
-        .td-card-t         { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:#0f172a; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .td-card-dn        { font-size:.6rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:#94a3b8; margin-bottom:.3rem; }
+        .td-card-t         { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:#0f172a; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
-        .td-card-body  { padding:1rem 1.25rem; flex:1; display:flex; flex-direction:column; }
-        .td-card-desc  { font-size:.78rem; color:#64748b; line-height:1.65; margin-bottom:.875rem; flex:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .td-card-body  { padding:.9rem 1.1rem; flex:1; display:flex; flex-direction:column; }
+        .td-card-desc  { font-size:.75rem; color:#64748b; line-height:1.65; margin-bottom:.75rem; flex:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
-        .td-chips      { display:flex; flex-wrap:wrap; gap:.35rem; margin-bottom:1rem; }
-        .td-chip       { display:inline-flex; align-items:center; gap:.3rem; padding:.2rem .55rem; border-radius:999px; font-size:.63rem; font-weight:600; letter-spacing:.03em; }
-        .td-chip-dot   { width:5px; height:5px; border-radius:50%; }
+        .td-chips      { display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:.875rem; }
+        .td-chip       { display:inline-flex; align-items:center; gap:.28rem; padding:.18rem .5rem; border-radius:999px; font-size:.6rem; font-weight:600; letter-spacing:.03em; }
+        .td-chip-dot   { width:4px; height:4px; border-radius:50%; flex-shrink:0; }
 
-        .td-card-foot  { display:flex; align-items:center; justify-content:space-between; padding-top:.875rem; border-top:1px solid #f1f5f9; flex-wrap:wrap; gap:.5rem; }
-        .td-info       { display:flex; align-items:center; gap:.75rem; font-size:.68rem; color:#94a3b8; }
-        .td-info-i     { display:flex; align-items:center; gap:.25rem; }
-        .td-info-i svg { width:.65rem; height:.65rem; }
-        .td-btns       { display:flex; align-items:center; gap:.375rem; }
+        .td-card-foot  { display:flex; align-items:center; justify-content:space-between; padding-top:.75rem; border-top:1px solid #f1f5f9; flex-wrap:wrap; gap:.4rem; }
+        .td-info       { display:flex; align-items:center; gap:.5rem; font-size:.65rem; color:#94a3b8; flex-wrap:wrap; }
+        .td-info-i     { display:flex; align-items:center; gap:.22rem; }
+        .td-info-i svg { width:.6rem; height:.6rem; }
+        .td-btns       { display:flex; align-items:center; gap:.3rem; flex-shrink:0; }
 
         .td-visit {
-          display:inline-flex; align-items:center; gap:.35rem;
-          padding:.45rem .875rem; background:${B}; color:#fff; border-radius:8px;
-          font-size:.72rem; font-weight:600; text-decoration:none; border:none; cursor:pointer;
+          display:inline-flex; align-items:center; gap:.3rem;
+          padding:.4rem .75rem; background:${B}; color:#fff; border-radius:7px;
+          font-size:.7rem; font-weight:600; text-decoration:none; border:none; cursor:pointer;
           transition:all .15s; letter-spacing:.02em; font-family:'Poppins',sans-serif;
+          white-space: nowrap;
         }
         .td-visit:hover { background:${BD}; transform:translateY(-1px); box-shadow:0 4px 14px rgba(19,63,119,.3); }
-        .td-visit svg  { width:.7rem; height:.7rem; }
+        .td-visit svg  { width:.65rem; height:.65rem; }
 
         .td-ib {
-          width:2rem; height:2rem; border-radius:7px; border:1.5px solid #e8edf4;
+          width:1.875rem; height:1.875rem; border-radius:6px; border:1.5px solid #e8edf4;
           background:transparent; display:flex; align-items:center; justify-content:center;
           color:#94a3b8; cursor:pointer; transition:all .15s; flex-shrink:0;
         }
         .td-ib:hover { background:#f8fafc; border-color:#cbd5e1; color:#475569; }
         .td-ib.bm    { background:#fef9c3; border-color:#fbbf24; color:#b45309; }
-        .td-ib svg   { width:.8rem; height:.8rem; }
+        .td-ib svg   { width:.75rem; height:.75rem; }
         .td-sw       { position:relative; }
 
-        /* ── LIST ── */
-        .td-list { display:flex; flex-direction:column; gap:.75rem; margin-bottom:2rem; }
+        .td-list { display:flex; flex-direction:column; gap:.625rem; margin-bottom:1.75rem; }
         .td-lcard {
           background:#fff; border:1.5px solid #edf1f8; border-radius:12px;
-          padding:1rem 1.25rem; display:flex; align-items:center; gap:1.25rem;
+          padding:.875rem 1.1rem; display:flex; align-items:center; gap:1rem;
           transition:all .2s; flex-wrap:wrap;
         }
-        .td-lcard:hover { border-color:${B}; box-shadow:0 6px 24px rgba(19,63,119,.1); transform:translateX(3px); }
-        .td-licon      { width:2.25rem; height:2.25rem; border-radius:10px; background:${B}; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-        .td-licon svg  { color:#fff; width:1rem; height:1rem; }
+        .td-lcard:hover { border-color:${B}; box-shadow:0 5px 20px rgba(19,63,119,.1); transform:translateX(2px); }
+        .td-licon      { width:2rem; height:2rem; border-radius:9px; background:${B}; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .td-licon svg  { color:#fff; width:.875rem; height:.875rem; }
         .td-licon.mca  { background:linear-gradient(135deg,#f43f5e,#e11d48); }
         .td-lmain      { flex:1; min-width:0; }
-        .td-lt         { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:#0f172a; line-height:1.3; }
-        .td-ls         { font-size:.7rem; color:#94a3b8; margin-top:.15rem; }
-        .td-lright     { display:flex; align-items:center; gap:.5rem; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
+        .td-lt         { font-family:'Cormorant Garamond',serif; font-size:.95rem; font-weight:600; color:#0f172a; line-height:1.3; }
+        .td-ls         { font-size:.67rem; color:#94a3b8; margin-top:.12rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .td-lright     { display:flex; align-items:center; gap:.4rem; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
 
-        /* ── EMPTY ── */
-        .td-empty { text-align:center; padding:5rem 2rem; border:2px dashed #e8edf4; border-radius:20px; background:#fff; }
-        .td-ei    { width:4rem; height:4rem; background:${BL}; border-radius:16px; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; }
-        .td-ei svg{ color:${B}; width:1.5rem; height:1.5rem; }
-        .td-empty h3 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:#374151; margin-bottom:.375rem; }
-        .td-empty p  { font-size:.82rem; color:#94a3b8; }
+        .td-empty { text-align:center; padding:4rem 2rem; border:2px dashed #e8edf4; border-radius:20px; background:#fff; }
+        .td-ei    { width:3.5rem; height:3.5rem; background:${BL}; border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; }
+        .td-ei svg{ color:${B}; width:1.35rem; height:1.35rem; }
+        .td-empty h3 { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:#374151; margin-bottom:.3rem; }
+        .td-empty p  { font-size:.8rem; color:#94a3b8; }
 
-        /* ── PAGINATION ── */
-        .td-pg  { display:flex; align-items:center; justify-content:space-between; background:#fff; border:1.5px solid #edf1f8; border-radius:12px; padding:.875rem 1.25rem; flex-wrap:wrap; gap:.75rem; }
-        .td-pgl { font-size:.75rem; color:#94a3b8; }
+        .td-pg  {
+          display:flex; align-items:center; justify-content:space-between;
+          background:#fff; border:1.5px solid #edf1f8; border-radius:12px;
+          padding:.75rem 1rem; flex-wrap:wrap; gap:.625rem;
+        }
+        .td-pgl { font-size:.72rem; color:#94a3b8; }
         .td-pgl strong { color:#475569; }
-        .td-pgbs { display:flex; gap:.3rem; flex-wrap:wrap; }
+        .td-pgbs { display:flex; gap:.25rem; flex-wrap:wrap; }
         .td-pgb {
-          min-width:2.25rem; height:2.25rem; padding:0 .5rem; border-radius:8px;
-          border:1.5px solid #e8edf4; font-family:'Poppins',sans-serif; font-size:.75rem; font-weight:500;
+          min-width:2rem; height:2rem; padding:0 .45rem; border-radius:7px;
+          border:1.5px solid #e8edf4; font-family:'Poppins',sans-serif; font-size:.72rem; font-weight:500;
           color:#475569; background:#fff; cursor:pointer; transition:all .15s;
-          display:flex; align-items:center; justify-content:center; gap:.25rem;
+          display:flex; align-items:center; justify-content:center; gap:.2rem;
         }
         .td-pgb:hover:not(:disabled) { background:#f8fafc; border-color:#cbd5e1; }
         .td-pgb.on  { background:${B}; color:#fff; border-color:${B}; font-weight:600; }
         .td-pgb:disabled { opacity:.35; cursor:not-allowed; }
-        .td-ellipsis { color:#cbd5e1; font-size:.75rem; padding:0 .2rem; display:flex; align-items:center; }
+        .td-ellipsis { color:#cbd5e1; font-size:.72rem; padding:0 .15rem; display:flex; align-items:center; }
 
-        /* ── KEYFRAMES ── */
+        @media (max-width: 1024px) {
+          .td-hero-inner { grid-template-columns: 1fr; padding-bottom: clamp(1.5rem,3vw,2.5rem); }
+          .td-hero-card { display: none; }
+          .td-hero h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); }
+          .td-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+          .td-hero { min-height: 300px; }
+          .td-hero h1 { font-size: clamp(1.5rem, 5vw, 2.2rem); }
+          .td-hero-sub { font-size: .82rem; }
+          .td-stats-inner { flex-wrap: wrap; }
+          .td-stat { flex: 1 1 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,.08); padding: .65rem 1rem; }
+          .td-stat:nth-child(odd) { border-right: 1px solid rgba(255,255,255,.08); }
+          .td-stat:nth-last-child(-n+2) { border-bottom: none; }
+          .td-search-inner { gap: .5rem; }
+          .td-divider { display: none; }
+          .td-grid { grid-template-columns: 1fr 1fr; gap: .75rem; }
+          .td-card-foot { flex-direction: column; align-items: flex-start; }
+          .td-btns { width: 100%; justify-content: flex-end; }
+          .td-lcard { gap: .75rem; }
+          .td-lright { width: 100%; justify-content: flex-start; margin-top: .5rem; padding-top: .5rem; border-top: 1px solid #f1f5f9; }
+          .td-pg { padding: .625rem .875rem; }
+          .td-pgl { width: 100%; text-align: center; }
+          .td-pgbs { justify-content: center; width: 100%; }
+        }
+
+        @media (max-width: 600px) {
+          .td-hero { min-height: 260px; }
+          .td-hero-inner { padding: 2rem 1rem 1.5rem; }
+          .td-hero h1 { font-size: clamp(1.35rem, 6vw, 1.9rem); }
+          .td-hero-tag { font-size: .58rem; padding: .25rem .7rem; }
+          .td-search-inner { padding: .625rem 1rem; }
+          .td-filter-btn span.td-filter-label { display: none; }
+          .td-main { padding: 1.25rem 1rem 3rem; }
+          .td-grid { grid-template-columns: 1fr; }
+          .td-tab { padding: .6rem .7rem; font-size: .7rem; }
+          .td-lcard { flex-wrap: wrap; }
+          .td-lmain { width: calc(100% - 3rem); }
+          .td-pg { flex-direction: column; align-items: center; gap: .5rem; }
+        }
+
+        @media (max-width: 400px) {
+          .td-hero { min-height: 220px; }
+          .td-hero-inner { padding: 1.75rem .875rem 1.25rem; }
+          .td-hero h1 { font-size: 1.3rem; }
+          .td-stats-inner { flex-wrap: nowrap; }
+          .td-stat { flex: 1; padding: .5rem .6rem; }
+          .td-stat:nth-child(odd) { border-right: 1px solid rgba(255,255,255,.08); }
+          .td-stat-num { font-size: 1.1rem; }
+          .td-stat-lbl { font-size: .48rem; letter-spacing: .06em; }
+          .td-search-inner { padding: .5rem .875rem; gap: .35rem; }
+          .td-si { font-size: .75rem; }
+          .td-filter-panel-inner { grid-template-columns: 1fr 1fr; gap: .625rem; }
+          .td-main { padding: 1rem .875rem 2.5rem; }
+          .td-tab { padding: .55rem .6rem; font-size: .67rem; }
+          .td-card-top { padding: .875rem; gap: .625rem; }
+          .td-card-body { padding: .75rem .875rem; }
+          .td-card-icon { width: 2.25rem; height: 2.25rem; border-radius: 9px; }
+          .td-card-t { font-size: .92rem; }
+          .td-card-desc { font-size: .72rem; }
+          .td-visit { padding: .35rem .625rem; font-size: .67rem; }
+          .td-ib { width: 1.75rem; height: 1.75rem; }
+          .td-pgb { min-width: 1.875rem; height: 1.875rem; font-size: .68rem; }
+          .td-pgb svg { width: .7rem; height: .7rem; }
+        }
+
+        @media (min-width: 1440px) {
+          .td-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (hover: none) {
+          .td-card:hover { transform: none; box-shadow: none; border-color: #edf1f8; }
+          .td-lcard:hover { transform: none; box-shadow: none; border-color: #edf1f8; }
+        }
+
         @keyframes smIn { from{opacity:0;transform:scale(.95) translateY(4px)} to{opacity:1;transform:scale(1) translateY(0)} }
       `}</style>
 
       <div className="td">
 
-        {/* ═══ HERO — background image ═══ */}
+        {/* HERO */}
         <section className="td-hero">
           <div className="td-deco td-deco1" />
           <div className="td-deco td-deco2" />
           <div className="td-deco td-deco3" />
 
-          {/* text + trending card */}
           <div className="td-hero-inner">
             <div>
               <div className="td-hero-tag">
@@ -514,7 +600,6 @@ export default function TaxationDocuments() {
             </div>
           </div>
 
-          {/* stats strip — inside hero, flush at bottom */}
           <div className="td-stats-strip">
             <div className="td-stats-inner">
               {[
@@ -532,55 +617,51 @@ export default function TaxationDocuments() {
           </div>
         </section>
 
-        {/* ═══ SEARCH BAR — sticky, sits BELOW hero ═══ */}
+        {/* SEARCH BAR */}
         <div className="td-search-section" ref={filterRef}>
           <div className="td-search-inner">
-            {/* search input */}
             <div className="td-si-wrap">
               <Search />
               <input
                 className="td-si"
-                placeholder="Search documents, forms, circulars…"
+                placeholder="Search documents…"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  style={{border:'none',background:'none',cursor:'pointer',color:'#94a3b8',display:'flex',padding:0,alignItems:'center'}}
+                  style={{border:'none',background:'none',cursor:'pointer',color:'#94a3b8',display:'flex',padding:0,alignItems:'center',flexShrink:0}}
                 >
-                  <X style={{width:'.875rem',height:'.875rem'}} />
+                  <X style={{width:'.8rem',height:'.8rem'}} />
                 </button>
               )}
             </div>
 
             <div className="td-divider" />
 
-            {/* filter toggle */}
             <button
               className={`td-filter-btn ${filtersOpen || activeFilters > 0 ? 'active' : ''}`}
               onClick={() => setFiltersOpen(v => !v)}
             >
-              <Filter style={{width:'.875rem',height:'.875rem'}} />
-              Filters
+              <Filter style={{width:'.8rem',height:'.8rem',flexShrink:0}} />
+              <span className="td-filter-label">Filters</span>
               {activeFilters > 0 && <span className="td-filter-badge">{activeFilters}</span>}
-              <ChevronDown style={{width:'.75rem',height:'.75rem',transform:filtersOpen?'rotate(180deg)':'none',transition:'transform .2s'}} />
+              <ChevronDown style={{width:'.7rem',height:'.7rem',transform:filtersOpen?'rotate(180deg)':'none',transition:'transform .2s',flexShrink:0}} />
             </button>
 
             <div className="td-divider" />
 
-            {/* view toggle */}
             <div className="td-vb">
               <button className={`td-vbtn ${viewMode==='grid'?'on':''}`} onClick={() => setViewMode('grid')} title="Grid view">
-                <LayoutGrid style={{width:'.875rem',height:'.875rem'}} />
+                <LayoutGrid style={{width:'.8rem',height:'.8rem'}} />
               </button>
               <button className={`td-vbtn ${viewMode==='list'?'on':''}`} onClick={() => setViewMode('list')} title="List view">
-                <List style={{width:'.875rem',height:'.875rem'}} />
+                <List style={{width:'.8rem',height:'.8rem'}} />
               </button>
             </div>
           </div>
 
-          {/* expandable filter panel */}
           {filtersOpen && (
             <div className="td-filter-panel">
               <div className="td-filter-panel-inner">
@@ -611,10 +692,9 @@ export default function TaxationDocuments() {
           )}
         </div>
 
-        {/* ═══ MAIN CONTENT ═══ */}
+        {/* MAIN CONTENT */}
         <div className="td-main">
 
-          {/* category tabs */}
           <div className="td-tabs">
             {categories.map(cat => (
               <button
@@ -627,14 +707,12 @@ export default function TaxationDocuments() {
             ))}
           </div>
 
-          {/* result count */}
           <div className="td-count-row">
             <p className="td-count">
-              Showing <strong>{start+1}–{Math.min(start+itemsPerPage, filtered.length)}</strong> of <strong>{filtered.length}</strong> documents
+              Showing <strong>{Math.min(start+1, filtered.length)}–{Math.min(start+itemsPerPage, filtered.length)}</strong> of <strong>{filtered.length}</strong> documents
             </p>
           </div>
 
-          {/* ── empty state ── */}
           {filtered.length === 0 ? (
             <div className="td-empty">
               <div className="td-ei"><FileText /></div>
@@ -642,7 +720,6 @@ export default function TaxationDocuments() {
               <p>Try adjusting your search or filter criteria</p>
             </div>
 
-          /* ── grid view ── */
           ) : viewMode === 'grid' ? (
             <div className="td-grid">
               {pageDocs.map(doc => {
@@ -710,7 +787,6 @@ export default function TaxationDocuments() {
               })}
             </div>
 
-          /* ── list view ── */
           ) : (
             <div className="td-list">
               {pageDocs.map(doc => {
@@ -724,7 +800,7 @@ export default function TaxationDocuments() {
                     <div className="td-lmain">
                       <div className="td-lt">{doc.title}</div>
                       <div className="td-ls">{doc.docNumber} · {doc.fileSize} · v{doc.version}</div>
-                      <div className="td-chips" style={{marginTop:'.5rem',marginBottom:0}}>
+                      <div className="td-chips" style={{marginTop:'.45rem',marginBottom:0}}>
                         <span className="td-chip" style={{background:cc.bg,color:cc.color}}>{doc.category}</span>
                         <span className="td-chip" style={{background:tc.bg,color:tc.color}}>
                           <span className="td-chip-dot" style={{background:tc.dot}} />{doc.taxType}
@@ -732,13 +808,13 @@ export default function TaxationDocuments() {
                       </div>
                     </div>
                     <div className="td-lright">
-                      <div style={{fontSize:'.68rem',color:'#94a3b8',textAlign:'right',lineHeight:1.6}}>
-                        <div style={{display:'flex',alignItems:'center',gap:'.25rem',justifyContent:'flex-end'}}>
-                          <Calendar style={{width:'.65rem',height:'.65rem'}} />
+                      <div style={{fontSize:'.65rem',color:'#94a3b8',textAlign:'right',lineHeight:1.6}}>
+                        <div style={{display:'flex',alignItems:'center',gap:'.22rem',justifyContent:'flex-end'}}>
+                          <Calendar style={{width:'.6rem',height:'.6rem'}} />
                           {new Date(doc.issueDate).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}
                         </div>
-                        <div style={{display:'flex',alignItems:'center',gap:'.25rem',justifyContent:'flex-end'}}>
-                          <TrendingUp style={{width:'.65rem',height:'.65rem'}} />
+                        <div style={{display:'flex',alignItems:'center',gap:'.22rem',justifyContent:'flex-end'}}>
+                          <TrendingUp style={{width:'.6rem',height:'.6rem'}} />
                           {doc.downloads.toLocaleString()} downloads
                         </div>
                       </div>
@@ -768,11 +844,11 @@ export default function TaxationDocuments() {
           {filtered.length > 0 && (
             <div className="td-pg">
               <span className="td-pgl">
-                <strong>{start+1}–{Math.min(start+itemsPerPage, filtered.length)}</strong> of <strong>{filtered.length}</strong>
+                <strong>{Math.min(start+1, filtered.length)}–{Math.min(start+itemsPerPage, filtered.length)}</strong> of <strong>{filtered.length}</strong>
               </span>
               <div className="td-pgbs">
                 <button className="td-pgb" disabled={currentPage===1} onClick={() => setCurrentPage(p=>p-1)}>
-                  <ChevronLeft style={{width:'.8rem',height:'.8rem'}} /> Prev
+                  <ChevronLeft style={{width:'.75rem',height:'.75rem'}} /> Prev
                 </button>
                 {Array.from({length:totalPages},(_,i)=>i+1).map(n => {
                   if (n===1 || n===totalPages || (n>=currentPage-1 && n<=currentPage+1))
@@ -782,7 +858,7 @@ export default function TaxationDocuments() {
                   return null;
                 })}
                 <button className="td-pgb" disabled={currentPage===totalPages} onClick={() => setCurrentPage(p=>p+1)}>
-                  Next <ChevronRight style={{width:'.8rem',height:'.8rem'}} />
+                  Next <ChevronRight style={{width:'.75rem',height:'.75rem'}} />
                 </button>
               </div>
             </div>

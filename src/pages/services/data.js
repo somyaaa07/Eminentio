@@ -1,691 +1,307 @@
 export const servicesData = {
 
-
-  gstRegistration: {
-    title: "GST Registration",
-    description: "Hassle-free GST registration for businesses and professionals.",
+  auditAssurance: {
+    title: "Audit & Assurance Staffing",
+    description: "Expert offshore audit professionals to support your CPA firm with precision and compliance.",
     features: [
-      "New GST Registration",
-      "Amendment in GST Registration",
-      "GST Cancellation",
-      "GST Revocation"
+      "Financial Statement Audits",
+      "Internal Control Assessment",
+      "Risk Assessment & Reporting",
+      "External Audit Documentation"
     ],
     hero: {
-      title: "GST Registration",
-      subtitle: "Quick, accurate, and compliant GST registration for all types of businesses across India",
-      image: "/banner-img/gst-registration.png",
-      cta: "Register for GST Now"
+      title: "Audit & Assurance Staffing",
+      subtitle: "Reliable offshore audit experts to strengthen your audit practice — on-demand, cost-efficient, and fully integrated",
+      image: "/banner-img/audit-assurance.png",
+      cta: "Hire Audit Professionals"
     },
     about: {
-      title: "Why Choose Our GST Registration Services?",
-      description: "We provide end-to-end GST registration services for proprietors, partnerships, LLPs, companies, and other entities. Our experts ensure smooth registration, correct classification, and full compliance from day one.",
+      title: "Why Choose Our Audit & Assurance Staffing?",
+      description: "Emenentia Consulting provides pre-vetted offshore audit professionals who seamlessly integrate with your existing team. Whether you need support for a single engagement or ongoing audit cycles, our experts bring precision, compliance knowledge, and global auditing standards to every task.",
       highlights: [
-        "Fast and error-free registration",
-        "Guidance on correct GST category",
-        "Support for all business types",
-        "Post-registration compliance support"
+        "Professionals trained in international audit standards",
+        "Seamless integration with your tools and workflows",
+        "Flexible staffing — scale up or down anytime",
+        "Reduce team burnout during peak audit season"
       ]
     },
     detailedFeatures: [
-      {
-        icon: "🏛️",
-        title: "New GST Registration",
-        description: "Complete assistance in obtaining fresh GSTIN for new and existing businesses"
-      },
-      {
-        icon: "✏️",
-        title: "Amendment in GST Registration",
-        description: "Modification of business details, address, partners, or other registered information"
-      },
-      {
-        icon: "❌",
-        title: "GST Cancellation",
-        description: "Voluntary or compulsory cancellation of GST registration with proper compliance"
-      },
-      {
-        icon: "🔄",
-        title: "GST Revocation",
-        description: "Restoration of cancelled GST registration through proper legal process"
-      }
-    ],
-    process: {
-      title: "Our GST Registration Process",
-      steps: [
-        {
-          number: "01",
-          title: "Document Collection",
-          description: "Gather PAN, address proof, business documents, and bank details"
-        },
-        {
-          number: "02",
-          title: "Application Filing",
-          description: "File GST registration application on the GST portal accurately"
-        },
-        {
-          number: "03",
-          title: "Query Resolution",
-          description: "Handle any queries raised by the GST officer promptly"
-        },
-        {
-          number: "04",
-          title: "GSTIN Issuance",
-          description: "Receive your GSTIN and registration certificate"
-        }
-      ]
-    },
-    faqs: [
-      {
-        question: "Who needs GST registration?",
-        answer: "Businesses with turnover exceeding prescribed limits, interstate suppliers, e-commerce sellers, and certain other categories must register for GST."
-      },
-      {
-        question: "How long does GST registration take?",
-        answer: "Typically 3-7 working days after submission of complete documents."
-      },
-      {
-        question: "What documents are required?",
-        answer: "PAN card, Aadhaar, business address proof, bank account details, and business incorporation documents."
-      },
-      {
-        question: "Can I register voluntarily?",
-        answer: "Yes, businesses below the threshold can also register voluntarily to avail input tax credit benefits."
-      }
-    ],
-    cta: {
-      title: "Get Your GSTIN Today",
-      description: "Quick and hassle-free GST registration with expert support",
-      primaryButton: "Apply for GST Registration",
-      secondaryButton: "Talk to GST Expert"
-    }
-  },
-
-  gstFiling: {
-    title: "GST Filing",
-    description: "Timely and accurate GST return filing services.",
-    features: [
-      "GSTR-1 Filing",
-      "GSTR-3B Filing",
-      "Annual GST Return",
-      "GST Reconciliation"
-    ],
-    hero: {
-      title: "GST Filing",
-      subtitle: "Accurate, timely, and compliant GST return filing to keep your business penalty-free",
-      image: "/banner-img/gst-filing.png",
-      cta: "File GST Returns Now"
-    },
-    about: {
-      title: "Why Choose Our GST Filing Services?",
-      description: "Our GST filing services ensure that all your returns are filed accurately and on time. We handle GSTR-1, GSTR-3B, annual returns, and reconciliation so you stay compliant without the stress.",
-      highlights: [
-        "On-time filing, zero penalties",
-        "Complete reconciliation support",
-        "Expert handling of notices",
-        "Dedicated GST manager"
-      ]
-    },
-    detailedFeatures: [
-      {
-        icon: "📋",
-        title: "GSTR-1 Filing",
-        description: "Monthly/quarterly outward supply return filing with complete invoice details"
-      },
       {
         icon: "📊",
-        title: "GSTR-3B Filing",
-        description: "Monthly summary return filing with accurate tax payment computation"
+        title: "Financial Statement Audits",
+        description: "Offshore audit staff to assist in reviewing and verifying financial statements with accuracy and compliance"
+      },
+      {
+        icon: "🔒",
+        title: "Internal Control Assessment",
+        description: "Evaluation of internal controls to identify gaps, risks, and improvement opportunities"
+      },
+      {
+        icon: "⚠️",
+        title: "Risk Assessment & Reporting",
+        description: "Thorough risk identification, analysis, and structured reporting aligned with your audit framework"
       },
       {
         icon: "📁",
-        title: "Annual GST Return",
-        description: "GSTR-9 and GSTR-9C filing with complete annual reconciliation"
-      },
-      {
-        icon: "🔍",
-        title: "GST Reconciliation",
-        description: "Matching of GSTR-2A/2B with books to maximize input tax credit claims"
+        title: "External Audit Documentation",
+        description: "Preparation and organization of documentation packages ready for external auditor review"
       }
     ],
     process: {
-      title: "Our GST Filing Process",
+      title: "How We Staff Your Audit Team",
       steps: [
         {
           number: "01",
-          title: "Data Collection",
-          description: "Collect sales, purchase, and expense data for the period"
+          title: "Share Your Requirements",
+          description: "Tell us your audit scope, team size needed, and timeline"
         },
         {
           number: "02",
-          title: "Reconciliation",
-          description: "Match books with GSTR-2A/2B and resolve mismatches"
+          title: "Expert Matching",
+          description: "We match you with pre-vetted audit professionals suited to your engagement"
         },
         {
           number: "03",
-          title: "Return Preparation",
-          description: "Prepare accurate GST returns with correct tax computation"
+          title: "Onboarding",
+          description: "Your offshore team integrates with your systems, tools, and reporting formats"
         },
         {
           number: "04",
-          title: "Filing & Confirmation",
-          description: "File returns on GST portal and share filing confirmation"
+          title: "Work & Scale",
+          description: "Team executes tasks under your supervision — scale up or down as needed"
         }
       ]
     },
     faqs: [
       {
-        question: "Which GST returns do you file?",
-        answer: "We file GSTR-1, GSTR-3B, GSTR-4, GSTR-9, GSTR-9C, and other applicable returns."
+        question: "What audit standards are your professionals trained in?",
+        answer: "Our audit staff are trained in international standards including GAAS, IFRS, and GAAP, and can adapt to your firm's specific requirements."
       },
       {
-        question: "What if I miss a GST filing deadline?",
-        answer: "Late fees and interest apply. We help minimize penalties and file pending returns quickly."
+        question: "Can offshore audit staff work in our software tools?",
+        answer: "Yes, our professionals are experienced with major audit tools and can adapt to your firm's specific platforms and workflows."
       },
       {
-        question: "Can you handle GST notices?",
-        answer: "Yes, we prepare and submit responses to GST department notices and queries."
+        question: "Is this suitable for small CPA firms?",
+        answer: "Absolutely. Our hourly billing model makes it cost-effective even for smaller firms needing just a few hours of support per week."
       },
       {
-        question: "Do you handle GST for e-commerce businesses?",
-        answer: "Yes, we have expertise in GST compliance for e-commerce sellers and aggregators."
+        question: "How quickly can we get started?",
+        answer: "Thanks to our pre-vetted talent pool, onboarding typically begins within a few days of finalizing your requirements."
       }
     ],
     cta: {
-      title: "Stay GST Compliant Every Month",
-      description: "Let our experts handle your GST filings while you focus on business",
-      primaryButton: "Start GST Filing",
-      secondaryButton: "Get Free Consultation"
+      title: "Strengthen Your Audit Team Today",
+      description: "Offshore audit professionals ready to integrate and deliver — on your terms",
+      primaryButton: "Hire Audit Staff",
+      secondaryButton: "Talk to Our Team"
     }
   },
 
-  customs: {
-    title: "Customs Duty",
-    description: "Expert customs duty advisory and compliance services.",
+  accountingStaffing: {
+    title: "Accounting Staffing",
+    description: "Dedicated offshore accounting professionals to handle your day-to-day financial operations.",
     features: [
-      "Import & Export Consultation",
-      "Customs Duty Classification",
-      "Duty Drawback Claims",
-      "Customs Compliance Advisory"
+      "Bookkeeping & Ledger Management",
+      "Financial Statement Preparation",
+      "Bank & Account Reconciliation",
+      "Management Reporting & Analysis"
     ],
     hero: {
-      title: "Customs Duty",
-      subtitle: "Expert customs duty advisory, classification, and compliance services for importers and exporters",
-      image: "/banner-img/customs.png",
-      cta: "Get Customs Advisory"
+      title: "Accounting Staffing",
+      subtitle: "Accurate, reliable offshore accountants who work exclusively for you — without the overhead of full-time hires",
+      image: "/banner-img/accounting-staffing.png",
+      cta: "Hire Accounting Professionals"
     },
     about: {
-      title: "Why Choose Our Customs Duty Services?",
-      description: "We provide comprehensive customs duty advisory services to help businesses navigate complex import-export regulations, optimize duty costs, and ensure complete customs compliance.",
+      title: "Why Choose Our Accounting Staffing?",
+      description: "Emenentia Consulting provides dedicated offshore accounting professionals who become an extension of your team. From daily bookkeeping to complex financial reporting, our accountants ensure accuracy, clarity, and timely insights — all billed on a flexible hourly model.",
       highlights: [
-        "Expert customs duty classification",
-        "Duty optimization strategies",
-        "Complete regulatory compliance",
-        "Experienced customs advisors"
+        "Dedicated accountants working exclusively for your business",
+        "Expertise in international accounting standards",
+        "Flexible engagement — hours or full-time equivalent",
+        "Save up to 60% compared to in-house hiring costs"
       ]
     },
     detailedFeatures: [
       {
-        icon: "🚢",
-        title: "Import & Export Consultation",
-        description: "End-to-end advisory for import and export customs procedures and documentation"
+        icon: "📒",
+        title: "Bookkeeping & Ledger Management",
+        description: "Daily transaction recording, ledger maintenance, and accounts management for accurate financial records"
       },
-      {
-        icon: "🗂️",
-        title: "Customs Duty Classification",
-        description: "Accurate HS code classification for correct duty determination"
-      },
-      {
-        icon: "💰",
-        title: "Duty Drawback Claims",
-        description: "Assistance in claiming duty drawback and refunds for exported goods"
-      },
-      {
-        icon: "✅",
-        title: "Customs Compliance Advisory",
-        description: "Guidance on customs regulations, FEMA, and foreign trade policy compliance"
-      }
-    ],
-    process: {
-      title: "Our Customs Duty Process",
-      steps: [
-        {
-          number: "01",
-          title: "Requirement Analysis",
-          description: "Understand your import/export nature and business requirements"
-        },
-        {
-          number: "02",
-          title: "Classification & Valuation",
-          description: "Determine correct HS codes and customs valuation"
-        },
-        {
-          number: "03",
-          title: "Documentation",
-          description: "Prepare and review all required customs documents"
-        },
-        {
-          number: "04",
-          title: "Compliance & Advisory",
-          description: "Ongoing advisory for duty optimization and regulatory compliance"
-        }
-      ]
-    },
-    faqs: [
-      {
-        question: "What is customs duty?",
-        answer: "Customs duty is a tax levied on goods imported into or exported from India as per the Customs Act and prevailing tariff rates."
-      },
-      {
-        question: "How can I reduce customs duty legally?",
-        answer: "Through correct HS code classification, availing FTA benefits, duty exemption schemes, and duty drawback claims."
-      },
-      {
-        question: "Do you assist with customs notices?",
-        answer: "Yes, we help respond to customs show cause notices, appeals, and departmental queries."
-      },
-      {
-        question: "Can you help with SEZ and EOU compliance?",
-        answer: "Yes, we provide specialized customs compliance services for SEZ units and Export Oriented Units."
-      }
-    ],
-    cta: {
-      title: "Optimize Your Customs Duty Today",
-      description: "Expert customs advisory to keep your imports and exports compliant and cost-efficient",
-      primaryButton: "Book Customs Consultation",
-      secondaryButton: "Talk to Expert"
-    }
-  },
-
-  incomeTax: {
-    title: "Income Tax Filing",
-    description: "Accurate and timely income tax return filing for individuals and businesses.",
-    features: [
-      "Individual ITR Filing",
-      "Business ITR Filing",
-      "Tax Computation",
-      "Income Tax Notice Handling"
-    ],
-    hero: {
-      title: "Income Tax Filing",
-      subtitle: "Accurate, timely, and maximized income tax return filing for individuals and all business types",
-      image: "/banner-img/income-tax.png",
-      cta: "File Income Tax Return"
-    },
-    about: {
-      title: "Why Choose Our Income Tax Filing Services?",
-      description: "We provide comprehensive income tax filing services for salaried individuals, self-employed professionals, partnerships, LLPs, companies, and all other entities. Our experts ensure maximum deductions and complete compliance.",
-      highlights: [
-        "Maximum deductions and savings",
-        "Filing for all ITR forms",
-        "Handling complex income sources",
-        "Expert notice management"
-      ]
-    },
-    detailedFeatures: [
       {
         icon: "📄",
-        title: "Individual ITR Filing",
-        description: "ITR filing for salaried, self-employed, freelancers, and professionals with optimized deductions"
+        title: "Financial Statement Preparation",
+        description: "Preparation of balance sheets, income statements, and cash flow statements aligned with reporting standards"
       },
       {
-        icon: "🏢",
-        title: "Business ITR Filing",
-        description: "Corporate tax filing for companies, LLPs, partnerships, and proprietorship firms"
-      },
-      {
-        icon: "🧮",
-        title: "Tax Computation",
-        description: "Accurate tax liability computation with all eligible exemptions and deductions"
-      },
-      {
-        icon: "📬",
-        title: "Income Tax Notice Handling",
-        description: "Expert drafting of responses to income tax notices, scrutiny, and assessments"
-      }
-    ],
-    process: {
-      title: "Our Income Tax Filing Process",
-      steps: [
-        {
-          number: "01",
-          title: "Document Collection",
-          description: "Gather Form 16, bank statements, investment proofs, and income details"
-        },
-        {
-          number: "02",
-          title: "Tax Computation",
-          description: "Calculate tax liability with all deductions under Chapter VI-A"
-        },
-        {
-          number: "03",
-          title: "Return Preparation",
-          description: "Prepare accurate ITR with correct income heads and schedules"
-        },
-        {
-          number: "04",
-          title: "Filing & Verification",
-          description: "File return on income tax portal and complete e-verification"
-        }
-      ]
-    },
-    faqs: [
-      {
-        question: "Who needs to file income tax returns?",
-        answer: "Individuals with income above basic exemption limit, all companies and LLPs, and those claiming refunds must file ITR."
-      },
-      {
-        question: "What is the deadline for ITR filing?",
-        answer: "Usually July 31st for individuals and October 31st for businesses requiring audit. We track all deadlines for you."
-      },
-      {
-        question: "Can you handle capital gains tax?",
-        answer: "Yes, we handle short-term and long-term capital gains from stocks, mutual funds, real estate, and other assets."
-      },
-      {
-        question: "Do you help with tax refunds?",
-        answer: "Yes, we ensure maximum eligible refund claims and track refund status with the department."
-      }
-    ],
-    cta: {
-      title: "File Your Income Tax Return Today",
-      description: "Maximize your savings with expert income tax filing services",
-      primaryButton: "File ITR Now",
-      secondaryButton: "Calculate Tax Savings"
-    }
-  },
-
-  tdsTcs: {
-    title: "TDS / TCS",
-    description: "Complete TDS and TCS compliance and filing services.",
-    features: [
-      "TDS Return Filing",
-      "TCS Return Filing",
-      "Form 16 / 16A Generation",
-      "TDS Reconciliation"
-    ],
-    hero: {
-      title: "TDS / TCS",
-      subtitle: "Complete TDS and TCS deduction, deposit, and return filing services for error-free compliance",
-      image: "/banner-img/tds-tcs.png",
-      cta: "Get TDS/TCS Support"
-    },
-    about: {
-      title: "Why Choose Our TDS / TCS Services?",
-      description: "We provide end-to-end TDS and TCS compliance services including correct deduction computation, timely deposit, quarterly return filing, and generation of Form 16/16A for employees and deductees.",
-      highlights: [
-        "Timely TDS/TCS deposit to avoid interest",
-        "Accurate quarterly return filing",
-        "Form 16 and 16A generation",
-        "Expert handling of TDS notices"
-      ]
-    },
-    detailedFeatures: [
-      {
-        icon: "💼",
-        title: "TDS Return Filing",
-        description: "Quarterly TDS return filing (Form 24Q, 26Q, 27Q) with accurate deductee details"
-      },
-      {
-        icon: "🏪",
-        title: "TCS Return Filing",
-        description: "TCS collection, deposit, and quarterly return filing for applicable businesses"
-      },
-      {
-        icon: "📜",
-        title: "Form 16 / 16A Generation",
-        description: "Generation and distribution of TDS certificates to employees and deductees"
-      },
-      {
-        icon: "🔍",
-        title: "TDS Reconciliation",
-        description: "Matching Form 26AS with books and resolving mismatches in TDS credits"
-      }
-    ],
-    process: {
-      title: "Our TDS / TCS Process",
-      steps: [
-        {
-          number: "01",
-          title: "Deduction Review",
-          description: "Review payments and identify applicable TDS/TCS rates and sections"
-        },
-        {
-          number: "02",
-          title: "Challan & Deposit",
-          description: "Timely deposit of deducted TDS/TCS with correct challan details"
-        },
-        {
-          number: "03",
-          title: "Return Filing",
-          description: "Quarterly TDS/TCS return filing with accurate deductee information"
-        },
-        {
-          number: "04",
-          title: "Certificate Issuance",
-          description: "Generate and issue Form 16/16A to all deductees within due dates"
-        }
-      ]
-    },
-    faqs: [
-      {
-        question: "Who needs to deduct TDS?",
-        answer: "Businesses, professionals, and individuals making specified payments like salary, rent, contractor payments, and professional fees must deduct TDS."
-      },
-      {
-        question: "What happens if TDS is not deposited on time?",
-        answer: "Interest at 1.5% per month is levied. We ensure timely deposits to avoid penalties and interest."
-      },
-      {
-        question: "When should Form 16 be issued?",
-        answer: "Form 16 (for salary) must be issued by June 15th after year end. Form 16A is issued quarterly."
-      },
-      {
-        question: "Can you correct TDS return errors?",
-        answer: "Yes, we file correction statements to rectify errors in previously filed TDS returns."
-      }
-    ],
-    cta: {
-      title: "Stay TDS Compliant Every Quarter",
-      description: "Expert TDS/TCS services to keep you penalty-free and fully compliant",
-      primaryButton: "Get TDS Support",
-      secondaryButton: "Talk to Expert"
-    }
-  },
-
-  advanceTax: {
-    title: "Advance Tax",
-    description: "Accurate advance tax computation and timely payment advisory.",
-    features: [
-      "Advance Tax Computation",
-      "Installment Planning",
-      "Interest Calculation",
-      "Compliance Advisory"
-    ],
-    hero: {
-      title: "Advance Tax",
-      subtitle: "Accurate advance tax estimation and timely payment to avoid interest and penalties",
-      image: "/banner-img/advance-tax.png",
-      cta: "Plan Advance Tax Now"
-    },
-    about: {
-      title: "Why Choose Our Advance Tax Services?",
-      description: "We help individuals, professionals, and businesses compute and pay advance tax correctly across all four installments, ensuring you avoid interest under sections 234B and 234C.",
-      highlights: [
-        "Accurate income estimation",
-        "Timely installment reminders",
-        "Interest and penalty avoidance",
-        "Year-round tax planning support"
-      ]
-    },
-    detailedFeatures: [
-      {
-        icon: "📆",
-        title: "Advance Tax Computation",
-        description: "Accurate estimation of taxable income and advance tax liability for the year"
-      },
-      {
-        icon: "📅",
-        title: "Installment Planning",
-        description: "Strategic planning of four advance tax installments — June, September, December, and March"
-      },
-      {
-        icon: "💹",
-        title: "Interest Calculation",
-        description: "Computation of interest under sections 234B and 234C to assess shortfall impact"
-      },
-      {
-        icon: "📋",
-        title: "Compliance Advisory",
-        description: "Ongoing advisory to revise estimates based on actual income during the year"
-      }
-    ],
-    process: {
-      title: "Our Advance Tax Process",
-      steps: [
-        {
-          number: "01",
-          title: "Income Estimation",
-          description: "Project total income from all sources for the financial year"
-        },
-        {
-          number: "02",
-          title: "Tax Computation",
-          description: "Calculate estimated tax liability after deductions and credits"
-        },
-        {
-          number: "03",
-          title: "Installment Advisory",
-          description: "Plan and advise on each quarterly advance tax installment"
-        },
-        {
-          number: "04",
-          title: "Payment & Tracking",
-          description: "Assist with challan payment and track advance tax credits in Form 26AS"
-        }
-      ]
-    },
-    faqs: [
-      {
-        question: "Who needs to pay advance tax?",
-        answer: "Any taxpayer with estimated tax liability of Rs. 10,000 or more in a financial year must pay advance tax."
-      },
-      {
-        question: "What are the advance tax installment due dates?",
-        answer: "15th June (15%), 15th September (45%), 15th December (75%), and 15th March (100%) of estimated tax."
-      },
-      {
-        question: "What if I miss an installment?",
-        answer: "Interest under sections 234B and 234C is applicable. We help minimize the impact with proper planning."
-      },
-      {
-        question: "Is advance tax applicable to salaried individuals?",
-        answer: "Generally no, as TDS covers salary income. But advance tax applies if there is additional income like capital gains, rent, or freelance income."
-      }
-    ],
-    cta: {
-      title: "Plan Your Advance Tax Smartly",
-      description: "Avoid interest and penalties with expert advance tax planning",
-      primaryButton: "Compute Advance Tax",
-      secondaryButton: "Talk to Tax Expert"
-    }
-  },
-
-  taxPlanning: {
-    title: "Tax Planning",
-    description: "Strategic tax planning to legally minimize your tax liability.",
-    features: [
-      "Personal Tax Planning",
-      "Corporate Tax Planning",
-      "Investment-Linked Tax Saving",
-      "Year-Round Tax Advisory"
-    ],
-    hero: {
-      title: "Tax Planning",
-      subtitle: "Smart, legal, and structured tax planning to maximize your savings and minimize liability",
-      image: "/banner-img/tax-planning.png",
-      cta: "Start Tax Planning"
-    },
-    about: {
-      title: "Why Choose Our Tax Planning Services?",
-      description: "Our tax planning services help individuals and businesses reduce their tax burden through legal strategies, investment planning, and optimal use of deductions and exemptions available under the Income Tax Act.",
-      highlights: [
-        "Customized tax saving strategies",
-        "Maximum deduction utilization",
-        "Investment-linked tax benefits",
-        "Proactive year-round advisory"
-      ]
-    },
-    detailedFeatures: [
-      {
-        icon: "🧮",
-        title: "Personal Tax Planning",
-        description: "Tailored tax saving strategies for salaried individuals and self-employed professionals"
-      },
-      {
-        icon: "🏢",
-        title: "Corporate Tax Planning",
-        description: "Structured corporate tax planning to optimize tax efficiency for businesses"
+        icon: "🏦",
+        title: "Bank & Account Reconciliation",
+        description: "Timely reconciliation of bank accounts, credit cards, and inter-company accounts to ensure accuracy"
       },
       {
         icon: "📈",
-        title: "Investment-Linked Tax Saving",
-        description: "Advisory on ELSS, PPF, NPS, insurance, and other tax-saving investment options"
+        title: "Management Reporting & Analysis",
+        description: "Insightful management reports, variance analysis, and financial summaries to support business decisions"
       },
       {
-        icon: "🗓️",
-        title: "Year-Round Tax Advisory",
-        description: "Continuous tax advisory throughout the year to adapt to income changes and new tax laws"
+        icon: "📊",
+        title: "Budgeting & Forecasting Support",
+        description: "Assistance in preparing budgets, forecasts, and financial projections for planning and strategy"
       }
     ],
     process: {
-      title: "Our Tax Planning Process",
+      title: "How We Staff Your Accounting Function",
       steps: [
         {
           number: "01",
-          title: "Financial Review",
-          description: "Analyze current income, investments, and existing tax structure"
+          title: "Define Your Needs",
+          description: "Share your accounting requirements, volume, and preferred tools or software"
         },
         {
           number: "02",
-          title: "Strategy Development",
-          description: "Design a customized tax planning strategy for maximum savings"
+          title: "Staff Assignment",
+          description: "We assign dedicated accounting professionals matched to your business needs"
         },
         {
           number: "03",
-          title: "Implementation",
-          description: "Guide implementation of tax-saving investments and structural changes"
+          title: "System Integration",
+          description: "Offshore accountants onboard to your accounting software and reporting formats"
         },
         {
           number: "04",
-          title: "Review & Adjustment",
-          description: "Periodic review and adjustment of strategy based on income and law changes"
+          title: "Ongoing Delivery",
+          description: "Regular task completion with full transparency and your complete oversight"
         }
       ]
     },
     faqs: [
       {
-        question: "What is tax planning?",
-        answer: "Tax planning involves legally arranging your financial affairs to minimize tax liability using deductions, exemptions, and investment options available under tax laws."
+        question: "Which accounting software do your professionals use?",
+        answer: "Our accountants are experienced with QuickBooks, Xero, Sage, NetSuite, and other major platforms. We adapt to your existing tools."
       },
       {
-        question: "When should I start tax planning?",
-        answer: "Ideally at the start of the financial year (April), but it's beneficial at any point during the year."
+        question: "Can I hire an accountant for just a few hours a week?",
+        answer: "Yes, our flexible hourly billing model lets you engage an accountant for as little or as much time as you need."
       },
       {
-        question: "Can you help save taxes for my business?",
-        answer: "Yes, we help businesses with depreciation planning, expense structuring, and legal tax optimization strategies."
+        question: "Will the same accountant work with us consistently?",
+        answer: "Yes, we assign dedicated professionals to ensure continuity, familiarity with your processes, and consistent quality."
       },
       {
-        question: "Is tax planning different from tax evasion?",
-        answer: "Yes, tax planning is completely legal and uses provisions of the law. Tax evasion is illegal concealment of income."
+        question: "Is offshore accounting secure and confidential?",
+        answer: "Absolutely. We follow strict data security protocols and confidentiality agreements to protect your financial information."
       }
     ],
     cta: {
-      title: "Maximize Your Tax Savings This Year",
-      description: "Expert tax planning strategies tailored to your financial goals",
-      primaryButton: "Start Tax Planning",
-      secondaryButton: "Calculate Tax Savings"
+      title: "Get Dedicated Accounting Support Today",
+      description: "Offshore accounting professionals who deliver clarity, accuracy, and savings",
+      primaryButton: "Hire Accountants",
+      secondaryButton: "Schedule a Free Consultation"
     }
   },
 
+  taxationStaffing: {
+    title: "Taxation Staffing",
+    description: "Skilled offshore tax professionals to manage compliance, planning, and filing for your clients.",
+    features: [
+      "Tax Return Preparation & Filing",
+      "Individual & Corporate Tax Compliance",
+      "Tax Planning & Advisory",
+      "Cross-Border Tax Considerations"
+    ],
+    hero: {
+      title: "Taxation Staffing",
+      subtitle: "Expert offshore tax professionals to handle compliance, filings, and advisory — so your firm stays ahead of every deadline",
+      image: "/banner-img/taxation-staffing.png",
+      cta: "Hire Tax Professionals"
+    },
+    about: {
+      title: "Why Choose Our Taxation Staffing?",
+      description: "Tax laws change constantly. Emenentia Consulting provides offshore tax professionals who stay current with regulatory changes and deliver accurate, compliant tax support. From individual returns to complex corporate filings and cross-border tax matters, our team is ready to work as an extension of yours.",
+      highlights: [
+        "Up-to-date with latest tax regulations and changes",
+        "Support for individual, corporate, and cross-border tax",
+        "Flexible capacity for tax season peaks",
+        "Reduce risk and improve compliance accuracy"
+      ]
+    },
+    detailedFeatures: [
+      {
+        icon: "📋",
+        title: "Tax Return Preparation & Filing",
+        description: "Accurate preparation and filing of individual and business tax returns within deadlines"
+      },
+      {
+        icon: "✅",
+        title: "Individual & Corporate Tax Compliance",
+        description: "End-to-end compliance support for individuals, partnerships, LLCs, and corporations"
+      },
+      {
+        icon: "🧮",
+        title: "Tax Planning & Advisory",
+        description: "Strategic tax planning advice to legally minimize tax liability for clients"
+      },
+      {
+        icon: "🌐",
+        title: "Cross-Border Tax Considerations",
+        description: "Support on international tax matters, treaties, transfer pricing, and foreign income reporting"
+      },
+      {
+        icon: "📰",
+        title: "Regulatory Updates Monitoring",
+        description: "Continuous tracking of tax law changes to keep your practice and clients fully compliant"
+      }
+    ],
+    process: {
+      title: "How We Staff Your Tax Function",
+      steps: [
+        {
+          number: "01",
+          title: "Identify Tax Requirements",
+          description: "Share your client base, return types, and volume of tax work needed"
+        },
+        {
+          number: "02",
+          title: "Expert Matching",
+          description: "We assign tax professionals with the right specialization for your needs"
+        },
+        {
+          number: "03",
+          title: "Onboarding & Integration",
+          description: "Tax staff integrate with your tax software, workflows, and client data systems"
+        },
+        {
+          number: "04",
+          title: "Delivery & Compliance",
+          description: "Returns are prepared, reviewed, and filed under your supervision and control"
+        }
+      ]
+    },
+    faqs: [
+      {
+        question: "Can offshore tax staff handle US federal and state tax returns?",
+        answer: "Yes, our tax professionals are trained in US tax compliance and experienced with federal and state return preparation across various entity types."
+      },
+      {
+        question: "How do you handle the busy tax season?",
+        answer: "Our flexible staffing model lets you quickly scale up your offshore tax team during peak periods and scale back afterward."
+      },
+      {
+        question: "Can your team assist with tax notices and correspondence?",
+        answer: "Yes, our tax professionals can help draft responses to tax authority notices and support resolution of compliance issues."
+      },
+      {
+        question: "Is client data kept confidential?",
+        answer: "Yes, all staff operate under strict confidentiality and data security protocols to protect your clients' sensitive tax information."
+      }
+    ],
+    cta: {
+      title: "Expand Your Tax Capacity Today",
+      description: "Offshore tax professionals ready to handle compliance, filings, and planning for your clients",
+      primaryButton: "Hire Tax Staff",
+      secondaryButton: "Book a Free Consultation"
+    }
+  }
 
 };

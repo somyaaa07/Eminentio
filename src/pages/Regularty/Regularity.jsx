@@ -3,482 +3,466 @@ import { useParams, Link } from "react-router-dom";
 import { regulatoryData } from "./data";
 
 import {
-  CheckCircle,
-  Rocket,
-  Phone,
-  BriefcaseBusiness,
-  Star,
-  Award,
-  TrendingUp,
-  HelpCircle,
-  Home,
-  FileText,
-  Briefcase,
-  BarChart3,
-  Calendar,
-  BookOpen,
-  Shield,
-  Building,
-  Target,
-  Lightbulb,
-  Clock,
-  AlertTriangle,
-  Download,
-  Mail,
-  ChevronRight,
-  ArrowRight,
-  ExternalLink,
-  Users,
-  Settings,
-  Zap,
-  Activity,
-  Database,
-  DollarSign,
-  Menu,
-  X,
-  Plus,
-  Minus,
+  CheckCircle, Rocket, Phone, Star,
+  TrendingUp, HelpCircle, Home, FileText, Briefcase, BarChart3,
+  Calendar, BookOpen, Shield, Building, Target, Lightbulb, Clock,
+  AlertTriangle, Download, Mail, ChevronRight, ArrowRight,
+  ExternalLink, Settings, Zap, Activity,
+  DollarSign, Menu, X, Plus, Minus, ChevronDown,
 } from "lucide-react";
 
-/* ─── design tokens ─────────────────────────────────── */
-const C = {
-  navy: "#0f3460",
-  navyDark: "#0a2444",
-  navyLight: "#1a4a7a",
-  gold: "#c9a84c",
-  goldLight: "#e8c96d",
-  offwhite: "#f8f7f4",
-  surface: "#ffffff",
-  muted: "#64748b",
-  border: "#e2e8f0",
-  danger: "#dc2626",
-  warning: "#d97706",
-  success: "#16a34a",
-  text: "#0f172a",
-  textLight: "#475569",
+/* ─── Design Tokens ─────────────────────────────────── */
+const T = {
+  ink:        "#0e0e0e",
+  inkMid:     "#3a3a3a",
+  inkLight:   "#7a7a7a",
+  paper:      "#faf9f7",
+  paperDark:  "#f0ede8",
+  white:      "#ffffff",
+  accentLight:"#f0f0f0",
+  rule:       "#e4e0d8",
+  navy:       "#0f2d52",
+  navyMid:    "#1a4270",
+  navyLight:  "#e8eff8",
+  danger:     "#c0392b",
+  dangerBg:   "#fdf2f0",
+  warning:    "#b85c00",
+  warningBg:  "#fef7f0",
+  success:    "#1a6b3c",
+  successBg:  "#f0faf5",
 };
 
-/* ─── tiny helpers ───────────────────────────────────── */
-const Tag = ({ children, color = C.navy }) => (
-  <span
-    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase"
-    style={{
-      backgroundColor: `${color}15`,
-      color,
-      border: `1px solid ${color}30`,
-      fontFamily: "'DM Sans', sans-serif",
-    }}
-  >
-    {children}
-  </span>
-);
+const fontDisplay = "'Cormorant Garamond', 'Georgia', serif";
+const fontSans    = "'Poppins', system-ui, sans-serif";
 
-const SectionLabel = ({ icon: Icon, children }) => (
-  <div className="flex items-center gap-3 mb-4">
-    <div
-      className="w-8 h-px flex-1"
-      style={{ backgroundColor: C.gold }}
-    />
-    <Tag color={C.navy}>
-      {Icon && <Icon size={11} />}
+/* ─── Responsive Hook ───────────────────────────────── */
+function useBreakpoint() {
+  const getW = () => (typeof window !== "undefined" ? window.innerWidth : 1200);
+  const calc = (w) => ({ isMobile: w < 768, isTablet: w >= 768 && w < 1024, isDesktop: w >= 1024, w });
+  const [s, setS] = useState(() => calc(getW()));
+  useEffect(() => {
+    const h = () => setS(calc(window.innerWidth));
+    window.addEventListener("resize", h);
+    return () => window.removeEventListener("resize", h);
+  }, []);
+  return s;
+}
+
+/* ─── Global CSS ─────────────────────────────────────── */
+const GLOBAL_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { overflow-x: hidden; }
+
+  /* ── Base layout ── */
+  .rv2-body {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .rv2-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .rv2-main { flex: 1; min-width: 0; }
+
+  /* ── Section card padding ── */
+  .rv2-card-pad { padding: 48px; }
+
+  /* ── Hero ── */
+  .rv2-hero { min-height: 640px; }
+  .rv2-hero-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+  .rv2-hero-content { max-width: 680px; }
+  .rv2-hero-title { font-size: clamp(40px, 5vw, 72px) !important; }
+  .rv2-hero-sub   { font-size: 17px !important; }
+  .rv2-hero-btns  { display: flex; gap: 12px; flex-wrap: wrap; }
+  .rv2-hero-btn   { padding: 13px 28px !important; width: auto !important; justify-content: flex-start; }
+
+  /* ── Grids ── */
+  .rv2-grid-highlights { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .rv2-grid-framework  { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .rv2-grid-services   { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .rv2-grid-tools      { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .rv2-grid-calendar   { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+  .rv2-grid-2col       { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .rv2-grid-process    { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .rv2-grid-faq        { display: grid; grid-template-columns: 280px 1fr; gap: 48px; }
+  .rv2-faq-left        { position: sticky; top: 100px; align-self: start; }
+
+  /* ── Services header row ── */
+  .rv2-services-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* ── Guide row ── */
+  .rv2-guide-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .rv2-guide-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+
+  /* ── CTA button row ── */
+  .rv2-cta-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 28px; }
+  .rv2-cta-btn  { flex: 0 0 auto; width: auto; }
+
+  /* ── Industry tabs ── */
+  .rv2-ind-tabs { overflow-x: auto; margin-bottom: 20px; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .rv2-ind-tabs-inner { display: flex; gap: 4px; padding: 4px; background: ${T.paperDark}; border-radius: 12px; width: fit-content; min-width: 100%; }
+
+  /* ── Mobile topbar — hidden on desktop ── */
+  .rv2-topbar { display: none; }
+
+  /* ── Scroll cue ── */
+  .rv2-scroll-cue { display: flex; }
+
+  /* ════════════════════════════════
+     TABLET  768–1023px
+  ════════════════════════════════ */
+  @media (max-width: 1023px) {
+    .rv2-sidebar  { display: none; }
+    .rv2-topbar {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: #ffffff;
+      border-bottom: 1px solid ${T.rule};
+      padding: 10px 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .rv2-body         { padding: 32px 20px 64px; gap: 0; }
+    .rv2-hero         { min-height: 560px; }
+    .rv2-hero-inner   { padding: 0 28px; }
+    .rv2-card-pad     { padding: 32px 28px; }
+    .rv2-services-head { flex-direction: column; align-items: flex-start; }
+    .rv2-grid-faq     { grid-template-columns: 1fr; gap: 28px; }
+    .rv2-faq-left     { position: static; }
+    .rv2-scroll-cue   { display: none; }
+  }
+
+  /* ════════════════════════════════
+     MOBILE  < 768px
+  ════════════════════════════════ */
+  @media (max-width: 767px) {
+    .rv2-hero         { min-height: 500px; }
+    .rv2-hero-inner   { padding: 70px 16px 44px !important; }
+    .rv2-hero-title   { font-size: clamp(26px, 8vw, 38px) !important; }
+    .rv2-hero-sub     { font-size: 14px !important; }
+    .rv2-hero-btns    { flex-direction: column; }
+    .rv2-hero-btn     { width: 100% !important; justify-content: center !important; }
+
+    .rv2-body         { padding: 20px 14px 56px; }
+    .rv2-card-pad     { padding: 18px 16px; }
+
+    .rv2-grid-highlights,
+    .rv2-grid-framework,
+    .rv2-grid-services,
+    .rv2-grid-tools,
+    .rv2-grid-calendar,
+    .rv2-grid-process  { grid-template-columns: 1fr !important; }
+
+    .rv2-grid-2col     { grid-template-columns: 1fr !important; }
+    .rv2-grid-faq      { grid-template-columns: 1fr; gap: 22px; }
+    .rv2-faq-left      { position: static; }
+
+    .rv2-services-head { flex-direction: column; align-items: flex-start; }
+
+    .rv2-guide-row     { flex-direction: column; gap: 10px; }
+    .rv2-guide-actions { flex-direction: row; align-items: center; }
+
+    .rv2-cta-btns      { flex-direction: column; align-items: stretch; }
+    .rv2-cta-btn       { width: 100% !important; justify-content: center !important; }
+
+    .rv2-scroll-cue    { display: none; }
+  }
+
+  /* ════════════════════════════════
+     SMALL MOBILE  < 480px
+  ════════════════════════════════ */
+  @media (max-width: 479px) {
+    .rv2-hero-inner  { padding: 60px 12px 36px !important; }
+    .rv2-card-pad    { padding: 14px 12px; }
+    .rv2-body        { padding: 16px 10px 48px; }
+    .rv2-ind-tabs-inner { min-width: max-content; }
+  }
+`;
+
+/* ─── Reusable atoms ─────────────────────────────────── */
+const Chip = ({ children, variant = "default" }) => {
+  const V = {
+    default: { bg: T.paperDark, color: T.inkMid,  border: T.rule },
+    navy:    { bg: T.navyLight, color: T.navy,     border: "#c0d0e4" },
+    accent:  { bg: T.navyLight, color: T.navy,     border: "#c0d0e4" },
+    danger:  { bg: T.dangerBg,  color: T.danger,   border: "#f5c6c2" },
+    warning: { bg: T.warningBg, color: T.warning,  border: "#f5ddc0" },
+    success: { bg: T.successBg, color: T.success,  border: "#b8dfc8" },
+  };
+  const v = V[variant] || V.default;
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 10px", borderRadius: 20, background: v.bg, color: v.color, border: `1px solid ${v.border}`, fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", fontFamily: fontSans }}>
       {children}
-    </Tag>
-    <div
-      className="w-8 h-px flex-1"
-      style={{ backgroundColor: C.gold }}
-    />
-  </div>
-);
+    </span>
+  );
+};
 
-const SectionTitle = ({ children, className = "" }) => (
-  <h2
-    className={`font-black text-3xl sm:text-4xl lg:text-5xl leading-tight ${className}`}
-    style={{ fontFamily: "'Playfair Display', serif", color: C.text }}
-  >
+const Eyebrow = ({ children, style = {} }) => (
+  <p style={{ fontFamily: fontSans, fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: T.navy, margin: "0 0 12px", ...style }}>
     {children}
-  </h2>
+  </p>
 );
 
-const Card = ({ children, className = "", hover = true, ...props }) => (
-  <div
-    className={`bg-white rounded-2xl border transition-all duration-300 ${
-      hover ? "hover:shadow-xl hover:-translate-y-0.5" : ""
-    } ${className}`}
-    style={{ borderColor: C.border, ...props.style }}
-    {...props}
-  >
+const Prose = ({ children, style = {} }) => (
+  <p style={{ fontFamily: fontSans, fontSize: 15, lineHeight: 1.75, color: T.inkMid, margin: 0, ...style }}>
     {children}
-  </div>
+  </p>
 );
 
-const NavDot = ({ active, onClick, label, icon: Icon }) => (
-  <button
-    onClick={onClick}
-    className={`w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-      active ? "text-white shadow-sm" : "text-slate-600 hover:bg-slate-50"
-    }`}
-    style={{
-      backgroundColor: active ? C.navy : "transparent",
-      fontFamily: "'DM Sans', sans-serif",
-    }}
+const Divider = ({ style = {} }) => (
+  <hr style={{ border: "none", borderTop: `1px solid ${T.rule}`, margin: "22px 0", ...style }} />
+);
+
+const NavItem = ({ active, onClick, icon: Icon, label }) => (
+  <button onClick={onClick} style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "8px 12px", borderRadius: 8, border: "none", cursor: "pointer", background: active ? T.navy : "transparent", color: active ? T.white : T.inkLight, fontFamily: fontSans, fontSize: 13, fontWeight: active ? 600 : 500, transition: "all 0.15s", textAlign: "left" }}
+    onMouseEnter={e => { if (!active) e.currentTarget.style.background = T.paperDark; }}
+    onMouseLeave={e => { if (!active) e.currentTarget.style.background = "transparent"; }}
   >
-    <Icon size={15} className="flex-shrink-0" />
-    <span>{label}</span>
+    <Icon size={14} style={{ flexShrink: 0, opacity: active ? 1 : 0.6 }} />
+    {label}
   </button>
 );
+
+const ImpactBadge = ({ impact }) => {
+  const map = { Critical: "danger", High: "warning", Medium: "accent" };
+  return <Chip variant={map[impact] || "default"}>{impact} impact</Chip>;
+};
+
+const card = (extra = {}) => ({ background: T.white, border: `1px solid ${T.rule}`, borderRadius: 16, ...extra });
 
 /* ═══════════════════════════════════════════════════════
    MAIN COMPONENT
 ═══════════════════════════════════════════════════════ */
-const Regulatory = () => {
+export default function RegulatoryV2() {
   const { regulatoryId } = useParams();
-  const regulatory = regulatoryData[regulatoryId];
-  const [openFaq, setOpenFaq] = useState(null);
-  const [activeSection, setActiveSection] = useState("hero");
+  const regulatory = regulatoryData?.[regulatoryId];
+  const { isMobile, isTablet, isDesktop } = useBreakpoint();
+
+  const [openFaq, setOpenFaq]                   = useState(null);
+  const [activeSection, setActiveSection]       = useState("hero");
   const [selectedIndustry, setSelectedIndustry] = useState(0);
-  const [selectedCaseStudy, setSelectedCaseStudy] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = [
-        "hero","about","overview","features","calendar",
-        "industry","violations","cases","resources","process","faq",
-      ];
-      const scrollPosition = window.scrollY + 120;
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const { offsetTop, offsetHeight } = el;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-      const total = document.body.scrollHeight - window.innerHeight;
-      setScrollProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (window.innerWidth >= 1024) setMobileMenuOpen(false);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "unset";
-    return () => { document.body.style.overflow = "unset"; };
-  }, [mobileMenuOpen]);
+  const [selectedCase, setSelectedCase]         = useState(0);
+  const [mobileOpen, setMobileOpen]             = useState(false);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  const scrollToSection = (id) => {
-    setActiveSection(id);
-    setMobileMenuOpen(false);
+  useEffect(() => {
+    const IDS = ["hero","about","overview","features","calendar","industry","violations","cases","resources","process","faq"];
+    const onScroll = () => {
+      const pos = window.scrollY + 140;
+      for (const id of IDS) {
+        const el = document.getElementById(id);
+        if (el && pos >= el.offsetTop && pos < el.offsetTop + el.offsetHeight) { setActiveSection(id); break; }
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => { document.body.style.overflow = mobileOpen ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [mobileOpen]);
+  useEffect(() => { if (isDesktop) setMobileOpen(false); }, [isDesktop]);
+
+  const goto = (id) => {
+    setMobileOpen(false);
     const el = document.getElementById(id);
-    if (el) window.scrollTo({ top: el.offsetTop - 90, behavior: "smooth" });
+    if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: "smooth" });
   };
 
-  if (!regulatory) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: C.offwhite }}>
-        <div className="text-center p-8">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: `${C.navy}10` }}>
-            <Shield size={28} style={{ color: C.navy }} />
-          </div>
-          <h2 className="text-3xl font-black mb-4" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-            Page Not Found
-          </h2>
-          <Link to="/" className="text-sm font-semibold underline" style={{ color: C.navy, fontFamily: "'DM Sans', sans-serif" }}>
-            ← Return to Home
-          </Link>
-        </div>
+  if (!regulatory) return (
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: T.paper, padding: 24 }}>
+      <div style={{ textAlign: "center" }}>
+        <Shield size={40} style={{ color: T.navy, marginBottom: 20 }} />
+        <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 24, color: T.ink, marginBottom: 12 }}>Page Not Found</p>
+        <Link to="/" style={{ color: T.navy, fontFamily: fontSans, fontSize: 14, fontWeight: 600 }}>← Return Home</Link>
       </div>
-    );
-  }
+    </div>
+  );
 
-  const nav = [
-    { id: "hero", label: "Overview", icon: Home },
-    { id: "about", label: "About", icon: FileText },
-    { id: "overview", label: "Framework", icon: BookOpen },
-    { id: "features", label: "Features", icon: Star },
-    { id: "calendar", label: "Calendar", icon: Calendar },
-    { id: "industry", label: "Industry", icon: Building },
-    { id: "violations", label: "Violations", icon: AlertTriangle },
-    { id: "cases", label: "Case Studies", icon: Target },
-    { id: "resources", label: "Resources", icon: Download },
-    { id: "process", label: "Process", icon: BriefcaseBusiness },
-    { id: "faq", label: "FAQ", icon: HelpCircle },
+  const navItems = [
+    { id: "hero",       label: "Overview",     icon: Home },
+    { id: "about",      label: "About",        icon: FileText },
+    { id: "overview",   label: "Framework",    icon: BookOpen },
+    { id: "features",   label: "Services",     icon: Star },
+    { id: "calendar",   label: "Calendar",     icon: Calendar },
+    { id: "industry",   label: "Industries",   icon: Building },
+    { id: "violations", label: "Violations",   icon: AlertTriangle },
+    { id: "cases",      label: "Case Studies", icon: Target },
+    { id: "resources",  label: "Resources",    icon: Download },
+    { id: "process",    label: "Process",      icon: Briefcase },
+    { id: "faq",        label: "FAQ",          icon: HelpCircle },
   ];
 
-  const featureIcons = [FileText, Building, BarChart3, DollarSign, Shield, Settings];
+  const featureIcons = [FileText, Building, BarChart3, DollarSign, Shield, Settings, Zap, Activity];
 
-  /* ── impact badge ── */
-  const ImpactBadge = ({ impact }) => {
-    const map = {
-      Critical: { bg: "#fef2f2", color: C.danger, dot: C.danger },
-      High:     { bg: "#fff7ed", color: C.warning, dot: C.warning },
-      Medium:   { bg: "#fefce8", color: "#b45309",  dot: "#b45309" },
-    };
-    const s = map[impact] || map["Medium"];
-    return (
-      <span
-        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
-        style={{ backgroundColor: s.bg, color: s.color, fontFamily: "'DM Sans', sans-serif" }}
-      >
-        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: s.dot }} />
-        {impact}
-      </span>
-    );
-  };
+  /* font-size shortcuts driven by JS (for cases where CSS classes can't help) */
+  const fh2 = isMobile ? 26 : isTablet ? 32 : 40;
+  const fh3 = isMobile ? 18 : 22;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: C.offwhite, fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ background: T.paper, fontFamily: fontSans, minHeight: "100vh" }}>
+      <style>{GLOBAL_CSS}</style>
 
-      {/* ── progress bar ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-0.5" style={{ backgroundColor: `${C.navy}15` }}>
-        <div
-          className="h-full transition-all duration-100"
-          style={{ width: `${scrollProgress}%`, background: `linear-gradient(90deg, ${C.navy}, ${C.gold})` }}
-        />
-      </div>
+      {/* ══ HERO ══════════════════════════════════════════ */}
+      <section id="hero" className="rv2-hero" style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "center" }}>
+        <img src={regulatory.hero.image} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to right, ${T.ink}f0 0%, ${T.ink}cc 55%, ${T.ink}60 100%)` }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)" }} />
+        {/* <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 4, background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent)" }} /> */}
 
-      {/* ════════════════ HERO ════════════════ */}
-      <section id="hero" className="relative min-h-[580px] flex items-end overflow-hidden">
-        {/* bg image */}
-        <div className="absolute inset-0">
-          <img src={regulatory.hero.image} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${C.navyDark}e8 0%, ${C.navy}cc 50%, ${C.navyDark}90 100%)` }} />
-          {/* decorative grain */}
-          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E\")" }} />
-        </div>
-
-        {/* diagonal accent */}
-        <div className="absolute bottom-0 right-0 w-1/3 h-full opacity-10"
-          style={{ background: `linear-gradient(135deg, transparent 50%, ${C.gold} 50%)` }} />
-
-        <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-8 pb-16 pt-32">
-          <div className="max-w-3xl">
-            {/* badge */}
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 text-xs font-bold tracking-widest uppercase"
-              style={{ backgroundColor: `${C.gold}25`, color: C.goldLight, border: `1px solid ${C.gold}40`, fontFamily: "'DM Sans', sans-serif" }}
-            >
-              <Shield size={12} />
-              Premium {regulatoryId?.toUpperCase()} Service
+        <div className="rv2-hero-inner" style={{ position: "relative", width: "100%" }}>
+          <div className="rv2-hero-content">
+            <div style={{ marginBottom: 18 }}>
+              <Chip variant="accent"><Shield size={10} /> {regulatoryId?.toUpperCase()} Compliance</Chip>
             </div>
-
-            <h1
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-6 leading-[1.05]"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
+            <h1 className="rv2-hero-title" style={{ fontFamily: fontDisplay, fontWeight: 700, lineHeight: 1.05, color: T.white, margin: "0 0 16px" }}>
               {regulatory.hero.title}
             </h1>
-
-            <p className="text-lg text-white/75 mb-10 leading-relaxed max-w-2xl">
+            <p className="rv2-hero-sub" style={{ fontFamily: fontSans, lineHeight: 1.7, color: "rgba(255,255,255,0.72)", margin: "0 0 28px", maxWidth: 520 }}>
               {regulatory.hero.subtitle}
             </p>
-
-            <div className="flex flex-wrap gap-3">
-              <Link to="/contact">
-                <button
-                  className="group flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 hover:gap-4"
-                  style={{ backgroundColor: C.gold, color: C.navyDark, fontFamily: "'DM Sans', sans-serif" }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = C.goldLight)}
-                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = C.gold)}
-                >
-                  {regulatory.hero.cta}
-                  <ArrowRight size={16} />
+            <div className="rv2-hero-btns">
+              <Link to="/contact" style={{ textDecoration: "none", flex: isMobile ? "1 1 100%" : "0 0 auto" }}>
+                <button className="rv2-hero-btn" style={{ display: "flex", alignItems: "center", gap: 8, borderRadius: 10, border: "none", background: T.white, color: T.navy, cursor: "pointer", fontFamily: fontSans, fontSize: 14, fontWeight: 700 }}>
+                  {regulatory.hero.cta} <ArrowRight size={15} />
                 </button>
               </Link>
-              <Link to="/contact">
-                <button
-                  className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-sm text-white transition-all duration-300"
-                  style={{ border: "1px solid rgba(255,255,255,0.3)", backgroundColor: "rgba(255,255,255,0.08)" }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.18)")}
-                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)")}
-                >
-                  <Phone size={15} />
-                  Schedule Call
+              <Link to="/contact" style={{ textDecoration: "none", flex: isMobile ? "1 1 100%" : "0 0 auto" }}>
+                <button className="rv2-hero-btn" style={{ display: "flex", alignItems: "center", gap: 8, borderRadius: 10, cursor: "pointer", background: "rgba(255,255,255,0.10)", color: T.white, border: "1px solid rgba(255,255,255,0.25)", fontFamily: fontSans, fontSize: 14, fontWeight: 600 }}>
+                  <Phone size={14} /> Schedule Call
                 </button>
               </Link>
             </div>
           </div>
+        </div>
+
+        <div className="rv2-scroll-cue" style={{ position: "absolute", bottom: 28, right: 48, flexDirection: "column", alignItems: "center", gap: 6, opacity: 0.45 }}>
+          <span style={{ fontFamily: fontSans, fontSize: 11, letterSpacing: "0.1em", color: T.white, textTransform: "uppercase" }}>Scroll</span>
+          <ChevronDown size={16} color={T.white} />
         </div>
       </section>
 
-      {/* ── mobile nav toggle ── */}
-      <div className="lg:hidden sticky top-0.5 z-40 px-4 py-3">
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm"
-          style={{ backgroundColor: C.navy, color: "white" }}
-        >
-          {mobileMenuOpen ? <X size={17} /> : <Menu size={17} />}
-          Navigate
+      {/* ══ STICKY TOPBAR (tablet + mobile via CSS) ════════ */}
+      <div className="rv2-topbar">
+        <span style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, color: T.ink }}>{regulatoryId?.toUpperCase()} Compliance</span>
+        <button onClick={() => setMobileOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 8, border: `1px solid ${T.rule}`, background: T.white, color: T.ink, cursor: "pointer", fontFamily: fontSans, fontSize: 13, fontWeight: 600 }}>
+          {mobileOpen ? <X size={14} /> : <Menu size={14} />} Menu
         </button>
       </div>
 
-      {/* ── mobile drawer ── */}
-      {mobileMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 z-50"
-          style={{ backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          <div
-            className="fixed left-0 top-0 bottom-0 w-72 overflow-y-auto p-5"
-            style={{ backgroundColor: C.surface }}
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-6">
-              <span className="font-black text-base" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                Navigation
-              </span>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-1.5 rounded-lg" style={{ backgroundColor: C.offwhite }}>
-                <X size={16} style={{ color: C.muted }} />
-              </button>
+      {/* ══ DRAWER ════════════════════════════════════════ */}
+      {mobileOpen && (
+        <div onClick={() => setMobileOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 999, background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}>
+          <div onClick={e => e.stopPropagation()} style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: Math.min(280, window.innerWidth * 0.82), background: T.white, padding: "20px 16px", overflowY: "auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <span style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 20, color: T.ink }}>Navigate</span>
+              <button onClick={() => setMobileOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}><X size={18} style={{ color: T.inkLight }} /></button>
             </div>
-            <nav className="space-y-1">
-              {nav.map(item => (
-                <NavDot key={item.id} active={activeSection === item.id} onClick={() => scrollToSection(item.id)} label={item.label} icon={item.icon} />
-              ))}
+            <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {navItems.map(n => <NavItem key={n.id} active={activeSection === n.id} onClick={() => goto(n.id)} icon={n.icon} label={n.label} />)}
             </nav>
-            {/* sidebar contact */}
-            <div className="mt-6 p-4 rounded-2xl" style={{ backgroundColor: `${C.navy}08`, border: `1px solid ${C.navy}15` }}>
-              <p className="font-black text-base mb-1" style={{ fontFamily: "'Playfair Display', serif", color: C.navy }}>Need Help?</p>
-              <p className="text-xs text-slate-500 mb-4">Our experts are ready</p>
+            <div style={{ marginTop: 24, padding: 16, background: T.navyLight, borderRadius: 12, border: `1px solid #c0d0e4` }}>
+              <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 17, color: T.navy, marginBottom: 6 }}>Need Help?</p>
+              <p style={{ fontFamily: fontSans, fontSize: 12, color: T.inkLight, marginBottom: 14 }}>Our experts are ready to assist.</p>
               <Link to="/contact">
-                <button className="w-full py-2.5 rounded-xl text-white text-sm font-bold mb-3" style={{ backgroundColor: C.navy }}>
-                  Contact Us
-                </button>
+                <button style={{ width: "100%", padding: "9px 0", borderRadius: 8, border: "none", background: T.navy, color: T.white, fontFamily: fontSans, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Contact Us</button>
               </Link>
-              <div className="flex items-center gap-2 text-xs" style={{ color: C.muted }}>
-                <Phone size={12} /> +91 XXXX-XXXXXX
-              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* ════════════════ BODY ════════════════ */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="flex gap-8 xl:gap-12">
+      {/* ══ BODY ═══════════════════════════════════════════ */}
+      <div className="rv2-body">
 
-          {/* ── SIDEBAR ── */}
-          <aside className="hidden lg:block w-56 xl:w-64 flex-shrink-0">
-            <div className="sticky top-24 space-y-4">
-
-              {/* nav card */}
-              <div className="rounded-2xl p-4" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
-                <p className="text-xs font-bold tracking-widest uppercase mb-4 px-1" style={{ color: C.muted }}>
-                  On this page
-                </p>
-                <nav className="space-y-0.5">
-                  {nav.map(item => (
-                    <NavDot key={item.id} active={activeSection === item.id} onClick={() => scrollToSection(item.id)} label={item.label} icon={item.icon} />
-                  ))}
-                </nav>
-              </div>
-
-              {/* contact card */}
-              <div
-                className="rounded-2xl p-5 text-white overflow-hidden relative"
-                style={{ background: `linear-gradient(135deg, ${C.navyDark} 0%, ${C.navyLight} 100%)` }}
-              >
-                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-10" style={{ backgroundColor: C.gold }} />
-                <Mail size={22} className="mb-3 opacity-80" />
-                <p className="font-black text-base mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  Need Help?
-                </p>
-                <p className="text-xs text-white/60 mb-4">Our experts are ready to assist you today.</p>
-                <Link to="/contact">
-                  <button
-                    className="w-full py-2.5 rounded-xl text-sm font-bold mb-3 transition-all duration-200"
-                    style={{ backgroundColor: C.gold, color: C.navyDark }}
-                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = C.goldLight)}
-                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = C.gold)}
-                  >
-                    Contact Us
-                  </button>
-                </Link>
-                <div className="flex items-center gap-2 text-xs text-white/50">
-                  <Phone size={11} /> +91 XXXX-XXXXXX
-                </div>
-              </div>
-
+        {/* ─── SIDEBAR (hidden <1024px via CSS) ─── */}
+        <aside className="rv2-sidebar">
+          <div style={{ ...card(), padding: "16px 12px" }}>
+            <p style={{ fontFamily: fontSans, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: T.inkLight, margin: "0 0 12px", paddingLeft: 12 }}>On this page</p>
+            <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {navItems.map(n => <NavItem key={n.id} active={activeSection === n.id} onClick={() => goto(n.id)} icon={n.icon} label={n.label} />)}
+            </nav>
+          </div>
+          <div style={{ background: T.navy, borderRadius: 16, padding: 20, color: T.white, position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: "rgba(255,255,255,0.12)" }} />
+            <Mail size={20} style={{ marginBottom: 12, opacity: 0.7 }} />
+            <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 18, marginBottom: 6 }}>Need Help?</p>
+            <p style={{ fontFamily: fontSans, fontSize: 12, color: "rgba(255,255,255,0.55)", marginBottom: 16 }}>Our experts are ready today.</p>
+            <Link to="/contact" style={{ textDecoration: "none" }}>
+              <button style={{ width: "100%", padding: "10px 0", borderRadius: 8, border: "none", background: T.white, color: T.navy, fontFamily: fontSans, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Contact Us</button>
+            </Link>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12, opacity: 0.45, fontSize: 11, fontFamily: fontSans }}>
+              <Phone size={11} /> +91 XXXX-XXXXXX
             </div>
-          </aside>
+          </div>
+        </aside>
 
-          {/* ── MAIN ── */}
-          <main className="flex-1 min-w-0 space-y-16">
+        {/* ─── MAIN CONTENT ─── */}
+        <main className="rv2-main">
 
-            {/* ▸ ABOUT */}
-            <section id="about">
-              <Card className="p-8 lg:p-10">
-                <SectionLabel icon={FileText}>About this Service</SectionLabel>
-                <SectionTitle className="mb-6">{regulatory.about.title}</SectionTitle>
-                <p className="text-base leading-relaxed mb-8" style={{ color: C.textLight }}>
-                  {regulatory.about.description}
-                </p>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {regulatory.about.highlights.map((h, i) => (
-                    <div
-                      key={i}
-                      className="flex items-start gap-3 p-4 rounded-xl transition-all duration-200 cursor-default"
-                      style={{ backgroundColor: `${C.navy}06`, border: `1px solid ${C.navy}10` }}
-                      onMouseEnter={e => (e.currentTarget.style.borderColor = `${C.navy}30`)}
-                      onMouseLeave={e => (e.currentTarget.style.borderColor = `${C.navy}10`)}
-                    >
-                      <div className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: `${C.gold}20` }}>
-                        <CheckCircle size={12} style={{ color: C.gold }} />
-                      </div>
-                      <p className="text-sm font-medium leading-relaxed" style={{ color: C.text }}>
-                        {h}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </section>
+          {/* ── ABOUT ── */}
+          <section id="about" style={{ paddingBottom: 40 }}>
+            <div className="rv2-card-pad" style={{ ...card() }}>
+              <Eyebrow>About this Service</Eyebrow>
+              <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink, marginBottom: 14 }}>{regulatory.about.title}</p>
+              <Prose style={{ marginBottom: 22, maxWidth: 600 }}>{regulatory.about.description}</Prose>
+              <div className="rv2-grid-highlights">
+                {regulatory.about.highlights.map((h, i) => (
+                  <div key={i} style={{ display: "flex", gap: 12, padding: "12px 14px", background: T.paper, borderRadius: 10, border: `1px solid ${T.rule}`, transition: "border-color 0.15s" }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = T.navy}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = T.rule}
+                  >
+                    <CheckCircle size={15} style={{ color: T.navy, flexShrink: 0, marginTop: 2 }} />
+                    <p style={{ fontFamily: fontSans, fontSize: 13, lineHeight: 1.6, color: T.inkMid, margin: 0 }}>{h}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
-            {/* ▸ REGULATORY OVERVIEW */}
-            {regulatory.regulatoryOverview && (
-              <section id="overview">
-                <div className="rounded-2xl p-8 lg:p-10" style={{ background: `linear-gradient(135deg, ${C.navyDark} 0%, ${C.navyLight} 100%)`, color: "white" }}>
-                  <SectionLabel icon={BookOpen}>
-                    <span style={{ color: C.goldLight }}>Regulatory Framework</span>
-                  </SectionLabel>
-                  <SectionTitle className="mb-6" style={{ color: "white" }}>
-                    {regulatory.regulatoryOverview.title}
-                  </SectionTitle>
-                  <p className="text-base leading-relaxed mb-10 text-white/70">
-                    {regulatory.regulatoryOverview.introduction}
-                  </p>
-                  <div className="grid sm:grid-cols-2 gap-4">
+          {/* ── FRAMEWORK ── */}
+          {regulatory.regulatoryOverview && (
+            <section id="overview" style={{ paddingBottom: 40 }}>
+              <div className="rv2-card-pad" style={{ background: T.navy, borderRadius: 20, position: "relative", overflow: "hidden" }}>
+                <div style={{ position: "absolute", inset: 0, opacity: 0.04, backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+                <div style={{ position: "relative" }}>
+                  <Eyebrow style={{ color: "rgba(255,255,255,0.7)" }}>Regulatory Framework</Eyebrow>
+                  <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.white, marginBottom: 14 }}>{regulatory.regulatoryOverview.title}</p>
+                  <p style={{ fontFamily: fontSans, fontSize: isMobile ? 13 : 15, lineHeight: 1.75, color: "rgba(255,255,255,0.62)", marginBottom: 28, maxWidth: 560 }}>{regulatory.regulatoryOverview.introduction}</p>
+                  <div className="rv2-grid-framework">
                     {regulatory.regulatoryOverview.keyAspects.map((a, i) => (
-                      <div
-                        key={i}
-                        className="p-5 rounded-2xl transition-all duration-200"
-                        style={{ backgroundColor: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
-                        onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)")}
-                        onMouseLeave={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
+                      <div key={i} style={{ padding: "18px 20px", borderRadius: 12, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)", transition: "background 0.2s" }}
+                        onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.11)"}
+                        onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
                       >
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-1.5 h-5 rounded-full" style={{ backgroundColor: C.gold }} />
-                          <h3 className="font-black text-lg" style={{ fontFamily: "'Playfair Display', serif" }}>
-                            {a.title}
-                          </h3>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                          <div style={{ width: 3, height: 20, borderRadius: 2, background: "rgba(255,255,255,0.6)", flexShrink: 0 }} />
+                          <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 17, color: T.white, margin: 0 }}>{a.title}</h3>
                         </div>
-                        <p className="text-sm text-white/60 mb-4 leading-relaxed">{a.description}</p>
-                        <ul className="space-y-2">
+                        <p style={{ fontFamily: fontSans, fontSize: 12, lineHeight: 1.65, color: "rgba(255,255,255,0.52)", marginBottom: 12 }}>{a.description}</p>
+                        <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 5 }}>
                           {a.regulations.map((r, j) => (
-                            <li key={j} className="flex items-start gap-2 text-xs text-white/55">
-                              <ChevronRight size={13} style={{ color: C.gold }} className="flex-shrink-0 mt-0.5" />
-                              {r}
+                            <li key={j} style={{ display: "flex", gap: 7, alignItems: "flex-start", fontSize: 12, color: "rgba(255,255,255,0.45)", fontFamily: fontSans }}>
+                              <ChevronRight size={12} style={{ color: "rgba(255,255,255,0.5)", flexShrink: 0, marginTop: 2 }} />{r}
                             </li>
                           ))}
                         </ul>
@@ -486,615 +470,436 @@ const Regulatory = () => {
                     ))}
                   </div>
                 </div>
-              </section>
-            )}
-
-            {/* ▸ FEATURES */}
-            <section id="features">
-              <div className="text-center mb-10">
-                <SectionLabel icon={Star}>Our Services</SectionLabel>
-                <SectionTitle className="mb-3">Comprehensive Solutions</SectionTitle>
-                <p className="text-base" style={{ color: C.textLight }}>End-to-end compliance services tailored to your needs</p>
-              </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {regulatory.detailedFeatures.map((f, i) => {
-                  const Icon = featureIcons[i] || Settings;
-                  return (
-                    <Card
-                      key={i}
-                      className="p-6 group cursor-default"
-                      onMouseEnter={e => (e.currentTarget.style.borderColor = C.navy)}
-                      onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}
-                    >
-                      <div
-                        className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
-                        style={{ backgroundColor: `${C.navy}10` }}
-                      >
-                        <Icon size={20} style={{ color: C.navy }} />
-                      </div>
-                      <h3 className="font-black text-lg mb-2" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                        {f.title}
-                      </h3>
-                      <p className="text-sm leading-relaxed" style={{ color: C.textLight }}>
-                        {f.description}
-                      </p>
-                    </Card>
-                  );
-                })}
               </div>
             </section>
+          )}
 
-            {/* ▸ COMPLIANCE CALENDAR */}
-            {regulatory.complianceCalendar && (
-              <section id="calendar">
-                <Card className="p-8 lg:p-10">
-                  <SectionLabel icon={Calendar}>Compliance Calendar</SectionLabel>
-                  <SectionTitle className="mb-4">{regulatory.complianceCalendar.title}</SectionTitle>
-                  <p className="text-base leading-relaxed mb-8" style={{ color: C.textLight }}>
-                    {regulatory.complianceCalendar.description}
-                  </p>
-                  <div className="space-y-4">
-                    {regulatory.complianceCalendar.deadlines.map((d, i) => (
-                      <div key={i} className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${C.border}` }}>
-                        <div className="flex items-center gap-3 px-6 py-4" style={{ backgroundColor: C.navy }}>
-                          <Calendar size={16} className="text-white/70" />
-                          <h3 className="font-black text-base text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
-                            {d.period}
-                          </h3>
-                        </div>
-                        <div className="p-4 space-y-3">
+          {/* ── SERVICES ── */}
+          <section id="features" style={{ paddingBottom: 40 }}>
+            <Eyebrow>Our Services</Eyebrow>
+            <div className="rv2-services-head">
+              <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink }}>Comprehensive Solutions</p>
+              <Prose style={{ maxWidth: 320 }}>End-to-end compliance services tailored for your business.</Prose>
+            </div>
+            <div className="rv2-grid-services">
+              {regulatory.detailedFeatures.map((f, i) => {
+                const Icon = featureIcons[i] || Settings;
+                return (
+                  <div key={i} style={{ ...card({ padding: "22px 20px" }), transition: "all 0.2s", cursor: "default", borderLeft: `3px solid ${T.rule}` }}
+                    onMouseEnter={e => { e.currentTarget.style.borderLeftColor = T.navy; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.06)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderLeftColor = T.rule; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                  >
+                    <div style={{ width: 38, height: 38, borderRadius: 10, background: T.navyLight, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
+                      <Icon size={17} style={{ color: T.navy }} />
+                    </div>
+                    <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 19, color: T.ink, marginBottom: 7 }}>{f.title}</h3>
+                    <p style={{ fontFamily: fontSans, fontSize: 13, lineHeight: 1.65, color: T.inkLight, margin: 0 }}>{f.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* ── CALENDAR ── */}
+          {regulatory.complianceCalendar && (
+            <section id="calendar" style={{ paddingBottom: 40 }}>
+              <div className="rv2-card-pad" style={{ ...card() }}>
+                <Eyebrow>Compliance Calendar</Eyebrow>
+                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink, marginBottom: 12 }}>{regulatory.complianceCalendar.title}</p>
+                <Prose style={{ marginBottom: 24 }}>{regulatory.complianceCalendar.description}</Prose>
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  {regulatory.complianceCalendar.deadlines.map((d, i) => (
+                    <div key={i} style={{ borderRadius: 12, overflow: "hidden", border: `1px solid ${T.rule}` }}>
+                      <div style={{ background: T.navy, padding: "12px 18px", display: "flex", alignItems: "center", gap: 10 }}>
+                        <Calendar size={14} style={{ color: "rgba(255,255,255,0.6)" }} />
+                        <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 17, color: T.white, margin: 0 }}>{d.period}</h3>
+                      </div>
+                      <div style={{ padding: 12 }}>
+                        <div className="rv2-grid-calendar">
                           {d.filings.map((f, j) => (
-                            <div
-                              key={j}
-                              className="flex items-start gap-4 p-4 rounded-xl transition-all duration-200"
-                              style={{ backgroundColor: C.offwhite, border: `1px solid transparent` }}
-                              onMouseEnter={e => (e.currentTarget.style.borderColor = `${C.navy}20`)}
-                              onMouseLeave={e => (e.currentTarget.style.borderColor = "transparent")}
-                            >
-                              <div
-                                className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-black"
-                                style={{ backgroundColor: C.navy }}
-                              >
-                                {j + 1}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-black text-sm mb-0.5" style={{ color: C.text, fontFamily: "'Playfair Display', serif" }}>
-                                  {f.form}
-                                </p>
-                                <p className="text-xs text-slate-500 mb-2">{f.description}</p>
-                                <div className="flex items-center gap-1.5 text-xs font-bold" style={{ color: C.gold }}>
-                                  <Clock size={11} /> {f.dueDate}
+                            <div key={j} style={{ display: "flex", gap: 12, padding: "12px 14px", background: T.paper, borderRadius: 10, border: `1px solid ${T.rule}` }}>
+                              <div style={{ width: 26, height: 26, borderRadius: 7, background: T.navy, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontFamily: fontSans, fontSize: 11, fontWeight: 700, color: T.white }}>{j + 1}</div>
+                              <div>
+                                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, color: T.ink, marginBottom: 2 }}>{f.form}</p>
+                                <p style={{ fontFamily: fontSans, fontSize: 11, color: T.inkLight, marginBottom: 6 }}>{f.description}</p>
+                                <div style={{ display: "flex", alignItems: "center", gap: 5, fontFamily: fontSans, fontSize: 11, fontWeight: 700, color: T.navy }}>
+                                  <Clock size={10} /> {f.dueDate}
                                 </div>
                               </div>
                             </div>
                           ))}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </Card>
-              </section>
-            )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
 
-            {/* ▸ INDUSTRY GUIDANCE */}
-            {regulatory.industryGuidance && (
-              <section id="industry">
-                <Card className="p-8 lg:p-10">
-                  <SectionLabel icon={Building}>Industry Guidance</SectionLabel>
-                  <SectionTitle className="mb-4">{regulatory.industryGuidance.title}</SectionTitle>
-                  <p className="text-base leading-relaxed mb-8" style={{ color: C.textLight }}>
-                    {regulatory.industryGuidance.description}
-                  </p>
-                  {/* sector tabs */}
-                  <div className="flex flex-wrap gap-2 mb-6 p-1.5 rounded-2xl" style={{ backgroundColor: C.offwhite }}>
+          {/* ── INDUSTRY GUIDANCE ── */}
+          {regulatory.industryGuidance && (
+            <section id="industry" style={{ paddingBottom: 40 }}>
+              <div className="rv2-card-pad" style={{ ...card() }}>
+                <Eyebrow>Industry Guidance</Eyebrow>
+                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink, marginBottom: 12 }}>{regulatory.industryGuidance.title}</p>
+                <Prose style={{ marginBottom: 18 }}>{regulatory.industryGuidance.description}</Prose>
+                <div className="rv2-ind-tabs">
+                  <div className="rv2-ind-tabs-inner">
                     {regulatory.industryGuidance.sectors.map((s, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setSelectedIndustry(i)}
-                        className="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200"
-                        style={{
-                          backgroundColor: selectedIndustry === i ? C.navy : "transparent",
-                          color: selectedIndustry === i ? "white" : C.muted,
-                        }}
-                      >
+                      <button key={i} onClick={() => setSelectedIndustry(i)} style={{ padding: "7px 14px", borderRadius: 9, border: "none", cursor: "pointer", whiteSpace: "nowrap", background: selectedIndustry === i ? T.navy : "transparent", color: selectedIndustry === i ? T.white : T.inkLight, fontFamily: fontSans, fontSize: 13, fontWeight: 600, transition: "all 0.15s" }}>
                         {s.name}
                       </button>
                     ))}
                   </div>
-                  <div className="grid sm:grid-cols-2 gap-6 p-6 rounded-2xl" style={{ backgroundColor: C.offwhite }}>
-                    <div>
-                      <div className="flex items-center gap-2 mb-4">
-                        <AlertTriangle size={15} style={{ color: C.warning }} />
-                        <h4 className="font-black text-base" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                          Key Challenges
-                        </h4>
-                      </div>
-                      <ul className="space-y-2.5">
-                        {regulatory.industryGuidance.sectors[selectedIndustry].challenges.map((c, j) => (
-                          <li
-                            key={j}
-                            className="flex items-start gap-3 p-3 rounded-xl bg-white text-sm"
-                            style={{ color: C.textLight, border: `1px solid ${C.border}` }}
-                          >
-                            <ChevronRight size={14} style={{ color: C.warning }} className="flex-shrink-0 mt-0.5" />
-                            {c}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-4">
-                        <Lightbulb size={15} style={{ color: C.success }} />
-                        <h4 className="font-black text-base" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                          Our Solutions
-                        </h4>
-                      </div>
-                      <ul className="space-y-2.5">
-                        {regulatory.industryGuidance.sectors[selectedIndustry].solutions.map((s, j) => (
-                          <li
-                            key={j}
-                            className="flex items-start gap-3 p-3 rounded-xl bg-white text-sm"
-                            style={{ color: C.textLight, border: `1px solid ${C.border}` }}
-                          >
-                            <CheckCircle size={14} style={{ color: C.success }} className="flex-shrink-0 mt-0.5" />
-                            {s}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </Card>
-              </section>
-            )}
-
-            {/* ▸ VIOLATIONS */}
-            {regulatory.violations && (
-              <section id="violations">
-                <Card className="p-8 lg:p-10">
-                  <SectionLabel icon={AlertTriangle}>Compliance Risk</SectionLabel>
-                  <SectionTitle className="mb-4">{regulatory.violations.title}</SectionTitle>
-                  <p className="text-base leading-relaxed mb-8" style={{ color: C.textLight }}>
-                    {regulatory.violations.description}
-                  </p>
-                  <div className="space-y-4">
-                    {regulatory.violations.commonViolations.map((v, i) => (
-                      <div
-                        key={i}
-                        className="rounded-2xl overflow-hidden transition-all duration-200"
-                        style={{ border: `1px solid ${C.border}` }}
-                        onMouseEnter={e => (e.currentTarget.style.borderColor = `${C.navy}40`)}
-                        onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}
-                      >
-                        <div className="p-5" style={{ backgroundColor: `${C.navy}04` }}>
-                          <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
-                            <h3 className="font-black text-lg" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                              {v.violation}
-                            </h3>
-                            <ImpactBadge impact={v.impact} />
-                          </div>
-                          <p className="text-sm" style={{ color: C.textLight }}>{v.penalty}</p>
-                        </div>
-                        <div className="px-5 py-4 flex items-start gap-3" style={{ borderTop: `1px solid ${C.border}` }}>
-                          <Shield size={15} style={{ color: C.navy }} className="flex-shrink-0 mt-0.5" />
-                          <div>
-                            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: C.navy }}>
-                              Prevention:&nbsp;
-                            </span>
-                            <span className="text-sm" style={{ color: C.textLight }}>{v.prevention}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* compounding / enforcement / strikeoff sub-sections */}
+                </div>
+                <div className="rv2-grid-2col">
                   {[
-                    regulatory.violations.compoundingProcess && {
-                      data: regulatory.violations.compoundingProcess,
-                      leftLabel: "Process Steps",
-                      rightLabel: "Benefits",
-                      rightItems: regulatory.violations.compoundingProcess.benefits,
-                      rightIcon: CheckCircle,
-                      rightIconColor: C.success,
-                    },
-                    regulatory.violations.enforcementMechanism && {
-                      data: regulatory.violations.enforcementMechanism,
-                      leftLabel: "Process Steps",
-                      rightLabel: "Potential Consequences",
-                      rightItems: regulatory.violations.enforcementMechanism.consequences,
-                      rightIcon: AlertTriangle,
-                      rightIconColor: C.danger,
-                    },
-                  ]
-                    .filter(Boolean)
-                    .map((block, bi) => (
-                      <div
-                        key={bi}
-                        className="mt-6 p-6 rounded-2xl"
-                        style={{ backgroundColor: C.offwhite, border: `1px solid ${C.border}` }}
-                      >
-                        <h3 className="font-black text-xl mb-6" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                          {block.data.title}
-                        </h3>
-                        <div className="grid sm:grid-cols-2 gap-6">
-                          <div>
-                            <p className="text-xs font-bold tracking-widest uppercase mb-4" style={{ color: C.muted }}>
-                              {block.leftLabel}
-                            </p>
-                            <ol className="space-y-3">
-                              {block.data.steps.map((s, j) => (
-                                <li key={j} className="flex items-start gap-3 text-sm" style={{ color: C.textLight }}>
-                                  <span className="flex-shrink-0 w-6 h-6 rounded-full text-white text-xs font-bold flex items-center justify-center" style={{ backgroundColor: C.navy }}>
-                                    {j + 1}
-                                  </span>
-                                  {s}
-                                </li>
-                              ))}
-                            </ol>
-                          </div>
-                          <div>
-                            <p className="text-xs font-bold tracking-widest uppercase mb-4" style={{ color: C.muted }}>
-                              {block.rightLabel}
-                            </p>
-                            <ul className="space-y-3 mb-4">
-                              {block.rightItems.map((item, j) => {
-                                const Icon = block.rightIcon;
-                                return (
-                                  <li key={j} className="flex items-start gap-3 text-sm" style={{ color: C.textLight }}>
-                                    <Icon size={14} style={{ color: block.rightIconColor }} className="flex-shrink-0 mt-0.5" />
-                                    {item}
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                            <div className="p-3 rounded-xl text-sm" style={{ backgroundColor: `${C.navy}08` }}>
-                              <span className="font-bold" style={{ color: C.navy }}>Timeline: </span>
-                              <span style={{ color: C.textLight }}>{block.data.timeline}</span>
-                            </div>
-                          </div>
-                        </div>
+                    { label: "Key Challenges", icon: AlertTriangle, iconColor: T.warning, items: regulatory.industryGuidance.sectors[selectedIndustry].challenges, check: false },
+                    { label: "Our Solutions",  icon: Lightbulb,     iconColor: T.success, items: regulatory.industryGuidance.sectors[selectedIndustry].solutions,  check: true  },
+                  ].map(({ label, icon: Icon, iconColor, items, check }) => (
+                    <div key={label} style={{ background: T.paper, borderRadius: 12, padding: "18px 16px", border: `1px solid ${T.rule}` }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+                        <Icon size={14} style={{ color: iconColor }} />
+                        <h4 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 16, color: T.ink, margin: 0 }}>{label}</h4>
                       </div>
-                    ))}
+                      <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 7 }}>
+                        {items.map((item, j) => (
+                          <li key={j} style={{ display: "flex", gap: 9, alignItems: "flex-start", padding: "9px 11px", background: T.white, borderRadius: 8, border: `1px solid ${T.rule}`, fontSize: 12, color: T.inkMid, fontFamily: fontSans, lineHeight: 1.5 }}>
+                            {check ? <CheckCircle size={13} style={{ color: T.success, flexShrink: 0, marginTop: 1 }} /> : <ChevronRight size={13} style={{ color: T.warning, flexShrink: 0, marginTop: 1 }} />}
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
 
-                  {regulatory.violations.strikeOffProcess && (
-                    <div className="mt-6 space-y-4">
-                      <h3 className="font-black text-xl" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                        {regulatory.violations.strikeOffProcess.title}
-                      </h3>
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        {/* strike off */}
-                        <div className="p-5 rounded-2xl" style={{ backgroundColor: "#fef2f2", border: `1px solid #fecaca` }}>
-                          <div className="flex items-center gap-2 mb-4">
-                            <AlertTriangle size={16} style={{ color: C.danger }} />
-                            <h4 className="font-black text-base" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                              Company Strike-Off
-                            </h4>
-                          </div>
-                          <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: C.danger }}>Grounds</p>
-                          <ul className="space-y-1.5 mb-4">
-                            {regulatory.violations.strikeOffProcess.strikeOff.grounds.map((g, i) => (
-                              <li key={i} className="flex items-start gap-2 text-sm" style={{ color: C.textLight }}>
-                                <ChevronRight size={13} style={{ color: C.danger }} className="flex-shrink-0 mt-0.5" /> {g}
-                              </li>
-                            ))}
-                          </ul>
-                          <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: C.danger }}>Consequences</p>
-                          <ul className="space-y-1.5">
-                            {regulatory.violations.strikeOffProcess.strikeOff.consequences.map((c, i) => (
-                              <li key={i} className="flex items-start gap-2 text-sm" style={{ color: C.textLight }}>
-                                <AlertTriangle size={12} style={{ color: C.danger }} className="flex-shrink-0 mt-0.5" /> {c}
-                              </li>
-                            ))}
-                          </ul>
+          {/* ── VIOLATIONS ── */}
+          {regulatory.violations && (
+            <section id="violations" style={{ paddingBottom: 40 }}>
+              <div className="rv2-card-pad" style={{ ...card() }}>
+                <Eyebrow>Compliance Risk</Eyebrow>
+                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink, marginBottom: 12 }}>{regulatory.violations.title}</p>
+                <Prose style={{ marginBottom: 22 }}>{regulatory.violations.description}</Prose>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {regulatory.violations.commonViolations.map((v, i) => (
+                    <div key={i} style={{ borderRadius: 12, overflow: "hidden", border: `1px solid ${T.rule}`, transition: "border-color 0.15s" }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = "#c0d0e4"}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = T.rule}
+                    >
+                      <div style={{ padding: "14px 18px", background: T.paper, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8 }}>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: isMobile ? 16 : 18, color: T.ink, marginBottom: 3 }}>{v.violation}</h3>
+                          <p style={{ fontFamily: fontSans, fontSize: 12, color: T.inkLight, margin: 0 }}>{v.penalty}</p>
                         </div>
-                        {/* dormant */}
-                        <div className="p-5 rounded-2xl" style={{ backgroundColor: `${C.navy}06`, border: `1px solid ${C.navy}18` }}>
-                          <div className="flex items-center gap-2 mb-4">
-                            <Shield size={16} style={{ color: C.navy }} />
-                            <h4 className="font-black text-base" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                              Dormant Company Status
-                            </h4>
-                          </div>
-                          <p className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: C.navy }}>Eligibility</p>
-                          <p className="text-sm mb-4" style={{ color: C.textLight }}>{regulatory.violations.strikeOffProcess.dormantStatus.eligibility}</p>
-                          <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: C.navy }}>Benefits</p>
-                          <ul className="space-y-1.5">
-                            {regulatory.violations.strikeOffProcess.dormantStatus.benefits.map((b, i) => (
-                              <li key={i} className="flex items-start gap-2 text-sm" style={{ color: C.textLight }}>
-                                <CheckCircle size={12} style={{ color: C.success }} className="flex-shrink-0 mt-0.5" /> {b}
-                              </li>
-                            ))}
-                          </ul>
+                        <ImpactBadge impact={v.impact} />
+                      </div>
+                      <div style={{ padding: "12px 18px", display: "flex", gap: 9, borderTop: `1px solid ${T.rule}`, background: T.white }}>
+                        <Shield size={13} style={{ color: T.navy, flexShrink: 0, marginTop: 2 }} />
+                        <p style={{ fontFamily: fontSans, fontSize: 12, color: T.inkMid, margin: 0, lineHeight: 1.6 }}>
+                          <strong style={{ color: T.navy, fontWeight: 700 }}>Prevention: </strong>{v.prevention}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {[
+                  regulatory.violations.compoundingProcess && { data: regulatory.violations.compoundingProcess, rightLabel: "Benefits", rightItems: regulatory.violations.compoundingProcess.benefits, RIcon: CheckCircle, rColor: T.success },
+                  regulatory.violations.enforcementMechanism && { data: regulatory.violations.enforcementMechanism, rightLabel: "Consequences", rightItems: regulatory.violations.enforcementMechanism.consequences, RIcon: AlertTriangle, rColor: T.danger },
+                ].filter(Boolean).map((blk, bi) => (
+                  <div key={bi} style={{ marginTop: 18, background: T.paper, borderRadius: 12, padding: isMobile ? "16px 14px" : "22px", border: `1px solid ${T.rule}` }}>
+                    <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh3, color: T.ink, marginBottom: 18 }}>{blk.data.title}</h3>
+                    <div className="rv2-grid-2col">
+                      <div>
+                        <p style={{ fontFamily: fontSans, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: T.inkLight, marginBottom: 11 }}>Process Steps</p>
+                        <ol style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 7 }}>
+                          {blk.data.steps.map((s, j) => (
+                            <li key={j} style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: 12, color: T.inkMid, fontFamily: fontSans, lineHeight: 1.6 }}>
+                              <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: 5, background: T.navy, color: T.white, fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{j + 1}</span>
+                              {s}
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                      <div>
+                        <p style={{ fontFamily: fontSans, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: T.inkLight, marginBottom: 11 }}>{blk.rightLabel}</p>
+                        <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 7, marginBottom: 12 }}>
+                          {blk.rightItems.map((item, j) => (
+                            <li key={j} style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: 12, color: T.inkMid, fontFamily: fontSans, lineHeight: 1.6 }}>
+                              <blk.RIcon size={13} style={{ color: blk.rColor, flexShrink: 0, marginTop: 2 }} />{item}
+                            </li>
+                          ))}
+                        </ul>
+                        <div style={{ padding: "9px 12px", background: T.navyLight, borderRadius: 8, fontSize: 12, fontFamily: fontSans }}>
+                          <span style={{ fontWeight: 700, color: T.navy }}>Timeline: </span>
+                          <span style={{ color: T.inkMid }}>{blk.data.timeline}</span>
                         </div>
                       </div>
                     </div>
-                  )}
-                </Card>
-              </section>
-            )}
+                  </div>
+                ))}
 
-            {/* ▸ CASE STUDIES */}
-            {regulatory.caseStudies && (
-              <section id="cases">
-                <Card className="p-8 lg:p-10">
-                  <SectionLabel icon={Target}>Success Stories</SectionLabel>
-                  <SectionTitle className="mb-4">{regulatory.caseStudies.title}</SectionTitle>
-                  <p className="text-base leading-relaxed mb-8" style={{ color: C.textLight }}>
-                    {regulatory.caseStudies.description}
-                  </p>
-                  <div className="grid sm:grid-cols-2 gap-3 mb-6">
+                {regulatory.violations.strikeOffProcess && (
+                  <div style={{ marginTop: 18 }}>
+                    <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh3, color: T.ink, marginBottom: 14 }}>{regulatory.violations.strikeOffProcess.title}</h3>
+                    <div className="rv2-grid-2col">
+                      <div style={{ background: T.dangerBg, borderRadius: 12, padding: "18px 16px", border: `1px solid #f5c6c2` }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                          <AlertTriangle size={14} style={{ color: T.danger }} />
+                          <h4 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, color: T.ink, margin: 0 }}>Company Strike-Off</h4>
+                        </div>
+                        <p style={{ fontFamily: fontSans, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: T.danger, marginBottom: 6 }}>Grounds</p>
+                        <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 5, marginBottom: 14 }}>
+                          {regulatory.violations.strikeOffProcess.strikeOff.grounds.map((g, i) => (
+                            <li key={i} style={{ display: "flex", gap: 7, fontSize: 12, color: T.inkMid, fontFamily: fontSans }}>
+                              <ChevronRight size={12} style={{ color: T.danger, flexShrink: 0, marginTop: 2 }} />{g}
+                            </li>
+                          ))}
+                        </ul>
+                        <p style={{ fontFamily: fontSans, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: T.danger, marginBottom: 6 }}>Consequences</p>
+                        <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 5 }}>
+                          {regulatory.violations.strikeOffProcess.strikeOff.consequences.map((c, i) => (
+                            <li key={i} style={{ display: "flex", gap: 7, fontSize: 12, color: T.inkMid, fontFamily: fontSans }}>
+                              <AlertTriangle size={11} style={{ color: T.danger, flexShrink: 0, marginTop: 2 }} />{c}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div style={{ background: T.navyLight, borderRadius: 12, padding: "18px 16px", border: `1px solid #c0d0e4` }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                          <Shield size={14} style={{ color: T.navy }} />
+                          <h4 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, color: T.ink, margin: 0 }}>Dormant Company Status</h4>
+                        </div>
+                        <p style={{ fontFamily: fontSans, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: T.navy, marginBottom: 5 }}>Eligibility</p>
+                        <p style={{ fontFamily: fontSans, fontSize: 12, color: T.inkMid, marginBottom: 14 }}>{regulatory.violations.strikeOffProcess.dormantStatus.eligibility}</p>
+                        <p style={{ fontFamily: fontSans, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: T.navy, marginBottom: 6 }}>Benefits</p>
+                        <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 5 }}>
+                          {regulatory.violations.strikeOffProcess.dormantStatus.benefits.map((b, i) => (
+                            <li key={i} style={{ display: "flex", gap: 7, fontSize: 12, color: T.inkMid, fontFamily: fontSans }}>
+                              <CheckCircle size={11} style={{ color: T.success, flexShrink: 0, marginTop: 2 }} />{b}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* ── CASE STUDIES ── */}
+          {regulatory.caseStudies && (
+            <section id="cases" style={{ paddingBottom: 40 }}>
+              <div className="rv2-card-pad" style={{ ...card() }}>
+                <Eyebrow>Success Stories</Eyebrow>
+                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink, marginBottom: 12 }}>{regulatory.caseStudies.title}</p>
+                <Prose style={{ marginBottom: 20 }}>{regulatory.caseStudies.description}</Prose>
+                <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", marginBottom: 18, paddingBottom: 4 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: `repeat(${regulatory.caseStudies.studies.length}, minmax(160px, 1fr))`, gap: 8, minWidth: isMobile ? `${regulatory.caseStudies.studies.length * 170}px` : "auto" }}>
                     {regulatory.caseStudies.studies.map((s, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setSelectedCaseStudy(i)}
-                        className="text-left p-4 rounded-2xl transition-all duration-200"
-                        style={{
-                          backgroundColor: selectedCaseStudy === i ? C.navy : C.offwhite,
-                          border: `2px solid ${selectedCaseStudy === i ? C.navy : "transparent"}`,
-                        }}
-                      >
-                        <p className="text-xs font-bold tracking-widest uppercase mb-1.5" style={{ color: selectedCaseStudy === i ? C.gold : C.muted }}>
-                          {s.industry}
-                        </p>
-                        <p className="font-black text-base" style={{ fontFamily: "'Playfair Display', serif", color: selectedCaseStudy === i ? "white" : C.text }}>
-                          {s.title}
-                        </p>
+                      <button key={i} onClick={() => setSelectedCase(i)} style={{ textAlign: "left", padding: "14px 16px", borderRadius: 10, cursor: "pointer", background: selectedCase === i ? T.navy : T.paper, border: `2px solid ${selectedCase === i ? T.navy : "transparent"}`, transition: "all 0.15s" }}>
+                        <p style={{ fontFamily: fontSans, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: selectedCase === i ? "rgba(255,255,255,0.7)" : T.inkLight, marginBottom: 5 }}>{s.industry}</p>
+                        <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 14, color: selectedCase === i ? T.white : T.ink, margin: 0 }}>{s.title}</p>
                       </button>
                     ))}
                   </div>
-                  {/* detail */}
-                  <div className="space-y-3 p-6 rounded-2xl" style={{ backgroundColor: C.offwhite }}>
-                    {[
-                      { icon: AlertTriangle, label: "The Challenge", field: "challenge" },
-                      { icon: Lightbulb, label: "Our Solution", field: "solution" },
-                      { icon: CheckCircle, label: "Outcome", field: "outcome" },
-                    ].map(({ icon: Icon, label, field }) => (
-                      <div key={field} className="bg-white p-5 rounded-xl" style={{ border: `1px solid ${C.border}` }}>
-                        <div className="flex items-center gap-2 mb-3">
-                          <Icon size={15} style={{ color: C.navy }} />
-                          <h4 className="font-black text-sm" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                            {label}
-                          </h4>
-                        </div>
-                        <p className="text-sm leading-relaxed" style={{ color: C.textLight }}>
-                          {regulatory.caseStudies.studies[selectedCaseStudy][field]}
-                        </p>
+                </div>
+                <div style={{ background: T.paper, borderRadius: 14, padding: isMobile ? 12 : 18, display: "flex", flexDirection: "column", gap: 8 }}>
+                  {[
+                    { icon: AlertTriangle, label: "The Challenge", field: "challenge" },
+                    { icon: Lightbulb,     label: "Our Solution",  field: "solution"  },
+                    { icon: CheckCircle,   label: "Outcome",       field: "outcome"   },
+                  ].map(({ icon: Icon, label, field }) => (
+                    <div key={field} style={{ background: T.white, borderRadius: 10, padding: "13px 14px", border: `1px solid ${T.rule}` }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
+                        <Icon size={13} style={{ color: T.navy }} />
+                        <h4 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, color: T.ink, margin: 0 }}>{label}</h4>
                       </div>
-                    ))}
-                    <div className="p-5 rounded-xl text-white" style={{ background: `linear-gradient(135deg, ${C.navyDark}, ${C.navyLight})` }}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp size={15} />
-                        <h4 className="font-black text-sm" style={{ fontFamily: "'Playfair Display', serif" }}>
-                          Business Impact
-                        </h4>
-                      </div>
-                      <p className="text-sm text-white/80 leading-relaxed">
-                        {regulatory.caseStudies.studies[selectedCaseStudy].impact}
-                      </p>
+                      <p style={{ fontFamily: fontSans, fontSize: 12, lineHeight: 1.7, color: T.inkMid, margin: 0 }}>{regulatory.caseStudies.studies[selectedCase][field]}</p>
                     </div>
-                  </div>
-                </Card>
-              </section>
-            )}
-
-            {/* ▸ RESOURCES */}
-            {regulatory.resources && (
-              <section id="resources">
-                <Card className="p-8 lg:p-10">
-                  <SectionLabel icon={Download}>Resources</SectionLabel>
-                  <SectionTitle className="mb-4">{regulatory.resources.title}</SectionTitle>
-                  <p className="text-base leading-relaxed mb-10" style={{ color: C.textLight }}>
-                    {regulatory.resources.description}
-                  </p>
-                  <h3 className="font-black text-xl mb-5" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                    Tools & Templates
-                  </h3>
-                  <div className="grid sm:grid-cols-2 gap-4 mb-10">
-                    {regulatory.resources.tools.map((t, i) => (
-                      <div
-                        key={i}
-                        className="group flex items-start gap-4 p-5 rounded-2xl transition-all duration-200 cursor-pointer"
-                        style={{ backgroundColor: C.offwhite, border: `1px solid ${C.border}` }}
-                        onMouseEnter={e => (e.currentTarget.style.borderColor = `${C.navy}30`)}
-                        onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}
-                      >
-                        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${C.navy}10` }}>
-                          <Download size={17} style={{ color: C.navy }} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-black text-base mb-1" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                            {t.name}
-                          </h4>
-                          <p className="text-xs text-slate-500 mb-3">{t.description}</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold" style={{ color: C.gold }}>{t.type}</span>
-                            <button className="flex items-center gap-1.5 text-xs font-bold transition-all duration-200 group-hover:gap-2.5" style={{ color: C.navy }}>
-                              <Download size={12} /> Download
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <h3 className="font-black text-xl mb-5" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                    Comprehensive Guides
-                  </h3>
-                  <div className="space-y-3">
-                    {regulatory.resources.guides.map((g, i) => (
-                      <div
-                        key={i}
-                        className="flex flex-col sm:flex-row items-start justify-between gap-4 p-5 rounded-2xl transition-all duration-200"
-                        style={{ backgroundColor: C.offwhite, border: `1px solid ${C.border}` }}
-                        onMouseEnter={e => (e.currentTarget.style.borderColor = `${C.navy}30`)}
-                        onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}
-                      >
-                        <div>
-                          <h4 className="font-black text-base mb-2" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                            {g.title}
-                          </h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {g.topics.map((tp, j) => (
-                              <span key={j} className="px-2.5 py-0.5 rounded-full text-xs font-semibold" style={{ backgroundColor: `${C.navy}10`, color: C.navy }}>
-                                {tp}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-start sm:items-end gap-2 flex-shrink-0">
-                          <span className="flex items-center gap-1 text-xs" style={{ color: C.muted }}>
-                            <Clock size={11} /> {g.readTime}
-                          </span>
-                          <button className="flex items-center gap-1.5 text-xs font-bold" style={{ color: C.navy }}>
-                            Read <ExternalLink size={12} />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              </section>
-            )}
-
-            {/* ▸ PROCESS */}
-            <section id="process">
-              <div className="text-center mb-10">
-                <SectionLabel icon={Briefcase}>Our Methodology</SectionLabel>
-                <SectionTitle className="mb-3">{regulatory.process.title}</SectionTitle>
-                <p className="text-base" style={{ color: C.textLight }}>Our proven approach ensures seamless compliance</p>
-              </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                {regulatory.process.steps.map((s, i) => (
-                  <div key={i} className="relative">
-                    <Card
-                      className="p-6 h-full group cursor-default"
-                      onMouseEnter={e => (e.currentTarget.style.borderColor = C.navy)}
-                      onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}
-                    >
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-2xl mb-5 transition-all duration-300 group-hover:scale-110"
-                        style={{ backgroundColor: `${C.navy}10`, color: C.navy, fontFamily: "'Playfair Display', serif" }}
-                      >
-                        {i + 1}
-                      </div>
-                      <h3 className="font-black text-base mb-2" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                        {s.title}
-                      </h3>
-                      <p className="text-sm leading-relaxed" style={{ color: C.textLight }}>{s.description}</p>
-                    </Card>
-                    {i < regulatory.process.steps.length - 1 && (
-                      <div className="hidden lg:flex absolute top-1/2 -right-3 -translate-y-1/2 z-10 w-6 h-6 rounded-full items-center justify-center" style={{ backgroundColor: C.offwhite }}>
-                        <ChevronRight size={14} style={{ color: C.navy }} />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="rounded-2xl p-8 text-center text-white" style={{ background: `linear-gradient(135deg, ${C.navyDark} 0%, ${C.navyLight} 100%)` }}>
-                <p className="text-lg mb-5 text-white/80">Ready to experience our proven compliance process?</p>
-                <button
-                  className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-200"
-                  style={{ backgroundColor: C.gold, color: C.navyDark }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = C.goldLight)}
-                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = C.gold)}
-                >
-                  Start Your Journey <Rocket size={15} />
-                </button>
-              </div>
-            </section>
-
-            {/* ▸ FAQ */}
-            <section id="faq">
-              <div className="text-center mb-10">
-                <SectionLabel icon={HelpCircle}>Common Questions</SectionLabel>
-                <SectionTitle className="mb-3">Frequently Asked Questions</SectionTitle>
-                <p className="text-base" style={{ color: C.textLight }}>Everything you need to know about our services</p>
-              </div>
-              <div className="max-w-3xl mx-auto space-y-3">
-                {regulatory.faqs.map((faq, i) => (
-                  <div
-                    key={i}
-                    className="rounded-2xl overflow-hidden transition-all duration-200"
-                    style={{ border: `1px solid ${openFaq === i ? `${C.navy}40` : C.border}` }}
-                  >
-                    <button
-                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left bg-white"
-                    >
-                      <span className="font-black text-base" style={{ fontFamily: "'Playfair Display', serif", color: C.text }}>
-                        {faq.question}
-                      </span>
-                      <div
-                        className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300"
-                        style={{ backgroundColor: openFaq === i ? C.navy : `${C.navy}10` }}
-                      >
-                        {openFaq === i
-                          ? <Minus size={14} className="text-white" />
-                          : <Plus size={14} style={{ color: C.navy }} />}
-                      </div>
-                    </button>
-                    {openFaq === i && (
-                      <div className="px-6 pb-5 pt-0 bg-white" style={{ borderTop: `1px solid ${C.border}` }}>
-                        <p className="text-sm leading-relaxed pt-4" style={{ color: C.textLight }}>
-                          {faq.answer}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* ▸ FINAL CTA */}
-            <section>
-              <div
-                className="rounded-3xl p-10 lg:p-14 text-white overflow-hidden relative"
-                style={{ background: `linear-gradient(135deg, ${C.navyDark} 0%, ${C.navyLight} 60%, ${C.navy} 100%)` }}
-              >
-                {/* decorative circles */}
-                <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full opacity-10" style={{ backgroundColor: C.gold }} />
-                <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full opacity-10" style={{ backgroundColor: C.gold }} />
-
-                <div className="relative text-center max-w-2xl mx-auto">
-                  <h2 className="font-black text-3xl sm:text-4xl mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
-                    {regulatory.cta.title}
-                  </h2>
-                  <p className="text-base text-white/70 mb-8 leading-relaxed">
-                    {regulatory.cta.description}
-                  </p>
-                  <div className="flex flex-wrap gap-3 justify-center mb-10">
-                    <button
-                      className="group flex items-center gap-2.5 px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-200 hover:gap-4"
-                      style={{ backgroundColor: C.gold, color: C.navyDark }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = C.goldLight)}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = C.gold)}
-                    >
-                      {regulatory.cta.primaryButton} <ArrowRight size={15} />
-                    </button>
-                    <button
-                      className="flex items-center gap-2.5 px-8 py-3.5 rounded-xl font-bold text-sm text-white transition-all duration-200"
-                      style={{ border: "1px solid rgba(255,255,255,0.3)", backgroundColor: "rgba(255,255,255,0.08)" }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.18)")}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)")}
-                    >
-                      <Phone size={15} /> {regulatory.cta.secondaryButton}
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-white/50">
-                    {["Free Consultation", "Expert Team", "Proven Track Record", "24/7 Support"].map(t => (
-                      <span key={t} className="flex items-center gap-1.5">
-                        <CheckCircle size={11} style={{ color: C.gold }} /> {t}
-                      </span>
-                    ))}
+                  ))}
+                  <div style={{ background: T.navy, borderRadius: 10, padding: "13px 14px", color: T.white }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
+                      <TrendingUp size={13} />
+                      <h4 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, margin: 0 }}>Business Impact</h4>
+                    </div>
+                    <p style={{ fontFamily: fontSans, fontSize: 12, lineHeight: 1.7, color: "rgba(255,255,255,0.7)", margin: 0 }}>{regulatory.caseStudies.studies[selectedCase].impact}</p>
                   </div>
                 </div>
               </div>
             </section>
+          )}
 
-          </main>
-        </div>
+          {/* ── RESOURCES ── */}
+          {regulatory.resources && (
+            <section id="resources" style={{ paddingBottom: 40 }}>
+              <div className="rv2-card-pad" style={{ ...card() }}>
+                <Eyebrow>Resources</Eyebrow>
+                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink, marginBottom: 12 }}>{regulatory.resources.title}</p>
+                <Prose style={{ marginBottom: 24 }}>{regulatory.resources.description}</Prose>
+                <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh3, color: T.ink, marginBottom: 14 }}>Tools &amp; Templates</h3>
+                <div className="rv2-grid-tools" style={{ marginBottom: 26 }}>
+                  {regulatory.resources.tools.map((t, i) => (
+                    <div key={i} style={{ display: "flex", gap: 12, padding: "14px 16px", background: T.paper, borderRadius: 10, border: `1px solid ${T.rule}`, transition: "border-color 0.15s", cursor: "pointer" }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = T.navyMid}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = T.rule}
+                    >
+                      <div style={{ width: 36, height: 36, borderRadius: 9, background: T.navyLight, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <Download size={15} style={{ color: T.navy }} />
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <h4 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 15, color: T.ink, marginBottom: 2 }}>{t.name}</h4>
+                        <p style={{ fontFamily: fontSans, fontSize: 11, color: T.inkLight, marginBottom: 8 }}>{t.description}</p>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontFamily: fontSans, fontSize: 10, fontWeight: 700, color: T.navy }}>{t.type}</span>
+                          <button style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: fontSans, fontSize: 11, fontWeight: 700, color: T.navy, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                            <Download size={11} /> Download
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh3, color: T.ink, marginBottom: 14 }}>Comprehensive Guides</h3>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {regulatory.resources.guides.map((g, i) => (
+                    <div key={i} className="rv2-guide-row" style={{ padding: "14px 16px", background: T.paper, borderRadius: 10, border: `1px solid ${T.rule}`, transition: "border-color 0.15s" }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = T.navyMid}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = T.rule}
+                    >
+                      <div>
+                        <h4 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 16, color: T.ink, marginBottom: 8 }}>{g.title}</h4>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                          {g.topics.map((tp, j) => (
+                            <span key={j} style={{ padding: "2px 9px", borderRadius: 20, background: T.navyLight, color: T.navy, fontSize: 10, fontFamily: fontSans, fontWeight: 600 }}>{tp}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="rv2-guide-actions">
+                        <span style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: fontSans, fontSize: 11, color: T.inkLight, whiteSpace: "nowrap" }}>
+                          <Clock size={10} /> {g.readTime}
+                        </span>
+                        <button style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: fontSans, fontSize: 11, fontWeight: 700, color: T.navy, background: "none", border: "none", cursor: "pointer", padding: 0, whiteSpace: "nowrap" }}>
+                          Read <ExternalLink size={11} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* ── PROCESS ── */}
+          <section id="process" style={{ paddingBottom: 40 }}>
+            <Eyebrow>Our Methodology</Eyebrow>
+            <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink, marginBottom: 8 }}>{regulatory.process.title}</p>
+            <Prose style={{ marginBottom: 22 }}>Our proven approach ensures seamless compliance every step of the way.</Prose>
+            <div className="rv2-grid-process" style={{ marginBottom: 18 }}>
+              {regulatory.process.steps.map((s, i) => (
+                <div key={i} style={{ ...card({ padding: "22px 20px" }), position: "relative", transition: "all 0.2s", cursor: "default" }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.07)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                >
+                  <div style={{ position: "absolute", top: 16, right: 16, fontFamily: fontDisplay, fontWeight: 700, fontSize: 40, color: T.paperDark, lineHeight: 1, userSelect: "none" }}>
+                    {String(i + 1).padStart(2, "0")}
+                  </div>
+                  <h3 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: 18, color: T.ink, marginBottom: 8 }}>{s.title}</h3>
+                  <p style={{ fontFamily: fontSans, fontSize: 12, lineHeight: 1.65, color: T.inkLight, margin: 0 }}>{s.description}</p>
+                </div>
+              ))}
+            </div>
+            <div style={{ background: T.navy, borderRadius: 14, padding: isMobile ? "28px 18px" : "36px 48px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: -30, right: -30, width: 120, height: 120, borderRadius: "50%", background: "rgba(255,255,255,0.1)" }} />
+              <p style={{ fontFamily: fontSans, fontSize: 14, color: "rgba(255,255,255,0.65)", marginBottom: 16 }}>Ready to experience our proven compliance process?</p>
+              <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 10, background: T.white, color: T.navy, border: "none", cursor: "pointer", fontFamily: fontSans, fontSize: 14, fontWeight: 700 }}>
+                Start Your Journey <Rocket size={14} />
+              </button>
+            </div>
+          </section>
+
+          {/* ── FAQ ── */}
+          <section id="faq" style={{ paddingBottom: 40 }}>
+            <div className="rv2-grid-faq">
+              <div className="rv2-faq-left">
+                <Eyebrow>FAQ</Eyebrow>
+                <p style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: fh2, lineHeight: 1.1, color: T.ink, marginBottom: 12 }}>Frequently Asked</p>
+                <Prose>Everything you need to know about our compliance services.</Prose>
+                <Divider />
+                <p style={{ fontFamily: fontSans, fontSize: 13, color: T.inkLight, marginBottom: 12 }}>Still have questions?</p>
+                <Link to="/contact" style={{ textDecoration: "none" }}>
+                  <button style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", borderRadius: 8, background: T.navy, color: T.white, border: "none", cursor: "pointer", fontFamily: fontSans, fontSize: 13, fontWeight: 700 }}>
+                    <Mail size={13} /> Contact Us
+                  </button>
+                </Link>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                {regulatory.faqs.map((faq, i) => (
+                  <div key={i} style={{ borderRadius: 10, overflow: "hidden", border: `1px solid ${openFaq === i ? T.navy : T.rule}`, transition: "border-color 0.15s" }}>
+                    <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                      style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, padding: "14px 16px", background: T.white, border: "none", cursor: "pointer", textAlign: "left" }}>
+                      <span style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: isMobile ? 14 : 16, color: T.ink, lineHeight: 1.4 }}>{faq.question}</span>
+                      <div style={{ flexShrink: 0, width: 26, height: 26, borderRadius: 7, background: openFaq === i ? T.navy : T.paperDark, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
+                        {openFaq === i ? <Minus size={12} style={{ color: T.white }} /> : <Plus size={12} style={{ color: T.inkMid }} />}
+                      </div>
+                    </button>
+                    {openFaq === i && (
+                      <div style={{ padding: "0 16px 14px", borderTop: `1px solid ${T.rule}`, background: T.white }}>
+                        <p style={{ fontFamily: fontSans, fontSize: 13, lineHeight: 1.75, color: T.inkMid, marginTop: 12 }}>{faq.answer}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ── FINAL CTA ── */}
+          <section>
+            <div style={{
+              background: T.navy, borderRadius: isMobile ? 16 : 24,
+              padding: isMobile ? "44px 18px" : isTablet ? "56px 36px" : "72px 64px",
+              textAlign: "center", color: T.white, position: "relative", overflow: "hidden",
+            }}>
+              <div style={{ position: "absolute", top: -48, left: "50%", transform: "translateX(-50%)", width: 320, height: 320, borderRadius: "50%", background: "rgba(255,255,255,0.08)" }} />
+              <div style={{ position: "absolute", bottom: -32, right: -32, width: 180, height: 180, borderRadius: "50%", background: "rgba(255,255,255,0.04)" }} />
+              <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 80, height: 3, background: T.white, borderRadius: "0 0 3px 3px" }} />
+              <div style={{ position: "relative", maxWidth: 560, margin: "0 auto" }}>
+                <Eyebrow style={{ color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>Get Started Today</Eyebrow>
+                <h2 style={{ fontFamily: fontDisplay, fontWeight: 700, fontSize: isMobile ? "clamp(24px,7vw,34px)" : "clamp(32px,4vw,48px)", lineHeight: 1.1, color: T.white, marginBottom: 14 }}>
+                  {regulatory.cta.title}
+                </h2>
+                <p style={{ fontFamily: fontSans, fontSize: isMobile ? 13 : 15, lineHeight: 1.75, color: "rgba(255,255,255,0.60)", marginBottom: 28 }}>
+                  {regulatory.cta.description}
+                </p>
+                <div className="rv2-cta-btns">
+                  <button className="rv2-cta-btn" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 28px", borderRadius: 10, background: T.white, color: T.navy, border: "none", cursor: "pointer", fontFamily: fontSans, fontSize: 14, fontWeight: 700 }}>
+                    {regulatory.cta.primaryButton} <ArrowRight size={14} />
+                  </button>
+                  <button className="rv2-cta-btn" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 28px", borderRadius: 10, background: "rgba(255,255,255,0.10)", color: T.white, border: "1px solid rgba(255,255,255,0.22)", cursor: "pointer", fontFamily: fontSans, fontSize: 14, fontWeight: 600 }}>
+                    <Phone size={14} /> {regulatory.cta.secondaryButton}
+                  </button>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? "8px 14px" : "12px 24px" }}>
+                  {["Free Consultation", "Expert Team", "Proven Track Record", "24/7 Support"].map(t => (
+                    <span key={t} style={{ display: "flex", alignItems: "center", gap: 5, fontFamily: fontSans, fontSize: 11, color: "rgba(255,255,255,0.45)" }}>
+                      <CheckCircle size={11} style={{ color: "rgba(255,255,255,0.7)" }} /> {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </main>
       </div>
     </div>
   );
-};
-
-export default Regulatory;
+}

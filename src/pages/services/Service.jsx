@@ -1,389 +1,703 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { servicesData } from "./data";
-
 import {
-  CheckCircle,
-  Star,
-  HelpCircle,
-  Home,
-  FileText,
-  BarChart3,
-  BriefcaseBusiness,
-  Menu,
-  X,
-  ChevronDown,
-  ArrowUp,
-  ArrowRight,
-  Phone,
+  CheckCircle, Star, HelpCircle, Home, FileText, BarChart3,
+  BriefcaseBusiness, Menu, X, ChevronDown, ArrowUp, ArrowRight,
+  Phone, ChevronRight, Trophy, ThumbsUp, Clock, Headphones,
 } from "lucide-react";
 
-/* ─── Google Fonts injection ─── */
+/* ─── Fonts ─── */
 const FontInjector = () => {
   useEffect(() => {
-    const link = document.createElement("link");
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700&display=swap";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-    return () => document.head.removeChild(link);
+    const l = document.createElement("link");
+    l.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600&display=swap";
+    l.rel = "stylesheet";
+    document.head.appendChild(l);
+    return () => document.head.removeChild(l);
   }, []);
   return null;
 };
 
-/* ─── Custom styles ─── */
-const styles = `
-  :root {
-    --navy: #133f77;
-    --navy-dark: #0d2e57;
-    --navy-light: #1a5299;
-    --gold: #c8a951;
-    --cream: #f9f6f0;
-    --text: #1e1e2e;
-    --muted: #6b7280;
-  }
+const css = `
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --navy:       #133f77;
+  --navy-d:     #0d2e57;
+  --navy-l:     #1a5299;
+  --navy-pale:  #eef3fb;
+  --cream:      #f8f5ef;
+  --white:      #ffffff;
+  --text:       #16213e;
+  --sub:        #4b5563;
+  --muted:      #9ca3af;
+  --border:     #e2e8f4;
+  --shadow-sm:  0 2px 8px rgba(13,46,87,.07);
+  --shadow-md:  0 8px 32px rgba(13,46,87,.12);
+  --shadow-lg:  0 20px 60px rgba(13,46,87,.16);
+  --r-sm:  8px;
+  --r-md:  14px;
+  --r-lg:  22px;
+}
 
+.sp {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+}
 
-  .sp-root { font-family: 'Poppins', sans-serif; color: var(--text); background: #ffffff; }
-  .sp-serif { font-family: 'Cormorant Garamond', serif; }
+/* ══════════════════════════════
+   HERO
+══════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
 
-  /* ── Hero ── */
-  .sp-hero-section {
-    position: relative;
-    min-height: 92vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-  }
-  .sp-hero-img {
-    position: absolute; inset: 0;
-    background-size: cover; background-position: center;
-    transform: scale(1.05);
-    transition: transform 8s ease;
-  }
-  .sp-hero-section:hover .sp-hero-img { transform: scale(1); }
-  .sp-hero-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(13,46,87,0.92) 0%, rgba(19,63,119,0.78) 55%, rgba(0,0,0,0.45) 100%);
-  }
-  .sp-hero-content { position: relative; z-index: 2; }
+.hero-bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center top;
+  transform: scale(1.07);
+  transition: transform 10s ease;
+}
+.hero:hover .hero-bg { transform: scale(1); }
 
-  .sp-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(200,169,81,0.18); border: 1px solid rgba(200,169,81,0.5);
-    color: #e8cc7a; padding: 6px 18px; border-radius: 100px;
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-    margin-bottom: 20px;
-  }
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(8,22,46,0.85) 0%,
+    rgba(8,22,46,0.60) 50%,
+    rgba(8,22,46,0.30) 100%
+  );
+}
+.hero-overlay::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(5,15,35,.45) 100%);
+}
 
-  /* ── Buttons ── */
-  .btn-primary {
-    background: var(--gold); color: #0d2e57;
-    padding: 14px 32px; border-radius: 4px; font-weight: 600; font-size: 0.88rem;
-    border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-    transition: all 0.25s; letter-spacing: 0.02em; text-decoration: none;
-    font-family: 'Poppins', sans-serif;
-  }
-  .btn-primary:hover { background: #debb6a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,169,81,0.4); }
+.hero-accent-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; z-index: 3;
+  background: linear-gradient(90deg, var(--navy-l), var(--navy), #1e6cc8);
+}
 
-  .btn-outline {
-    background: transparent; color: #fff;
-    padding: 13px 32px; border-radius: 4px; font-weight: 500; font-size: 0.88rem;
-    border: 1.5px solid rgba(255,255,255,0.5); cursor: pointer;
-    display: inline-flex; align-items: center; gap: 8px;
-    transition: all 0.25s; text-decoration: none;
-    font-family: 'Poppins', sans-serif;
-  }
-  .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+.hero-body {
+  position: relative; z-index: 2; width: 100%;
+  max-width: 1300px; margin: 0 auto;
+  padding: clamp(60px, 10vh, 110px) clamp(16px, 5vw, 72px) clamp(48px, 8vh, 96px);
+}
 
-  /* ── Layout ── */
-  .sp-layout { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-  @media(min-width:640px){ .sp-layout { padding: 0 48px; } }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.85);
+  padding: 5px 14px; border-radius: 100px;
+  font-size: .65rem; font-weight: 600;
+  letter-spacing: .15em; text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.hero-tag-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255,255,255,.6); flex-shrink: 0;
+}
 
-  /* ── Main content wrapper ── */
-  .sp-content-wrapper {
-    display: flex;
-    gap: 48px;
-    align-items: flex-start;
-    padding-top: 60px;
-    padding-bottom: 100px;
-  }
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 7vw, 5.5rem);
+  font-weight: 700; color: #fff;
+  line-height: 1.07; margin-bottom: 18px;
+  max-width: 820px;
+  text-shadow: 0 2px 20px rgba(0,0,0,.3);
+}
 
-  /* ── Sidebar ── */
-  .sp-sidebar {
-    display: none;
-    width: 252px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 96px;
-    align-self: flex-start;
-  }
+.hero-sub {
+  font-size: clamp(.88rem, 1.5vw, 1.08rem);
+  color: rgba(255,255,255,.68); line-height: 1.8;
+  max-width: 540px; font-weight: 300; margin-bottom: 32px;
+}
 
-  @media(min-width: 1024px) {
-    .sp-sidebar { display: block; }
-    .sp-fab-mobile { display: none !important; }
-    .sp-fab-top-mobile { display: none !important; }
-    .sp-fab-top-desk { display: flex !important; }
-  }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px; }
 
-  @media(max-width: 1023px) {
-    .sp-fab-top-desk { display: none !important; }
-  }
+.btn-hero-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; color: var(--navy-d);
+  padding: 12px 26px; border-radius: var(--r-sm); border: 2px solid #fff;
+  font-family: 'Poppins', sans-serif; font-size: .82rem; font-weight: 600;
+  cursor: pointer; text-decoration: none; transition: all .22s;
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+  white-space: nowrap;
+}
+.btn-hero-primary:hover {
+  background: transparent; color: #fff;
+  box-shadow: 0 6px 28px rgba(0,0,0,.3); transform: translateY(-2px);
+}
 
-  .sp-sidebar-inner {
-    background: var(--cream);
-    border-radius: 14px;
-    padding: 24px;
-    border: 1px solid #e8edf5;
-    box-shadow: 0 4px 20px rgba(19,63,119,0.06);
-  }
+.btn-hero-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.88);
+  padding: 11px 22px; border-radius: var(--r-sm);
+  border: 1.5px solid rgba(255,255,255,.3);
+  font-family: 'Poppins', sans-serif; font-size: .82rem; font-weight: 400;
+  cursor: pointer; text-decoration: none; transition: all .22s;
+  backdrop-filter: blur(6px); white-space: nowrap;
+}
+.btn-hero-ghost:hover { border-color: rgba(255,255,255,.65); background: rgba(255,255,255,.14); color: #fff; }
 
-  .sp-sidebar-label {
-    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
-  }
+/* Stats strip */
+.hero-stats {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--r-md); overflow: hidden;
+  background: rgba(255,255,255,.07);
+  backdrop-filter: blur(12px);
+  width: fit-content; max-width: 100%;
+}
+.h-stat {
+  padding: 16px 28px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,.12);
+  flex: 1; min-width: 100px;
+}
+.h-stat:last-child { border-right: none; }
+.h-stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700; color: #fff; line-height: 1;
+}
+.h-stat-lbl {
+  font-size: .6rem; color: rgba(255,255,255,.5);
+  margin-top: 4px; letter-spacing: .06em; text-transform: uppercase;
+}
 
-  .sp-nav-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px; border-radius: 8px;
-    font-size: 0.82rem; font-weight: 500; color: var(--muted);
-    cursor: pointer; transition: all 0.2s; border: none; background: none;
-    width: 100%; text-align: left; font-family: 'Poppins', sans-serif;
-  }
-  .sp-nav-item:hover { color: var(--navy); background: rgba(19,63,119,0.07); }
-  .sp-nav-item.active { background: var(--navy); color: #fff; }
+.hero-wave { position: absolute; bottom: -1px; left: 0; width: 100%; z-index: 3; }
 
-  .sp-sidebar-cta {
-    margin-top: 22px; background: var(--navy);
-    border-radius: 10px; padding: 20px 18px; color: #fff;
-  }
-  .sp-sidebar-cta-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; margin-bottom: 6px; }
-  .sp-sidebar-cta-sub { font-size: 0.76rem; color: rgba(255,255,255,0.68); margin-bottom: 16px; }
+/* ══════════════════════════════
+   MOBILE STICKY NAV BAR
+══════════════════════════════ */
+.mob-bar {
+  display: none;
+  position: sticky; top: 0; z-index: 50;
+  background: var(--navy-d);
+  padding: 0 16px;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 16px rgba(5,18,50,.25);
+}
+@media (max-width: 1023px) { .mob-bar { display: flex; } }
 
-  /* ── Main content ── */
-  .sp-main { flex: 1; min-width: 0; }
+.mob-bar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; font-weight: 600; color: #fff;
+  padding: 14px 0; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; max-width: 60vw;
+}
+.mob-bar-menu {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff; padding: 7px 13px; border-radius: 6px;
+  font-family: 'Poppins', sans-serif; font-size: .74rem; font-weight: 500;
+  cursor: pointer; transition: all .2s; flex-shrink: 0;
+}
+.mob-bar-menu:hover { background: rgba(255,255,255,.18); }
 
-  /* ── Section headings ── */
-  .sp-section-tag {
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
-  }
-  .sp-section-tag::after { content:''; flex:1; height:1px; background: var(--gold); opacity:0.3; }
-  .sp-section-h2 {
-    font-family: 'Cormorant Garamond', serif; font-size: 2.5rem;
-    color: var(--navy); line-height: 1.15; margin-bottom: 18px;
-  }
-  @media(max-width:640px){ .sp-section-h2 { font-size: 1.9rem; } }
+/* ══════════════════════════════
+   DRAWER
+══════════════════════════════ */
+.drawer { position: fixed; inset: 0; z-index: 200; }
+.drawer-dim {
+  position: absolute; inset: 0;
+  background: rgba(5,14,35,.7); backdrop-filter: blur(4px);
+}
+.drawer-panel {
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: min(300px, 85vw);
+  background: var(--white); overflow-y: auto; padding-bottom: 48px;
+  box-shadow: -12px 0 48px rgba(0,0,0,.2);
+  animation: slideIn .26s cubic-bezier(.22,.1,.36,1);
+}
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-  /* ── Divider ── */
-  .sp-divider { width: 56px; height: 3px; background: var(--gold); border-radius: 2px; margin-bottom: 28px; }
+.drawer-top {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border); margin-bottom: 10px;
+}
+.drawer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-weight: 700; color: var(--navy-d);
+}
+.drawer-close {
+  background: none; border: none; cursor: pointer;
+  padding: 6px; color: var(--muted); border-radius: 6px; transition: background .2s;
+}
+.drawer-close:hover { background: var(--border); }
+.drawer-nav { padding: 0 12px; display: flex; flex-direction: column; gap: 3px; }
+.drawer-cta {
+  margin: 20px 14px 0;
+  background: linear-gradient(135deg, var(--navy-d), var(--navy-l));
+  border-radius: var(--r-md); padding: 22px 18px;
+}
+.drawer-cta-h { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #fff; margin-bottom: 6px; }
+.drawer-cta-p { font-size: .72rem; color: rgba(255,255,255,.55); margin-bottom: 14px; line-height: 1.6; }
 
-  /* ── About section ── */
-  .sp-section-about { margin-bottom: 80px; }
-  .sp-about-desc { color: #4b5563; line-height: 1.9; font-size: 1rem; margin-bottom: 36px; max-width: 700px; }
-  .sp-highlights-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+/* ══════════════════════════════
+   NAV ITEMS
+══════════════════════════════ */
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; font-size: .8rem; font-weight: 400;
+  color: var(--sub); cursor: pointer; border: none; background: none;
+  text-align: left; font-family: 'Poppins', sans-serif; width: 100%;
+  border-left: 3px solid transparent; border-radius: 0 8px 8px 0;
+  transition: all .18s;
+}
+.nav-item:hover { color: var(--navy); background: var(--navy-pale); }
+.nav-item.on {
+  color: var(--navy); background: var(--navy-pale);
+  border-left-color: var(--navy); font-weight: 600;
+}
 
-  .sp-highlight {
-    display: flex; gap: 14px; align-items: flex-start;
-    padding: 16px 20px; border-left: 3px solid var(--navy);
-    background: var(--cream); border-radius: 0 10px 10px 0;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .sp-highlight:hover { border-color: var(--gold); transform: translateX(4px); }
-  .sp-highlight p { font-size: 0.88rem; font-weight: 500; color: #374151; }
+/* ══════════════════════════════
+   LAYOUT
+══════════════════════════════ */
+.wrap { max-width: 1300px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 72px); }
 
-  /* ── Features ── */
-  .sp-section-features { margin-bottom: 80px; }
-  .sp-features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.page-grid {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  gap: 0 60px;
+  padding-top: 72px; padding-bottom: 120px;
+  align-items: start;
+}
+@media (max-width: 1023px) {
+  .page-grid { grid-template-columns: 1fr; gap: 0; padding-top: 48px; padding-bottom: 80px; }
+  .sidebar { display: none !important; }
+}
 
-  .sp-feature {
-    background: #fff; border: 1px solid #e8edf5;
-    border-radius: 14px; padding: 28px 24px;
-    transition: box-shadow 0.25s, transform 0.25s;
-    position: relative; overflow: hidden;
-  }
-  .sp-feature::before {
-    content: ''; position: absolute; top:0; left:0; right:0; height:3px;
-    background: linear-gradient(90deg, var(--navy), var(--gold));
-    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
-  }
-  .sp-feature:hover::before { transform: scaleX(1); }
-  .sp-feature:hover { box-shadow: 0 12px 40px rgba(19,63,119,0.12); transform: translateY(-4px); }
-  .sp-feature-icon { font-size: 2.2rem; margin-bottom: 14px; }
-  .sp-feature h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 10px; }
-  .sp-feature p { font-size: 0.84rem; color: #6b7280; line-height: 1.75; }
+/* ══════════════════════════════
+   SIDEBAR
+══════════════════════════════ */
+.sidebar { position: sticky; top: 28px; }
 
-  /* ── Process ── */
-  .sp-section-process { margin-bottom: 80px; }
-  .sp-process-list { display: flex; flex-direction: column; gap: 14px; }
+.sidebar-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.sidebar-head {
+  background: linear-gradient(135deg, var(--navy-d) 0%, var(--navy-l) 100%);
+  padding: 20px 18px 16px;
+}
+.sidebar-head-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.18rem; color: #fff; font-weight: 600;
+}
+.sidebar-head-sub { font-size: .7rem; color: rgba(255,255,255,.55); margin-top: 3px; }
 
-  .sp-step {
-    display: grid; grid-template-columns: 56px 1fr; gap: 20px; align-items: start;
-    padding: 24px 28px; background: #fff; border: 1px solid #e8edf5; border-radius: 14px;
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-  .sp-step:hover { box-shadow: 0 8px 28px rgba(19,63,119,0.1); transform: translateX(4px); }
-  .sp-step-num {
-    width: 52px; height: 52px; background: var(--navy); color: #fff;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; flex-shrink: 0;
-  }
-  .sp-step h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.22rem; color: var(--navy); margin-bottom: 6px; }
-  .sp-step p { font-size: 0.86rem; color: #6b7280; line-height: 1.8; }
+.sidebar-nav { padding: 10px 10px 14px; display: flex; flex-direction: column; gap: 2px; }
+.sidebar-lbl {
+  font-size: .58rem; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted); padding: 8px 12px 5px; display: block;
+}
+.sidebar-footer { border-top: 1px solid var(--border); padding: 16px 16px 18px; }
+.sidebar-footer-label {
+  font-size: .66rem; color: var(--muted); margin-bottom: 10px; text-align: center;
+}
 
-  .sp-process-cta {
-    margin-top: 32px; background: linear-gradient(135deg, #0d2e57, #133f77);
-    border-radius: 14px; padding: 40px 44px; text-align: center;
-  }
-  .sp-process-cta p { font-family: 'Cormorant Garamond', serif; color: #fff; font-size: 1.6rem; margin-bottom: 20px; }
+/* ══════════════════════════════
+   BUTTONS
+══════════════════════════════ */
+.btn-solid {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--navy-d); color: #fff;
+  padding: 11px 22px; border-radius: var(--r-sm); border: 2px solid var(--navy-d);
+  font-family: 'Poppins', sans-serif; font-size: .82rem; font-weight: 600;
+  cursor: pointer; text-decoration: none; transition: all .22s; white-space: nowrap;
+}
+.btn-solid:hover { background: var(--navy); border-color: var(--navy); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-solid.full { width: 100%; }
 
-  /* ── Stats ── */
-  .sp-section-stats { margin-bottom: 80px; }
-  .sp-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  @media(min-width:768px){ .sp-stats-grid { grid-template-columns: repeat(4, 1fr); } }
+/* ══════════════════════════════
+   SECTION PATTERN
+══════════════════════════════ */
+.sec { margin-bottom: 80px; }
+@media (max-width: 640px) { .sec { margin-bottom: 60px; } }
 
-  .sp-stat {
-    text-align: center; padding: 36px 16px;
-    background: var(--navy); color: #fff; border-radius: 14px;
-    position: relative; overflow: hidden;
-  }
-  .sp-stat::after {
-    content:''; position: absolute; bottom:-24px; right:-24px;
-    width: 90px; height: 90px; border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-  }
-  .sp-stat-emoji { font-size: 1.7rem; margin-bottom: 12px; }
-  .sp-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 700; color: var(--gold); line-height: 1; }
-  .sp-stat-label { font-size: 0.74rem; font-weight: 500; color: rgba(255,255,255,0.7); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.07em; }
+.sec-kicker {
+  display: flex; align-items: center; gap: 8px;
+  font-size: .62rem; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--navy); margin-bottom: 8px;
+}
+.sec-kicker-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--navy); flex-shrink: 0;
+}
+.sec-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.9rem);
+  font-weight: 700; color: var(--navy-d); line-height: 1.12; margin-bottom: 12px;
+}
+.sec-rule {
+  width: 44px; height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--navy), var(--navy-l));
+  margin-bottom: 24px;
+}
 
-  /* ── FAQ ── */
-  .sp-section-faq { margin-bottom: 80px; }
-  .sp-faq-list { display: flex; flex-direction: column; gap: 10px; }
+/* ══════════════════════════════
+   ABOUT
+══════════════════════════════ */
+.about-body {
+  font-size: clamp(.9rem, 1.5vw, 1rem);
+  line-height: 1.9; color: var(--sub);
+  font-weight: 300; max-width: 700px; margin-bottom: 32px;
+}
 
-  .sp-faq-item { border: 1px solid #e8edf5; border-radius: 12px; overflow: hidden; transition: box-shadow 0.2s; }
-  .sp-faq-item:hover { box-shadow: 0 4px 16px rgba(19,63,119,0.08); }
+.hl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+@media (max-width: 480px) { .hl-grid { grid-template-columns: 1fr; } }
 
-  .sp-faq-btn {
-    width: 100%; text-align: left; background: none; border: none; cursor: pointer;
-    padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--navy);
-    transition: background 0.2s;
-  }
-  .sp-faq-btn:hover { background: var(--cream); }
-  .sp-faq-btn.open { background: var(--navy); color: #fff; }
-  .sp-faq-chevron { flex-shrink: 0; transition: transform 0.25s; }
-  .sp-faq-chevron.open { transform: rotate(180deg); color: var(--gold); }
-  .sp-faq-answer { padding: 18px 22px; background: var(--cream); font-size: 0.88rem; line-height: 1.85; color: #4b5563; border-top: 1px solid #e8edf5; }
+.hl-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px; background: var(--white);
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  transition: all .22s; cursor: default;
+}
+.hl-card:hover { border-color: var(--navy); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.hl-card-icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--navy-pale); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.hl-card-text { font-size: .84rem; font-weight: 500; color: var(--text); line-height: 1.55; }
 
-  /* ── CTA Banner ── */
-  .sp-cta-section {
-    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, var(--navy-light) 100%);
-    border-radius: 18px; padding: 60px 48px; text-align: center; position: relative; overflow: hidden;
-  }
-  .sp-cta-section::before {
-    content:''; position: absolute; inset:0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-  .sp-cta-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.9rem; color: #fff; margin-bottom: 14px; position: relative; }
-  .sp-cta-section p { color: rgba(255,255,255,0.78); font-size: 1.05rem; max-width: 560px; margin: 0 auto 32px; position: relative; font-weight: 300; }
-  .sp-cta-btns { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; position: relative; }
-  @media(max-width:640px){ .sp-cta-section { padding: 44px 24px; } .sp-cta-section h2 { font-size: 2rem; } }
+/* ══════════════════════════════
+   FEATURES
+══════════════════════════════ */
+.feat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+@media (max-width: 480px) { .feat-grid { grid-template-columns: 1fr; } }
 
-  /* ── Mobile nav drawer ── */
-  .sp-drawer { position: fixed; inset:0; z-index: 50; }
-  .sp-drawer-bg { position: absolute; inset:0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
-  .sp-drawer-panel {
-    position: absolute; right:0; top:0; bottom:0; width: 290px;
-    background: #fff; overflow-y:auto; box-shadow: -8px 0 48px rgba(0,0,0,0.18);
-    animation: slideIn 0.25s ease;
-  }
-  @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.feat-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 24px 20px;
+  transition: all .26s; position: relative; overflow: hidden;
+}
+.feat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--navy-d), var(--navy-l), #4a9ee8);
+  transform: scaleX(0); transform-origin: left; transition: transform .32s;
+}
+.feat-card:hover::before { transform: scaleX(1); }
+.feat-card:hover { border-color: rgba(19,63,119,.2); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.feat-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem, 2vw, 1.22rem);
+  font-weight: 700; color: var(--navy-d); margin-bottom: 8px; line-height: 1.3;
+}
+.feat-card p { font-size: .82rem; color: var(--sub); line-height: 1.8; }
 
-  .sp-drawer-header { display: flex; justify-content: space-between; align-items: center; padding: 28px 24px 20px; border-bottom: 1px solid #f0f0f0; }
-  .sp-drawer-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--navy); font-weight: 600; }
+/* ══════════════════════════════
+   PROCESS
+══════════════════════════════ */
+.proc-grid { display: flex; flex-direction: column; gap: 10px; }
 
-  /* ── Floating Action Buttons ── */
-  .sp-fab {
-    position: fixed; z-index: 40; border: none; cursor: pointer;
-    width: 52px; height: 52px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.22); transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .sp-fab:hover { transform: scale(1.1); box-shadow: 0 10px 30px rgba(0,0,0,0.28); }
+.proc-card {
+  display: grid; grid-template-columns: 64px 1fr;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-md); overflow: hidden; transition: all .22s;
+}
+.proc-card:hover { box-shadow: var(--shadow-md); transform: translateX(3px); border-color: rgba(19,63,119,.25); }
 
-  /* Mobile only */
-  .sp-fab-mobile { bottom: 28px; right: 28px; background: var(--navy); color: #fff; }
-  .sp-fab-top-mobile { bottom: 92px; right: 28px; background: #fff; color: var(--navy); border: 2px solid #e8edf5; }
+.proc-num-col {
+  background: linear-gradient(180deg, var(--navy-d), var(--navy));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 700; color: rgba(255,255,255,.9);
+  min-height: 88px; flex-shrink: 0; transition: background .22s;
+}
+.proc-card:hover .proc-num-col { background: linear-gradient(180deg, var(--navy), var(--navy-l)); }
 
-  /* Desktop only */
-  .sp-fab-top-desk { bottom: 32px; right: 32px; background: var(--navy); color: #fff; }
+.proc-content { padding: 18px 22px; }
+.proc-content h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 700; color: var(--navy-d); margin-bottom: 5px;
+}
+.proc-content p { font-size: .82rem; color: var(--sub); line-height: 1.8; }
 
-  /* Wave bottom of hero */
-  .sp-hero-wave { position: absolute; bottom: -1px; left: 0; width: 100%; display: block; }
+.proc-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px; margin-top: 24px;
+  padding: clamp(20px, 4vw, 30px) clamp(20px, 5vw, 36px);
+  background: linear-gradient(135deg, var(--cream), #ede9e0);
+  border: 1px solid var(--border); border-radius: var(--r-md);
+}
+.proc-cta-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-style: italic; color: var(--navy-d);
+}
 
-  /* Hero title */
-  .sp-hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.4rem, 6vw, 4.4rem);
-    color: #fff; line-height: 1.1; margin-bottom: 20px; font-weight: 700;
-  }
-  .sp-hero-sub { color: rgba(255,255,255,0.82); font-weight: 300; font-size: clamp(1rem, 2vw, 1.2rem); margin-bottom: 36px; line-height: 1.75; }
-  .sp-hero-btns { display: flex; flex-wrap: wrap; gap: 14px; }
+/* ══════════════════════════════
+   STATS
+══════════════════════════════ */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+@media (max-width: 768px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 380px)  { .stats-strip { grid-template-columns: 1fr; } }
+
+.stat-cell {
+  background: linear-gradient(160deg, var(--navy-d) 0%, #0f3a73 100%);
+  padding: clamp(28px, 5vw, 44px) clamp(12px, 3vw, 20px);
+  text-align: center; position: relative; overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,.08); transition: background .25s;
+}
+.stat-cell:last-child { border-right: none; }
+@media (max-width: 768px) {
+  .stat-cell:nth-child(2) { border-right: none; }
+  .stat-cell:nth-child(3) { border-top: 1px solid rgba(255,255,255,.08); }
+  .stat-cell:nth-child(4) { border-top: 1px solid rgba(255,255,255,.08); }
+}
+@media (max-width: 380px) {
+  .stat-cell { border-right: none; border-top: 1px solid rgba(255,255,255,.08); }
+  .stat-cell:first-child { border-top: none; }
+}
+.stat-cell:hover { background: linear-gradient(160deg, var(--navy) 0%, #164a90 100%); }
+.stat-cell::after {
+  content: attr(data-n); position: absolute; right: -8px; bottom: -14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5rem; font-weight: 700; line-height: 1;
+  color: rgba(255,255,255,.05); pointer-events: none; user-select: none;
+}
+
+.stat-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px; color: rgba(255,255,255,.85);
+}
+.stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 2.9rem); font-weight: 700; color: #fff; line-height: 1;
+}
+.stat-lbl {
+  font-size: .63rem; font-weight: 500; color: rgba(255,255,255,.45);
+  margin-top: 8px; text-transform: uppercase; letter-spacing: .1em;
+}
+
+/* ══════════════════════════════
+   FAQ
+══════════════════════════════ */
+.faq-wrap { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); }
+.faq-row { border-bottom: 1px solid var(--border); }
+.faq-row:last-child { border-bottom: none; }
+
+.faq-q {
+  width: 100%; text-align: left; background: var(--white); border: none;
+  padding: clamp(14px, 2.5vw, 20px) clamp(16px, 3vw, 24px);
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  font-family: 'Poppins', sans-serif; font-weight: 500;
+  font-size: clamp(.82rem, 1.5vw, .88rem);
+  color: var(--navy-d); cursor: pointer; transition: background .18s;
+}
+.faq-q:hover { background: var(--cream); }
+.faq-q.open { background: var(--navy-pale); color: var(--navy); }
+
+.faq-chevron { flex-shrink: 0; transition: transform .25s; color: var(--muted); }
+.faq-chevron.open { transform: rotate(180deg); color: var(--navy); }
+
+.faq-a {
+  background: var(--cream);
+  padding: clamp(14px, 2.5vw, 18px) clamp(16px, 3vw, 24px) clamp(16px, 3vw, 22px);
+  font-size: clamp(.82rem, 1.5vw, .86rem);
+  line-height: 1.9; color: var(--sub); font-weight: 300;
+  border-top: 1px solid var(--border);
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ══════════════════════════════
+   CTA BLOCK
+══════════════════════════════ */
+.cta-block {
+  background: linear-gradient(135deg, var(--navy-d) 0%, #1652a0 100%);
+  border-radius: var(--r-lg);
+  padding: clamp(40px, 7vw, 72px) clamp(24px, 7%, 80px);
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: center; gap: clamp(24px, 5vw, 56px);
+}
+@media (max-width: 700px) { .cta-block { grid-template-columns: 1fr; } }
+
+.cta-block::before {
+  content: ''; position: absolute; right: -80px; top: -80px;
+  width: 280px; height: 280px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.07); pointer-events: none;
+}
+.cta-block::after {
+  content: ''; position: absolute; right: 60px; bottom: -100px;
+  width: 200px; height: 200px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.06); pointer-events: none;
+}
+
+.cta-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .62rem; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 14px;
+}
+.cta-tag::before { content: ''; width: 18px; height: 1.5px; background: rgba(255,255,255,.35); }
+
+.cta-block h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.7rem, 3.5vw, 2.9rem);
+  color: #fff; line-height: 1.18; margin-bottom: 12px; font-weight: 700;
+}
+.cta-block p { font-size: clamp(.88rem, 1.5vw, .96rem); color: rgba(255,255,255,.5); font-weight: 300; line-height: 1.8; max-width: 460px; }
+
+.cta-actions { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; min-width: 180px; }
+@media (max-width: 700px) { .cta-actions { flex-direction: row; flex-wrap: wrap; min-width: unset; } }
+
+.btn-cta-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: #fff; color: var(--navy-d);
+  padding: 13px 24px; border-radius: var(--r-sm); border: 2px solid #fff;
+  font-family: 'Poppins', sans-serif; font-size: .82rem; font-weight: 600;
+  cursor: pointer; text-decoration: none; transition: all .22s; white-space: nowrap;
+}
+.btn-cta-primary:hover { background: transparent; color: #fff; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.2); }
+
+.btn-cta-phone {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: rgba(255,255,255,.1); color: rgba(255,255,255,.78);
+  padding: 12px 22px; border-radius: var(--r-sm);
+  border: 1.5px solid rgba(255,255,255,.22);
+  font-family: 'Poppins', sans-serif; font-size: .82rem; font-weight: 400;
+  cursor: pointer; text-decoration: none; transition: all .22s;
+  white-space: nowrap; backdrop-filter: blur(6px);
+}
+.btn-cta-phone:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.5); color: #fff; }
+
+/* ══════════════════════════════
+   SCROLL FAB
+══════════════════════════════ */
+.fab {
+  position: fixed; bottom: clamp(20px, 4vw, 30px); right: clamp(16px, 4vw, 28px);
+  z-index: 100; width: 44px; height: 44px; border-radius: 50%; border: none;
+  background: var(--navy-d); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 24px rgba(13,46,87,.35); cursor: pointer;
+  transition: all .2s; animation: popIn .3s ease;
+}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.fab:hover { background: var(--navy); transform: translateY(-3px); }
+
+/* ══════════════════════════════
+   MOBILE TWEAKS  ≤ 480px
+══════════════════════════════ */
+@media (max-width: 480px) {
+  .hero { min-height: 100svh; }
+  .hero-stats { width: 100%; }
+  .h-stat { padding: 14px 16px; }
+  .hero-actions { gap: 8px; }
+  .btn-hero-primary, .btn-hero-ghost { width: 100%; justify-content: center; }
+  .proc-card { grid-template-columns: 52px 1fr; }
+  .proc-num-col { font-size: 1.1rem; min-height: 78px; }
+  .proc-cta { flex-direction: column; align-items: flex-start; }
+  .cta-block { padding: 36px 20px; }
+}
+
+/* ══════════════════════════════
+   TABLET  768px – 1023px
+══════════════════════════════ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .feat-grid { grid-template-columns: repeat(2, 1fr); }
+  .hl-grid   { grid-template-columns: repeat(2, 1fr); }
+  .hero-title { font-size: clamp(2.8rem, 6vw, 4rem); }
+}
+
+/* ══════════════════════════════
+   LARGE SCREENS  ≥ 1440px
+══════════════════════════════ */
+@media (min-width: 1440px) {
+  .hero-body { padding-bottom: 112px; }
+  .page-grid { gap: 0 80px; }
+}
 `;
 
+/* ══════════════════════════════════════════
+   COMPONENT
+══════════════════════════════════════════ */
 const ServicePage = () => {
   const { serviceId } = useParams();
   const service = servicesData[serviceId];
+
   const [openFaq, setOpenFaq] = useState(null);
-  const [activeSection, setActiveSection] = useState("hero");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [active, setActive]   = useState("hero");
+  const [drawer, setDrawer]   = useState(false);
+  const [showFab, setShowFab] = useState(false);
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [serviceId]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["hero", "about", "features", "process", "stats", "faq"];
-      const sp = window.scrollY + 120;
-      setShowScrollTop(window.scrollY > 400);
-      for (const id of sections) {
+    const ids = ["hero", "about", "features", "process", "stats", "faq"];
+    const onScroll = () => {
+      setShowFab(window.scrollY > 400);
+      const off = window.scrollY + 130;
+      for (const id of ids) {
         const el = document.getElementById(id);
-        if (el && sp >= el.offsetTop && sp < el.offsetTop + el.offsetHeight) {
-          setActiveSection(id);
-          break;
-        }
+        if (el && off >= el.offsetTop && off < el.offsetTop + el.offsetHeight) { setActive(id); break; }
       }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
-  const scrollToSection = (id) => {
-    setMobileMenuOpen(false);
-    setActiveSection(id);
+  const goTo = (id) => {
+    setDrawer(false);
     const el = document.getElementById(id);
-    if (el) window.scrollTo({ top: el.offsetTop - 88, behavior: "smooth" });
+    if (el) window.scrollTo({ top: el.offsetTop - 64, behavior: "smooth" });
+    setActive(id);
   };
 
-  const tableOfContents = [
-    { id: "hero",     label: "Overview",     icon: Home },
-    { id: "about",    label: "About",        icon: FileText },
-    { id: "features", label: "Key Features", icon: Star },
-    { id: "process",  label: "Our Process",  icon: BriefcaseBusiness },
-    { id: "stats",    label: "Our Impact",   icon: BarChart3 },
-    { id: "faq",      label: "FAQ",          icon: HelpCircle },
+  const nav = [
+    { id: "hero",     label: "Overview",     Icon: Home },
+    { id: "about",    label: "About",        Icon: FileText },
+    { id: "features", label: "Key Features", Icon: Star },
+    { id: "process",  label: "Our Process",  Icon: BriefcaseBusiness },
+    { id: "stats",    label: "Our Impact",   Icon: BarChart3 },
+    { id: "faq",      label: "FAQ",          Icon: HelpCircle },
   ];
 
+  const NavItems = ({ iconSize = 14 }) => nav.map(({ id, label, Icon }) => (
+    <button key={id} className={`nav-item${active === id ? " on" : ""}`} onClick={() => goTo(id)}>
+      <Icon size={iconSize} style={{ flexShrink: 0 }} /> {label}
+    </button>
+  ));
+
   if (!service) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Poppins',sans-serif", padding: "20px" }}>
       <div style={{ textAlign: "center" }}>
-        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2rem", color: "#133f77", marginBottom: 16 }}>
-          Service Not Found
-        </h2>
-        <Link to="/" style={{ color: "#133f77", fontFamily: "'Poppins', sans-serif" }}>Return to Home</Link>
+        <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(4rem,12vw,7rem)", fontWeight: 700, color: "#e2e8f4", lineHeight: 1 }}>404</div>
+        <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.4rem,4vw,2rem)", color: "#0d2e57", margin: "16px 0 10px" }}>Service Not Found</h2>
+        <Link to="/" style={{ color: "#133f77", fontWeight: 600, fontSize: ".88rem" }}>← Return Home</Link>
       </div>
     </div>
   );
@@ -391,162 +705,137 @@ const ServicePage = () => {
   return (
     <>
       <FontInjector />
-      <style>{styles}</style>
+      <style>{css}</style>
+      <div className="sp">
 
-      <div className="sp-root">
+        {/* ══ HERO ══ */}
+        <section id="hero" className="hero">
+          <div className="hero-bg" style={{ backgroundImage: `url(${service.hero.image})` }} />
+          <div className="hero-overlay" />
+          <div className="hero-accent-bar" />
 
-        {/* ── Mobile FABs (hidden on desktop via CSS) ── */}
-        <button className="sp-fab sp-fab-mobile sp-fab-mobile" onClick={() => setMobileMenuOpen(v => !v)} aria-label="Menu">
-          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
-        {showScrollTop && (
-          <button className="sp-fab sp-fab-top-mobile" onClick={scrollToTop} aria-label="Scroll to top">
-            <ArrowUp size={20} />
-          </button>
-        )}
+          {/* Breadcrumb REMOVED */}
 
-        {/* Desktop scroll-to-top (hidden on mobile via CSS) */}
-        {showScrollTop && (
-          <button className="sp-fab sp-fab-top-desk" onClick={scrollToTop} aria-label="Scroll to top">
-            <ArrowUp size={20} color="#fff" />
-          </button>
-        )}
+          <div className="hero-body">
+            <div className="hero-tag">
+              <span className="hero-tag-dot" />
+              Premium Service
+            </div>
+            <h1 className="hero-title">{service.hero.title}</h1>
+            <p className="hero-sub">{service.hero.subtitle}</p>
 
-        {/* ── Mobile Drawer ── */}
-        {mobileMenuOpen && (
-          <div className="sp-drawer">
-            <div className="sp-drawer-bg" onClick={() => setMobileMenuOpen(false)} />
-            <div className="sp-drawer-panel">
-              <div className="sp-drawer-header">
-                <span className="sp-drawer-title">Navigation</span>
-                <button
-                  style={{ border: "none", background: "none", cursor: "pointer", padding: 4 }}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <X size={22} color="#6b7280" />
+            <div className="hero-actions">
+              <Link to="/contact">
+                <button className="btn-hero-primary">
+                  {service.hero.cta} <ArrowRight size={15} />
                 </button>
-              </div>
-              <div style={{ padding: "20px 24px" }}>
-                <nav style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                  {tableOfContents.map(item => {
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.id}
-                        className={`sp-nav-item${activeSection === item.id ? " active" : ""}`}
-                        onClick={() => scrollToSection(item.id)}
-                      >
-                        <Icon size={16} /> {item.label}
-                      </button>
-                    );
-                  })}
-                </nav>
-                <div className="sp-sidebar-cta" style={{ marginTop: 24 }}>
-                  <p className="sp-sidebar-cta-title">Need Help?</p>
-                  <p className="sp-sidebar-cta-sub">Our experts are ready to assist you</p>
-                  <Link to="/contact">
-                    <button className="btn-primary" style={{ width: "100%", justifyContent: "center" }}>
-                      Contact Us
-                    </button>
-                  </Link>
+              </Link>
+           
+            </div>
+
+            <div className="hero-stats">
+              {[
+                { val: "500+", lbl: "Projects Done" },
+                { val: "98%",  lbl: "Satisfaction"  },
+                { val: "15+",  lbl: "Years Exp."    },
+              ].map((s, i) => (
+                <div key={i} className="h-stat">
+                  <div className="h-stat-val">{s.val}</div>
+                  <div className="h-stat-lbl">{s.lbl}</div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
-        )}
-
-        {/* ══════════════════════════════════════════
-            HERO
-        ══════════════════════════════════════════ */}
-        <section id="hero" className="sp-hero-section">
-          <div className="sp-hero-img" style={{ backgroundImage: `url(${service.hero.image})` }} />
-          <div className="sp-hero-overlay" />
-
-          <div className="sp-hero-content sp-layout" style={{ width: "100%", paddingTop: 90, paddingBottom: 100 }}>
-            <div style={{ maxWidth: 680 }}>
-              <div className="sp-badge">Premium {serviceId?.toUpperCase()} Service</div>
-              <h1 className="sp-hero-title">{service.hero.title}</h1>
-              <p className="sp-hero-sub">{service.hero.subtitle}</p>
-              <div className="sp-hero-btns">
-                <Link to="/contact">
-                  <button className="btn-primary">{service.hero.cta} <ArrowRight size={16} /></button>
-                </Link>
-                <Link to="/about">
-                  <button className="btn-outline">Learn More</button>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <svg className="sp-hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none">
-            <path d="M0,40 C360,80 1080,0 1440,40 L1440,60 L0,60 Z" fill="#ffffff" />
-          </svg>
         </section>
 
-        {/* ══════════════════════════════════════════
-            MAIN CONTENT
-        ══════════════════════════════════════════ */}
-        <div className="sp-layout">
-          <div className="sp-content-wrapper">
+        {/* ══ MOBILE STICKY BAR ══ */}
+        <div className="mob-bar">
+          <span className="mob-bar-title">{service.hero.title}</span>
+          <button className="mob-bar-menu" onClick={() => setDrawer(true)}>
+            <Menu size={15} /> Sections
+          </button>
+        </div>
 
-            {/* ── Desktop Sidebar ── */}
-            <aside className="sp-sidebar">
-              <div className="sp-sidebar-inner">
-                <p className="sp-sidebar-label">Contents</p>
-                <nav style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                  {tableOfContents.map(item => {
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.id}
-                        className={`sp-nav-item${activeSection === item.id ? " active" : ""}`}
-                        onClick={() => scrollToSection(item.id)}
-                      >
-                        <Icon size={15} /> {item.label}
-                      </button>
-                    );
-                  })}
-                </nav>
-                <div className="sp-sidebar-cta">
-                  <p className="sp-sidebar-cta-title">Need Help?</p>
-                  <p className="sp-sidebar-cta-sub">Our experts are ready to assist</p>
+        {/* ══ DRAWER ══ */}
+        {drawer && (
+          <div className="drawer">
+            <div className="drawer-dim" onClick={() => setDrawer(false)} />
+            <div className="drawer-panel">
+              <div className="drawer-top">
+                <span className="drawer-logo">Navigate</span>
+                <button className="drawer-close" onClick={() => setDrawer(false)}>
+                  <X size={20} />
+                </button>
+              </div>
+              <nav className="drawer-nav">
+                <NavItems iconSize={14} />
+              </nav>
+              <div className="drawer-cta">
+                <p className="drawer-cta-h">Need Help?</p>
+                <p className="drawer-cta-p">Our team is ready to assist you today.</p>
+                <Link to="/contact">
+                  <button className="btn-solid full">Contact Us <ArrowRight size={13} /></button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══ MAIN BODY ══ */}
+        <div className="wrap">
+          <div className="page-grid">
+
+            {/* Sidebar */}
+            <aside className="sidebar">
+              <div className="sidebar-card">
+                <div className="sidebar-head">
+                  <div className="sidebar-head-title">On This Page</div>
+                  <div className="sidebar-head-sub">Jump to any section</div>
+                </div>
+                <div className="sidebar-nav">
+                  <span className="sidebar-lbl">Sections</span>
+                  <NavItems iconSize={13} />
+                </div>
+                <div className="sidebar-footer">
+                  <div className="sidebar-footer-label">Ready to take the next step?</div>
                   <Link to="/contact">
-                    <button className="btn-primary" style={{ width: "100%", justifyContent: "center", padding: "10px 16px", fontSize: "0.82rem" }}>
-                      Contact Us
+                    <button className="btn-solid full">
+                      Free Consultation <ArrowRight size={13} />
                     </button>
                   </Link>
                 </div>
               </div>
             </aside>
 
-            {/* ── Main Content ── */}
-            <main className="sp-main">
+            {/* Main */}
+            <main>
 
-              {/* ── ABOUT ── */}
-              <section id="about" className="sp-section-about">
-                <div className="sp-section-tag"><span>Our Service</span></div>
-                <h2 className="sp-section-h2">{service.about.title}</h2>
-                <div className="sp-divider" />
-                <p className="sp-about-desc">{service.about.description}</p>
-                <div className="sp-highlights-grid">
+              {/* ABOUT */}
+              <section id="about" className="sec">
+                <div className="sec-kicker"><span className="sec-kicker-dot" />Our Service</div>
+                <h2 className="sec-title">{service.about.title}</h2>
+                <div className="sec-rule" />
+                <p className="about-body">{service.about.description}</p>
+                <div className="hl-grid">
                   {service.about.highlights.map((h, i) => (
-                    <div key={i} className="sp-highlight">
-                      <CheckCircle size={18} color="#133f77" style={{ flexShrink: 0, marginTop: 2 }} />
-                      <p>{h}</p>
+                    <div key={i} className="hl-card">
+                      <div className="hl-card-icon">
+                        <CheckCircle size={15} color="#133f77" />
+                      </div>
+                      <span className="hl-card-text">{h}</span>
                     </div>
                   ))}
                 </div>
               </section>
 
-              {/* ── FEATURES ── */}
-              <section id="features" className="sp-section-features">
-                <div className="sp-section-tag"><span>What We Offer</span></div>
-                <h2 className="sp-section-h2">Key Features & Services</h2>
-                <div className="sp-divider" />
-                <div className="sp-features-grid">
+              {/* FEATURES */}
+              <section id="features" className="sec">
+                <div className="sec-kicker"><span className="sec-kicker-dot" />What We Offer</div>
+                <h2 className="sec-title">Key Features &amp; Services</h2>
+                <div className="sec-rule" />
+                <div className="feat-grid">
                   {service.detailedFeatures.map((f, i) => (
-                    <div key={i} className="sp-feature">
-                      <div className="sp-feature-icon">{f.icon}</div>
+                    <div key={i} className="feat-card">
                       <h3>{f.title}</h3>
                       <p>{f.description}</p>
                     </div>
@@ -554,88 +843,89 @@ const ServicePage = () => {
                 </div>
               </section>
 
-              {/* ── PROCESS ── */}
-              <section id="process" className="sp-section-process">
-                <div className="sp-section-tag"><span>Methodology</span></div>
-                <h2 className="sp-section-h2">{service.process.title}</h2>
-                <div className="sp-divider" />
-                <p style={{ color: "#6b7280", marginBottom: 28, fontSize: "0.95rem" }}>Our proven step-by-step methodology</p>
-                <div className="sp-process-list">
+              {/* PROCESS */}
+              <section id="process" className="sec">
+                <div className="sec-kicker"><span className="sec-kicker-dot" />Methodology</div>
+                <h2 className="sec-title">{service.process.title}</h2>
+                <div className="sec-rule" />
+                <div className="proc-grid">
                   {service.process.steps.map((step, i) => (
-                    <div key={i} className="sp-step">
-                      <div className="sp-step-num">{i + 1}</div>
-                      <div>
+                    <div key={i} className="proc-card">
+                      <div className="proc-num-col">{String(i + 1).padStart(2, "0")}</div>
+                      <div className="proc-content">
                         <h3>{step.title}</h3>
                         <p>{step.description}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="sp-process-cta">
-                  <p>Ready to start your journey with us?</p>
+                <div className="proc-cta">
+                  <p className="proc-cta-text">"Ready to start your journey with us?"</p>
                   <Link to="/contact">
-                    <button className="btn-primary">Start Now <ArrowRight size={16} /></button>
+                    <button className="btn-solid">Get Started <ArrowRight size={14} /></button>
                   </Link>
                 </div>
               </section>
 
-              {/* ── STATS ── */}
-              <section id="stats" className="sp-section-stats">
-                <div className="sp-section-tag"><span>Track Record</span></div>
-                <h2 className="sp-section-h2">Our Impact in Numbers</h2>
-                <div className="sp-divider" />
-                <div className="sp-stats-grid">
+              {/* STATS */}
+              <section id="stats" className="sec">
+                <div className="sec-kicker"><span className="sec-kicker-dot" />Track Record</div>
+                <h2 className="sec-title">Our Impact in Numbers</h2>
+                <div className="sec-rule" />
+                <div className="stats-strip">
                   {[
-                    { number: "500+", label: "Projects Completed", emoji: "🏆" },
-                    { number: "98%",  label: "Client Satisfaction", emoji: "⭐" },
-                    { number: "15+",  label: "Years Experience",    emoji: "📅" },
-                    { number: "24/7", label: "Support Available",   emoji: "🎧" },
+                    { val: "500+", lbl: "Projects Completed", Icon: Trophy,     n: "500" },
+                    { val: "98%",  lbl: "Client Satisfaction", Icon: ThumbsUp,  n: "98"  },
+                    { val: "15+",  lbl: "Years Experience",    Icon: Clock,      n: "15"  },
+                    { val: "24/7", lbl: "Support Available",   Icon: Headphones, n: "247" },
                   ].map((s, i) => (
-                    <div key={i} className="sp-stat">
-                      <div className="sp-stat-emoji">{s.emoji}</div>
-                      <div className="sp-stat-num">{s.number}</div>
-                      <div className="sp-stat-label">{s.label}</div>
+                    <div key={i} className="stat-cell" data-n={s.n}>
+                      <div className="stat-icon"><s.Icon size={20} strokeWidth={1.6} /></div>
+                      <div className="stat-val">{s.val}</div>
+                      <div className="stat-lbl">{s.lbl}</div>
                     </div>
                   ))}
                 </div>
               </section>
 
-              {/* ── FAQ ── */}
-              <section id="faq" className="sp-section-faq">
-                <div className="sp-section-tag"><span>Questions</span></div>
-                <h2 className="sp-section-h2">Frequently Asked Questions</h2>
-                <div className="sp-divider" />
-                <div className="sp-faq-list">
+              {/* FAQ */}
+              <section id="faq" className="sec">
+                <div className="sec-kicker"><span className="sec-kicker-dot" />Questions</div>
+                <h2 className="sec-title">Frequently Asked Questions</h2>
+                <div className="sec-rule" />
+                <div className="faq-wrap">
                   {service.faqs.map((faq, i) => (
-                    <div key={i} className="sp-faq-item">
+                    <div key={i} className="faq-row">
                       <button
-                        className={`sp-faq-btn${openFaq === i ? " open" : ""}`}
+                        className={`faq-q${openFaq === i ? " open" : ""}`}
                         onClick={() => setOpenFaq(openFaq === i ? null : i)}
                       >
                         <span>{faq.question}</span>
-                        <ChevronDown
-                          size={18}
-                          className={`sp-faq-chevron${openFaq === i ? " open" : ""}`}
-                        />
+                        <ChevronDown size={16} className={`faq-chevron${openFaq === i ? " open" : ""}`} />
                       </button>
-                      {openFaq === i && (
-                        <div className="sp-faq-answer">{faq.answer}</div>
-                      )}
+                      {openFaq === i && <div className="faq-a">{faq.answer}</div>}
                     </div>
                   ))}
                 </div>
               </section>
 
-              {/* ── CTA BANNER ── */}
-              <section className="sp-cta-section">
-                <h2>{service.cta.title}</h2>
-                <p>{service.cta.description}</p>
-                <div className="sp-cta-btns">
-                  <Link to="/contact">
-                    <button className="btn-primary">{service.cta.primaryButton} <ArrowRight size={16} /></button>
+              {/* CTA */}
+              <section className="cta-block">
+                <div>
+                  <div className="cta-tag">Get Started Today</div>
+                  <h2>{service.cta.title}</h2>
+                  <p>{service.cta.description}</p>
+                </div>
+                <div className="cta-actions">
+                  <Link to="/contact" style={{ textDecoration: "none" }}>
+                    <button className="btn-cta-primary">
+                      {service.cta.primaryButton} <ArrowRight size={14} />
+                    </button>
                   </Link>
                   <a href="tel:+919999999999" style={{ textDecoration: "none" }}>
-                    <button className="btn-outline"><Phone size={16} /> {service.cta.secondaryButton}</button>
+                    <button className="btn-cta-phone">
+                      <Phone size={14} /> {service.cta.secondaryButton}
+                    </button>
                   </a>
                 </div>
               </section>
@@ -643,6 +933,14 @@ const ServicePage = () => {
             </main>
           </div>
         </div>
+
+        {/* FAB */}
+        {showFab && (
+          <button className="fab" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Scroll to top">
+            <ArrowUp size={18} />
+          </button>
+        )}
+
       </div>
     </>
   );
